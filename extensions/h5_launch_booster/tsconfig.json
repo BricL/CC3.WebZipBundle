@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "inlineSourceMap": false,
+        "outDir": "./dist",
+        "rootDir": "./source",
+        "allowJs": true,
+        "experimentalDecorators": true,
+        "lib": [
+            "dom",
+            "es7",
+            "ES2017"
+        ],
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "types": [
+            "@cocos/creator-types/editor/protected",
+            "node",
+            "@cocos/creator-types/editor",
+            "@cocos/creator-types/engine",
+        ]
+    },
+    "exclude": [
+        "./dist"
+    ],
+    "include": [
+        "./source"
+    ]
+}
