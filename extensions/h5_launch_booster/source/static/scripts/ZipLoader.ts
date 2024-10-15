@@ -1,4 +1,4 @@
-import { _decorator, assetManager, Component, director, error, find, Input, input, instantiate, KeyCode, log, Prefab, resources } from "cc";
+import { _decorator, assetManager, Component, director, error, find, Input, input, instantiate, KeyCode, log, path, Prefab, resources } from "cc";
 // @ts-ignore
 import { DEBUG } from 'cc/env';
 
@@ -85,6 +85,7 @@ export class ZipLoader extends Component {
     private recordUrl(url: string) {
         if (!this.stopLogAssetsUrl) {
             this.zipLoaderUrlList.push(url);
+
             // const searchPatternForMd5Code = /\.\w+\./;
 
             // if (searchPatternForMd5Code.test(url)) {

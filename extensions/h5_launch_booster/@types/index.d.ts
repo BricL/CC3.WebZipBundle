@@ -27,16 +27,17 @@ export interface ICustomPanelThis extends IPanelThis {
 }
 
 export interface IOptions {
-    remoteAddress: string;
-    enterCocos: string;
-    selectTest: string;
-    objectTest: {
-        number: number;
-        string: string;
-        boolean: boolean
-    },
-    arrayTest: [number, string, boolean];
-    webTestOption: boolean;
+    enable: boolean;
+    // remoteAddress: string;
+    // enterCocos: string;
+    // selectTest: string;
+    // objectTest: {
+    //     number: number;
+    //     string: string;
+    //     boolean: boolean
+    // },
+    // arrayTest: [number, string, boolean];
+    // webTestOption: boolean;
 }
 
 export interface ITaskOptions extends IBuildTaskOption {

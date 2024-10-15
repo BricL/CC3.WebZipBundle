@@ -13,14 +13,16 @@ export const methods: { [key: string]: (...any: any) => any } = {
  * @zh 扩展加载完成后触发的钩子
  */
 export const load = function () {
+    // Check build-config directory
     console.log(`h5_launch_booster loaded: ${Editor.Project.path}`);
-    const buildConfigPath = `${Editor.Project.path}/build-config`;
+    const buildConfigPath = `${Editor.Project.path}/h5lb-build-config`;
 
     if (!fs.existsSync(buildConfigPath)) {
         fs.mkdirSync(buildConfigPath);
         console.warn(`h5_launch_booster create build-config directory at '${buildConfigPath}.'`);
     }
 
+    // Check assetsUrlListRecord.json
     if (!fs.existsSync(`${buildConfigPath}/assetsUrlListRecord.json`)) {
         const assetsUrlListPath = `${buildConfigPath}/assetsUrlListRecord.json`;
         fs.writeFileSync(assetsUrlListPath, JSON.stringify([]));
