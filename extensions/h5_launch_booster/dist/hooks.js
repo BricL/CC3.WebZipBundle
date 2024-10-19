@@ -110,18 +110,35 @@ const onAfterBuild = function (options, result) {
             const jsonString = fs.readFileSync(`${H5LB_BUILD_CONFIG_PATH}/assetsUrlListRecord.json`, 'utf-8');
             const assetsPathList = JSON.parse(jsonString);
             for (const assetPath of assetsPathList) {
-                const assetName = cc_1.path.basename(assetPath);
-                const srcAssetPath = cc_1.path.join(BUILD_PROJECT_DEST_PATH, assetPath);
+                let assetName = cc_1.path.basename(assetPath);
+                let srcAssetPath = cc_1.path.join(BUILD_PROJECT_DEST_PATH, assetPath);
                 try {
                     if (fs.existsSync(srcAssetPath)) {
                         const destAssetPath = cc_1.path.join(TEMP_PATH, cc_1.path.dirname(assetPath), assetName);
-                        console.log(`[${global_1.PACKAGE_NAME}] Copying file: ${srcAssetPath} to ${destAssetPath}`);
-                        fs.mkdirSync(cc_1.path.dirname(destAssetPath), { recursive: true });
-                        fs.copyFileSync(srcAssetPath, destAssetPath);
+                        copyAsset(srcAssetPath, destAssetPath);
                         resultString.push(destAssetPath);
                     }
                     else {
-                        console.error(`[${global_1.PACKAGE_NAME}] file not exists: ${srcAssetPath} `);
+                        if (options.md5Cache) {
+                            const regexTemplate = /\.[a-z,A-Z,0-9]*\./;
+                            assetName = assetName.replace(regexTemplate, ".");
+                            assetName = assetName.replace(cc_1.path.extname(assetName), "");
+                        }
+                        const srcAssetDir = cc_1.path.dirname(srcAssetPath);
+                        const items = fs.readdirSync(srcAssetDir);
+                        let isFound = false;
+                        for (const item of items) {
+                            if (item.includes(assetName)) {
+                                srcAssetPath = cc_1.path.join(srcAssetDir, item);
+                                const destAssetPath = cc_1.path.join(TEMP_PATH, cc_1.path.dirname(assetPath), item);
+                                copyAsset(srcAssetPath, destAssetPath);
+                                resultString.push(destAssetPath);
+                                isFound = true;
+                                break;
+                            }
+                        }
+                        if (!isFound)
+                            console.error(`[${global_1.PACKAGE_NAME}] file not exists: ${srcAssetPath} `);
                     }
                 }
                 catch (exp) {
@@ -141,6 +158,12 @@ const onAfterBuild = function (options, result) {
     });
 };
 exports.onAfterBuild = onAfterBuild;
+function copyAsset(srcAssetPath, destAssetPath) {
+    // const destAssetPath = path.join(TEMP_PATH, path.dirname(assetPath), assetName);
+    console.log(`[${global_1.PACKAGE_NAME}] Copying file: ${srcAssetPath} to ${destAssetPath}`);
+    fs.mkdirSync(cc_1.path.dirname(destAssetPath), { recursive: true });
+    fs.copyFileSync(srcAssetPath, destAssetPath);
+}
 const unload = function () {
     return __awaiter(this, void 0, void 0, function* () {
         // console.log(`[${PACKAGE_NAME}] Unload cocos plugin example in builder.`);
@@ -171,25 +194,23 @@ function zipFolder(srcFolder, destFolder) {
     return __awaiter(this, void 0, void 0, function* () {
         const zip = new jszip_1.default();
         function addFolderToZip(folderPath, zipFolder) {
-            return __awaiter(this, void 0, void 0, function* () {
-                const items = yield fs.readdirSync(folderPath);
-                for (const item of items) {
-                    const fullPath = cc_1.path.join(folderPath, item);
-                    const stats = yield fs.statSync(fullPath);
-                    if (stats.isDirectory()) {
-                        const folder = zipFolder.folder(item);
-                        yield addFolderToZip(fullPath, folder);
-                    }
-                    else {
-                        const fileData = yield fs.readFileSync(fullPath);
-                        zipFolder.file(item, fileData);
-                    }
+            const items = fs.readdirSync(folderPath);
+            for (const item of items) {
+                const fullPath = cc_1.path.join(folderPath, item);
+                const stats = fs.statSync(fullPath);
+                if (stats.isDirectory()) {
+                    const folder = zipFolder.folder(item);
+                    addFolderToZip(fullPath, folder);
                 }
-            });
+                else {
+                    const fileData = fs.readFileSync(fullPath);
+                    zipFolder.file(item, fileData);
+                }
+            }
         }
-        yield addFolderToZip(srcFolder, zip);
+        addFolderToZip(srcFolder, zip);
         const zipContent = yield zip.generateAsync({ type: 'nodebuffer' });
-        yield fs.writeFileSync(destFolder, zipContent);
-        console.log(`Folder ${srcFolder} has been zipped to ${destFolder}`);
+        fs.writeFileSync(destFolder, zipContent);
+        console.log(`[${global_1.PACKAGE_NAME}] Folder ${srcFolder} has been zipped to ${destFolder}`);
     });
 }

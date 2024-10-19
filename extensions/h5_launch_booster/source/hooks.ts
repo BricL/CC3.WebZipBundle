@@ -72,19 +72,38 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
         const assetsPathList = JSON.parse(jsonString);
 
         for (const assetPath of assetsPathList) {
-            const assetName = path.basename(assetPath);
-            const srcAssetPath = path.join(BUILD_PROJECT_DEST_PATH, assetPath);
+            let assetName = path.basename(assetPath);
+            let srcAssetPath = path.join(BUILD_PROJECT_DEST_PATH, assetPath);
 
             try {
                 if (fs.existsSync(srcAssetPath)) {
                     const destAssetPath = path.join(TEMP_PATH, path.dirname(assetPath), assetName);
-                    console.log(`[${PACKAGE_NAME}] Copying file: ${srcAssetPath} to ${destAssetPath}`);
-                    fs.mkdirSync(path.dirname(destAssetPath), { recursive: true });
-                    fs.copyFileSync(srcAssetPath, destAssetPath);
-
+                    copyAsset(srcAssetPath, destAssetPath);
                     resultString.push(destAssetPath);
                 } else {
-                    console.error(`[${PACKAGE_NAME}] file not exists: ${srcAssetPath} `);
+                    if (options.md5Cache) {
+                        const regexTemplate = /\.[a-z,A-Z,0-9]*\./;
+                        assetName = assetName.replace(regexTemplate, ".");
+                        assetName = assetName.replace(path.extname(assetName), "");
+                    }
+
+                    const srcAssetDir = path.dirname(srcAssetPath);
+                    const items = fs.readdirSync(srcAssetDir);
+                    let isFound = false;
+
+                    for (const item of items) {
+                        if (item.includes(assetName)) {
+                            srcAssetPath = path.join(srcAssetDir, item);
+                            const destAssetPath = path.join(TEMP_PATH, path.dirname(assetPath), item);
+                            copyAsset(srcAssetPath, destAssetPath);
+                            resultString.push(destAssetPath);
+                            isFound = true;
+                            break;
+                        }
+                    }
+
+                    if(!isFound)
+                        console.error(`[${PACKAGE_NAME}] file not exists: ${srcAssetPath} `);
                 }
             } catch (exp) {
                 console.error(`[${PACKAGE_NAME}] copy file failed: ${exp}`);
@@ -103,6 +122,14 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
         await zipFolder(TEMP_PATH, path.join(H5LB_BUILD_CONFIG_PATH, md5Hash.length > 0 ? `h5lbResCache.${md5Hash}.zip` : 'h5lbResCache.zip'));
     }
 };
+
+function copyAsset(srcAssetPath: string, destAssetPath: string) {
+    // const destAssetPath = path.join(TEMP_PATH, path.dirname(assetPath), assetName);
+    console.log(`[${PACKAGE_NAME}] Copying file: ${srcAssetPath} to ${destAssetPath}`);
+
+    fs.mkdirSync(path.dirname(destAssetPath), { recursive: true });
+    fs.copyFileSync(srcAssetPath, destAssetPath);
+}
 
 export const unload: BuildHook.unload = async function () {
     // console.log(`[${PACKAGE_NAME}] Unload cocos plugin example in builder.`);
@@ -125,27 +152,27 @@ export const onAfterMake: BuildHook.onAfterMake = async function (root, options)
 async function zipFolder(srcFolder: string, destFolder: string) {
     const zip = new JSZip();
 
-    async function addFolderToZip(folderPath: string, zipFolder: JSZip) {
-        const items = await fs.readdirSync(folderPath);
+    function addFolderToZip(folderPath: string, zipFolder: JSZip) {
+        const items = fs.readdirSync(folderPath);
 
         for (const item of items) {
             const fullPath = path.join(folderPath, item);
-            const stats = await fs.statSync(fullPath);
+            const stats = fs.statSync(fullPath);
 
             if (stats.isDirectory()) {
                 const folder = zipFolder.folder(item);
-                await addFolderToZip(fullPath, folder);
+                addFolderToZip(fullPath, folder);
             } else {
-                const fileData = await fs.readFileSync(fullPath);
+                const fileData = fs.readFileSync(fullPath);
                 zipFolder.file(item, fileData);
             }
         }
     }
 
-    await addFolderToZip(srcFolder, zip);
+    addFolderToZip(srcFolder, zip);
 
     const zipContent = await zip.generateAsync({ type: 'nodebuffer' });
-    await fs.writeFileSync(destFolder, zipContent);
+    fs.writeFileSync(destFolder, zipContent);
 
-    console.log(`Folder ${srcFolder} has been zipped to ${destFolder}`);
+    console.log(`[${PACKAGE_NAME}] Folder ${srcFolder} has been zipped to ${destFolder}`);
 }
