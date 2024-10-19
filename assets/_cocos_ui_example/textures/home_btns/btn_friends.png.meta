@@ -1,0 +1,141 @@
+{
+  "ver": "1.0.27",
+  "importer": "image",
+  "imported": true,
+  "uuid": "be19f41d-ffa0-41c5-9c87-6bc24d853502",
+  "files": [
+    ".json",
+    ".png"
+  ],
+  "subMetas": {
+    "6c48a": {
+      "importer": "texture",
+      "uuid": "be19f41d-ffa0-41c5-9c87-6bc24d853502@6c48a",
+      "displayName": "btn_friends",
+      "id": "6c48a",
+      "name": "texture",
+      "userData": {
+        "imageUuidOrDatabaseUri": "be19f41d-ffa0-41c5-9c87-6bc24d853502",
+        "wrapModeS": "clamp-to-edge",
+        "wrapModeT": "clamp-to-edge",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "anisotropy": 0,
+        "isUuid": true,
+        "visible": false
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f9941": {
+      "ver": "1.0.12",
+      "importer": "sprite-frame",
+      "uuid": "be19f41d-ffa0-41c5-9c87-6bc24d853502@f9941",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {},
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "premultiplyAlpha": false,
+        "anisotropy": 1,
+        "trimType": "auto",
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": -1,
+        "offsetY": -2.5,
+        "trimX": 6,
+        "trimY": 5,
+        "width": 92,
+        "height": 105,
+        "rawWidth": 106,
+        "rawHeight": 110,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "be19f41d-ffa0-41c5-9c87-6bc24d853502@6c48a",
+        "atlasUuid": "",
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [
+            -46,
+            -52.5,
+            0,
+            46,
+            -52.5,
+            0,
+            -46,
+            52.5,
+            0,
+            46,
+            52.5,
+            0
+          ],
+          "indexes": [
+            0,
+            1,
+            2,
+            2,
+            1,
+            3
+          ],
+          "uv": [
+            6,
+            105,
+            98,
+            105,
+            6,
+            0,
+            98,
+            0
+          ],
+          "nuv": [
+            0.05660377358490566,
+            0,
+            0.9245283018867925,
+            0,
+            0.05660377358490566,
+            0.9545454545454546,
+            0.9245283018867925,
+            0.9545454545454546
+          ],
+          "minPos": [
+            -46,
+            -52.5,
+            0
+          ],
+          "maxPos": [
+            46,
+            52.5,
+            0
+          ]
+        }
+      },
+      "displayName": "btn_friends",
+      "id": "f9941",
+      "name": "spriteFrame"
+    }
+  },
+  "userData": {
+    "type": "sprite-frame",
+    "redirect": "be19f41d-ffa0-41c5-9c87-6bc24d853502@6c48a",
+    "hasAlpha": true,
+    "fixAlphaTransparencyArtifacts": false
+  }
+}

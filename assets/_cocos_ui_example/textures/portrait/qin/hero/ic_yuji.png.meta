@@ -1,0 +1,141 @@
+{
+  "ver": "1.0.27",
+  "importer": "image",
+  "imported": true,
+  "uuid": "93e99691-afa5-4a9c-89e8-79c0a7cd0af5",
+  "files": [
+    ".json",
+    ".png"
+  ],
+  "subMetas": {
+    "6c48a": {
+      "importer": "texture",
+      "uuid": "93e99691-afa5-4a9c-89e8-79c0a7cd0af5@6c48a",
+      "displayName": "ic_yuji",
+      "id": "6c48a",
+      "name": "texture",
+      "userData": {
+        "imageUuidOrDatabaseUri": "93e99691-afa5-4a9c-89e8-79c0a7cd0af5",
+        "wrapModeS": "clamp-to-edge",
+        "wrapModeT": "clamp-to-edge",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "anisotropy": 0,
+        "isUuid": true,
+        "visible": false
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f9941": {
+      "ver": "1.0.12",
+      "importer": "sprite-frame",
+      "uuid": "93e99691-afa5-4a9c-89e8-79c0a7cd0af5@f9941",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {},
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "premultiplyAlpha": false,
+        "anisotropy": 1,
+        "trimType": "auto",
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 1,
+        "offsetY": 2.5,
+        "trimX": 31,
+        "trimY": 25,
+        "width": 90,
+        "height": 95,
+        "rawWidth": 150,
+        "rawHeight": 150,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "93e99691-afa5-4a9c-89e8-79c0a7cd0af5@6c48a",
+        "atlasUuid": "",
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [
+            -45,
+            -47.5,
+            0,
+            45,
+            -47.5,
+            0,
+            -45,
+            47.5,
+            0,
+            45,
+            47.5,
+            0
+          ],
+          "indexes": [
+            0,
+            1,
+            2,
+            2,
+            1,
+            3
+          ],
+          "uv": [
+            31,
+            125,
+            121,
+            125,
+            31,
+            30,
+            121,
+            30
+          ],
+          "nuv": [
+            0.20666666666666667,
+            0.2,
+            0.8066666666666666,
+            0.2,
+            0.20666666666666667,
+            0.8333333333333334,
+            0.8066666666666666,
+            0.8333333333333334
+          ],
+          "minPos": [
+            -45,
+            -47.5,
+            0
+          ],
+          "maxPos": [
+            45,
+            47.5,
+            0
+          ]
+        }
+      },
+      "displayName": "ic_yuji",
+      "id": "f9941",
+      "name": "spriteFrame"
+    }
+  },
+  "userData": {
+    "type": "sprite-frame",
+    "redirect": "93e99691-afa5-4a9c-89e8-79c0a7cd0af5@6c48a",
+    "hasAlpha": true,
+    "fixAlphaTransparencyArtifacts": false
+  }
+}

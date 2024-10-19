@@ -1,0 +1,141 @@
+{
+  "ver": "1.0.27",
+  "importer": "image",
+  "imported": true,
+  "uuid": "893f6783-50a1-46d7-a74d-dafc7e24f27c",
+  "files": [
+    ".json",
+    ".png"
+  ],
+  "subMetas": {
+    "6c48a": {
+      "importer": "texture",
+      "uuid": "893f6783-50a1-46d7-a74d-dafc7e24f27c@6c48a",
+      "displayName": "ic_snrom",
+      "id": "6c48a",
+      "name": "texture",
+      "userData": {
+        "imageUuidOrDatabaseUri": "893f6783-50a1-46d7-a74d-dafc7e24f27c",
+        "wrapModeS": "clamp-to-edge",
+        "wrapModeT": "clamp-to-edge",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "anisotropy": 0,
+        "isUuid": true,
+        "visible": false
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f9941": {
+      "ver": "1.0.12",
+      "importer": "sprite-frame",
+      "uuid": "893f6783-50a1-46d7-a74d-dafc7e24f27c@f9941",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {},
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "premultiplyAlpha": false,
+        "anisotropy": 1,
+        "trimType": "auto",
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 2.5,
+        "offsetY": 0.5,
+        "trimX": 21,
+        "trimY": 20,
+        "width": 113,
+        "height": 109,
+        "rawWidth": 150,
+        "rawHeight": 150,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "893f6783-50a1-46d7-a74d-dafc7e24f27c@6c48a",
+        "atlasUuid": "",
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [
+            -56.5,
+            -54.5,
+            0,
+            56.5,
+            -54.5,
+            0,
+            -56.5,
+            54.5,
+            0,
+            56.5,
+            54.5,
+            0
+          ],
+          "indexes": [
+            0,
+            1,
+            2,
+            2,
+            1,
+            3
+          ],
+          "uv": [
+            21,
+            130,
+            134,
+            130,
+            21,
+            21,
+            134,
+            21
+          ],
+          "nuv": [
+            0.14,
+            0.14,
+            0.8933333333333333,
+            0.14,
+            0.14,
+            0.8666666666666667,
+            0.8933333333333333,
+            0.8666666666666667
+          ],
+          "minPos": [
+            -56.5,
+            -54.5,
+            0
+          ],
+          "maxPos": [
+            56.5,
+            54.5,
+            0
+          ]
+        }
+      },
+      "displayName": "ic_snrom",
+      "id": "f9941",
+      "name": "spriteFrame"
+    }
+  },
+  "userData": {
+    "type": "sprite-frame",
+    "redirect": "893f6783-50a1-46d7-a74d-dafc7e24f27c@6c48a",
+    "hasAlpha": true,
+    "fixAlphaTransparencyArtifacts": false
+  }
+}
