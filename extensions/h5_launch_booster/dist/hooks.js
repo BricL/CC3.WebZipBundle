@@ -119,23 +119,23 @@ const onAfterBuild = function (options, result) {
                         resultString.push(destAssetPath);
                     }
                     else {
+                        let isFound = false;
                         // Can't find the asset name with md5 hash, try to find the asset name without md5 hash
                         if (options.md5Cache) {
                             const regexTemplate = /\.[a-z,A-Z,0-9]*\./;
                             assetName = assetName.replace(regexTemplate, ".");
                             assetName = assetName.replace(cc_1.path.extname(assetName), "");
-                        }
-                        const srcAssetDir = cc_1.path.dirname(srcAssetPath);
-                        const items = fs.readdirSync(srcAssetDir);
-                        let isFound = false;
-                        for (const item of items) {
-                            if (item.includes(assetName)) {
-                                srcAssetPath = cc_1.path.join(srcAssetDir, item);
-                                const destAssetPath = cc_1.path.join(TEMP_PATH, cc_1.path.dirname(assetPath), item);
-                                copyAsset(srcAssetPath, destAssetPath);
-                                resultString.push(destAssetPath);
-                                isFound = true;
-                                break;
+                            const srcAssetDir = cc_1.path.dirname(srcAssetPath);
+                            const items = fs.readdirSync(srcAssetDir);
+                            for (const item of items) {
+                                if (item.includes(assetName)) {
+                                    srcAssetPath = cc_1.path.join(srcAssetDir, item);
+                                    const destAssetPath = cc_1.path.join(TEMP_PATH, cc_1.path.dirname(assetPath), item);
+                                    copyAsset(srcAssetPath, destAssetPath);
+                                    resultString.push(destAssetPath);
+                                    isFound = true;
+                                    break;
+                                }
                             }
                         }
                         if (!isFound) {

@@ -81,25 +81,26 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
                     copyAsset(srcAssetPath, destAssetPath);
                     resultString.push(destAssetPath);
                 } else {
+                    let isFound = false;
+
                     // Can't find the asset name with md5 hash, try to find the asset name without md5 hash
                     if (options.md5Cache) {
                         const regexTemplate = /\.[a-z,A-Z,0-9]*\./;
                         assetName = assetName.replace(regexTemplate, ".");
                         assetName = assetName.replace(path.extname(assetName), "");
-                    }
 
-                    const srcAssetDir = path.dirname(srcAssetPath);
-                    const items = fs.readdirSync(srcAssetDir);
-                    let isFound = false;
+                        const srcAssetDir = path.dirname(srcAssetPath);
+                        const items = fs.readdirSync(srcAssetDir);
 
-                    for (const item of items) {
-                        if (item.includes(assetName)) {
-                            srcAssetPath = path.join(srcAssetDir, item);
-                            const destAssetPath = path.join(TEMP_PATH, path.dirname(assetPath), item);
-                            copyAsset(srcAssetPath, destAssetPath);
-                            resultString.push(destAssetPath);
-                            isFound = true;
-                            break;
+                        for (const item of items) {
+                            if (item.includes(assetName)) {
+                                srcAssetPath = path.join(srcAssetDir, item);
+                                const destAssetPath = path.join(TEMP_PATH, path.dirname(assetPath), item);
+                                copyAsset(srcAssetPath, destAssetPath);
+                                resultString.push(destAssetPath);
+                                isFound = true;
+                                break;
+                            }
                         }
                     }
 
