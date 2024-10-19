@@ -119,6 +119,7 @@ const onAfterBuild = function (options, result) {
                         resultString.push(destAssetPath);
                     }
                     else {
+                        // Can't find the asset name with md5 hash, try to find the asset name without md5 hash
                         if (options.md5Cache) {
                             const regexTemplate = /\.[a-z,A-Z,0-9]*\./;
                             assetName = assetName.replace(regexTemplate, ".");
@@ -137,8 +138,10 @@ const onAfterBuild = function (options, result) {
                                 break;
                             }
                         }
-                        if (!isFound)
+                        if (!isFound) {
+                            // The asset file not exists
                             console.error(`[${global_1.PACKAGE_NAME}] file not exists: ${srcAssetPath} `);
+                        }
                     }
                 }
                 catch (exp) {

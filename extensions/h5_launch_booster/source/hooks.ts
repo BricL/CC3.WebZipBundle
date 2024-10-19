@@ -81,6 +81,7 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
                     copyAsset(srcAssetPath, destAssetPath);
                     resultString.push(destAssetPath);
                 } else {
+                    // Can't find the asset name with md5 hash, try to find the asset name without md5 hash
                     if (options.md5Cache) {
                         const regexTemplate = /\.[a-z,A-Z,0-9]*\./;
                         assetName = assetName.replace(regexTemplate, ".");
@@ -102,8 +103,10 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
                         }
                     }
 
-                    if(!isFound)
+                    if (!isFound) {
+                        // The asset file not exists
                         console.error(`[${PACKAGE_NAME}] file not exists: ${srcAssetPath} `);
+                    }
                 }
             } catch (exp) {
                 console.error(`[${PACKAGE_NAME}] copy file failed: ${exp}`);
