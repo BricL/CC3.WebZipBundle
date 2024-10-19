@@ -84,23 +84,21 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
                     let isFound = false;
 
                     // Can't find the asset name with md5 hash, try to find the asset name without md5 hash
-                    if (options.md5Cache) {
-                        const regexTemplate = /\.[a-z,A-Z,0-9]*\./;
-                        assetName = assetName.replace(regexTemplate, ".");
-                        assetName = assetName.replace(path.extname(assetName), "");
+                    const regexTemplate = /\.[a-z,A-Z,0-9]*\./;
+                    assetName = assetName.replace(regexTemplate, ".");
+                    assetName = assetName.replace(path.extname(assetName), "");
 
-                        const srcAssetDir = path.dirname(srcAssetPath);
-                        const items = fs.readdirSync(srcAssetDir);
+                    const srcAssetDir = path.dirname(srcAssetPath);
+                    const items = fs.readdirSync(srcAssetDir);
 
-                        for (const item of items) {
-                            if (item.includes(assetName)) {
-                                srcAssetPath = path.join(srcAssetDir, item);
-                                const destAssetPath = path.join(TEMP_PATH, path.dirname(assetPath), item);
-                                copyAsset(srcAssetPath, destAssetPath);
-                                resultString.push(destAssetPath);
-                                isFound = true;
-                                break;
-                            }
+                    for (const item of items) {
+                        if (item.includes(assetName)) {
+                            srcAssetPath = path.join(srcAssetDir, item);
+                            const destAssetPath = path.join(TEMP_PATH, path.dirname(assetPath), item);
+                            copyAsset(srcAssetPath, destAssetPath);
+                            resultString.push(destAssetPath);
+                            isFound = true;
+                            break;
                         }
                     }
 
@@ -123,7 +121,7 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
             console.log(`[${PACKAGE_NAME}] md5 hash: ${md5Hash}`);
         }
 
-        await zipFolder(TEMP_PATH, path.join(H5LB_BUILD_CONFIG_PATH, md5Hash.length > 0 ? `h5lbResCache.${md5Hash}.zip` : 'h5lbResCache.zip'));
+        await zipFolder(TEMP_PATH, path.join(H5LB_BUILD_CONFIG_PATH, options.md5Cache ? `h5lbResCache.${md5Hash}.zip` : 'h5lbResCache.zip'));
     }
 };
 
