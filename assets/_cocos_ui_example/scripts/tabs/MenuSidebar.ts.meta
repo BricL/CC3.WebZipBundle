@@ -1,0 +1,12 @@
+{
+  "ver": "4.0.24",
+  "importer": "typescript",
+  "imported": true,
+  "uuid": "f6bf218f-c16f-4184-97e1-3a959db3d0cf",
+  "files": [],
+  "subMetas": {},
+  "userData": {
+    "moduleId": "project:///assets/scripts/tabs/MenuSidebar.ts",
+    "simulateGlobals": []
+  }
+}

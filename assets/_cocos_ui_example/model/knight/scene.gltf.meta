@@ -1,0 +1,186 @@
+{
+  "ver": "2.3.13",
+  "importer": "gltf",
+  "imported": true,
+  "uuid": "5cc5f0f4-43dd-405c-a9c0-6247d1bfa1b0",
+  "files": [
+    "__original-animation-0.cconb"
+  ],
+  "subMetas": {
+    "f605f": {
+      "ver": "1.1.1",
+      "importer": "gltf-mesh",
+      "uuid": "5cc5f0f4-43dd-405c-a9c0-6247d1bfa1b0@f605f",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {},
+      "userData": {
+        "gltfIndex": 0,
+        "triangleCount": 2058
+      },
+      "id": "f605f",
+      "name": "knight_full_Material_0.mesh",
+      "displayName": ""
+    },
+    "73b7f": {
+      "ver": "1.0.17",
+      "importer": "gltf-animation",
+      "uuid": "5cc5f0f4-43dd-405c-a9c0-6247d1bfa1b0@73b7f",
+      "imported": true,
+      "files": [
+        ".cconb"
+      ],
+      "subMetas": {},
+      "userData": {
+        "gltfIndex": 0,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 1
+        },
+        "events": [],
+        "wrapMode": 2
+      },
+      "id": "73b7f",
+      "name": "Take 001.animation",
+      "displayName": ""
+    },
+    "438fe": {
+      "ver": "1.0.1",
+      "importer": "gltf-skeleton",
+      "uuid": "5cc5f0f4-43dd-405c-a9c0-6247d1bfa1b0@438fe",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {},
+      "userData": {
+        "gltfIndex": 0,
+        "jointsLength": 27
+      },
+      "id": "438fe",
+      "name": "UnnamedSkeleton.skeleton",
+      "displayName": ""
+    },
+    "e39f7": {
+      "ver": "1.0.22",
+      "importer": "texture",
+      "uuid": "5cc5f0f4-43dd-405c-a9c0-6247d1bfa1b0@e39f7",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {},
+      "userData": {
+        "wrapModeS": "repeat",
+        "wrapModeT": "repeat",
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "linear",
+        "premultiplyAlpha": false,
+        "anisotropy": 0,
+        "isUuid": false,
+        "imageUuidOrDatabaseUri": "db://assets/_cocos_ui_example/model/knight/textures/Material_baseColor.png"
+      },
+      "id": "e39f7",
+      "name": "UnnamedTexture.texture",
+      "displayName": ""
+    },
+    "b4e6b": {
+      "ver": "1.0.14",
+      "importer": "gltf-material",
+      "uuid": "5cc5f0f4-43dd-405c-a9c0-6247d1bfa1b0@b4e6b",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {},
+      "userData": {
+        "gltfIndex": 0
+      },
+      "id": "b4e6b",
+      "name": "Material.material",
+      "displayName": ""
+    },
+    "d1932": {
+      "ver": "1.0.14",
+      "importer": "gltf-scene",
+      "uuid": "5cc5f0f4-43dd-405c-a9c0-6247d1bfa1b0@d1932",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {},
+      "userData": {
+        "gltfIndex": 0
+      },
+      "id": "d1932",
+      "name": "scene.prefab",
+      "displayName": ""
+    }
+  },
+  "userData": {
+    "normals": 2,
+    "tangents": 2,
+    "dumpMaterials": false,
+    "animationImportSettings": [
+      {
+        "name": "Take 001",
+        "duration": 1,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "Take 001",
+            "from": 0,
+            "to": 1,
+            "wrapMode": 2,
+            "previousId": "73b7f"
+          }
+        ]
+      }
+    ],
+    "assetFinder": {
+      "meshes": [
+        "5cc5f0f4-43dd-405c-a9c0-6247d1bfa1b0@f605f"
+      ],
+      "skeletons": [
+        "5cc5f0f4-43dd-405c-a9c0-6247d1bfa1b0@438fe"
+      ],
+      "textures": [
+        "5cc5f0f4-43dd-405c-a9c0-6247d1bfa1b0@e39f7"
+      ],
+      "materials": [
+        "5cc5f0f4-43dd-405c-a9c0-6247d1bfa1b0@b4e6b"
+      ],
+      "scenes": [
+        "5cc5f0f4-43dd-405c-a9c0-6247d1bfa1b0@d1932"
+      ]
+    },
+    "imageMetas": [
+      {
+        "uri": "db://assets/_cocos_ui_example/model/knight/textures/Material_baseColor.png"
+      }
+    ],
+    "lods": {
+      "enable": false,
+      "hasBuiltinLOD": false,
+      "options": [
+        {
+          "screenRatio": 0.25,
+          "faceCount": 1
+        },
+        {
+          "screenRatio": 0.125,
+          "faceCount": 0.25
+        },
+        {
+          "screenRatio": 0.01,
+          "faceCount": 0.1
+        }
+      ]
+    }
+  }
+}

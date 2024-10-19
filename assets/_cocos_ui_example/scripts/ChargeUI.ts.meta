@@ -1,0 +1,12 @@
+{
+  "ver": "4.0.24",
+  "importer": "typescript",
+  "imported": true,
+  "uuid": "73177ee7-dcb7-45ee-b12b-886de351de0a",
+  "files": [],
+  "subMetas": {},
+  "userData": {
+    "moduleId": "project:///assets/scripts/ChargeUI.ts",
+    "simulateGlobals": []
+  }
+}

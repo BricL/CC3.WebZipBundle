@@ -1,0 +1,12 @@
+{
+  "ver": "4.0.24",
+  "importer": "typescript",
+  "imported": true,
+  "uuid": "bc2c4cd6-d3d9-47c2-99dd-5dfb8f1f366f",
+  "files": [],
+  "subMetas": {},
+  "userData": {
+    "moduleId": "project:///assets/scripts/SubBtnsUI.ts",
+    "simulateGlobals": []
+  }
+}
