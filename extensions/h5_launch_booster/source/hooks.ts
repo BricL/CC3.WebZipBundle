@@ -2,6 +2,8 @@ import { path } from 'cc';
 import { BuildHook, IBuildResult, ITaskOptions } from '../@types';
 import { PACKAGE_NAME } from './global';
 import * as fs from 'fs';
+import * as crypo from 'crypto';
+import JSZip from 'jszip';
 
 function log(...arg: any[]) {
     return console.log(`[${PACKAGE_NAME}] `, ...arg);
@@ -11,6 +13,7 @@ let allAssets = [];
 
 export const throwError: BuildHook.throwError = true;
 
+//#region lifecycle hooks
 export const load: BuildHook.load = async function () {
     console.log(`[${PACKAGE_NAME}] Load cocos plugin example in builder.`);
     allAssets = await Editor.Message.request('asset-db', 'query-assets');
@@ -54,19 +57,50 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
 
     const pkgOptions = options.packages[PACKAGE_NAME];
     if (pkgOptions) {
-        const assetsUrlListPath = `${Editor.Project.path}/h5lb-build-config/assetsUrlListRecord.json`;
-        
-        const jsonString = fs.readFileSync(assetsUrlListPath, 'utf-8');
+        const BUILD_PROJECT_DEST_PATH = result.dest;
+        const H5LB_BUILD_CONFIG_PATH = `${Editor.Project.path}/h5lb-build-config`;
+        const TEMP_PATH = path.join(H5LB_BUILD_CONFIG_PATH, 'temp');
+
+        // Clean/Create temp folder
+        if (fs.existsSync(TEMP_PATH))
+            fs.rmdirSync(TEMP_PATH, { recursive: true });
+        fs.mkdirSync(TEMP_PATH, { recursive: true });
+
+        // Copy assets to temp folder
+        const resultString = [];
+        const jsonString = fs.readFileSync(`${H5LB_BUILD_CONFIG_PATH}/assetsUrlListRecord.json`, 'utf-8');
         const assetsPathList = JSON.parse(jsonString);
+
         for (const assetPath of assetsPathList) {
-            const filePath = `${result.dest}/${assetPath}`;
+            const assetName = path.basename(assetPath);
+            const srcAssetPath = path.join(BUILD_PROJECT_DEST_PATH, assetPath);
 
-            if (fs.existsSync(filePath)) {
+            try {
+                if (fs.existsSync(srcAssetPath)) {
+                    const destAssetPath = path.join(TEMP_PATH, path.dirname(assetPath), assetName);
+                    console.log(`[${PACKAGE_NAME}] Copying file: ${srcAssetPath} to ${destAssetPath}`);
+                    fs.mkdirSync(path.dirname(destAssetPath), { recursive: true });
+                    fs.copyFileSync(srcAssetPath, destAssetPath);
 
-            } else {
-                console.error(`[${PACKAGE_NAME}] file not exists: ${filePath} `);
+                    resultString.push(destAssetPath);
+                } else {
+                    console.error(`[${PACKAGE_NAME}] file not exists: ${srcAssetPath} `);
+                }
+            } catch (exp) {
+                console.error(`[${PACKAGE_NAME}] copy file failed: ${exp}`);
             }
         }
+
+        let md5Hash = '';
+        if (options.md5Cache) {
+            if (resultString.length > 0) {
+                const hash = crypo.createHash('md5').update(resultString.join('')).digest('hex');
+                md5Hash = hash.substring(0, 5);
+            }
+            console.log(`[${PACKAGE_NAME}] md5 hash: ${md5Hash}`);
+        }
+
+        await zipFolder(TEMP_PATH, path.join(H5LB_BUILD_CONFIG_PATH, md5Hash.length > 0 ? `h5lbResCache.${md5Hash}.zip` : 'h5lbResCache.zip'));
     }
 };
 
@@ -86,3 +120,32 @@ export const onBeforeMake: BuildHook.onBeforeMake = async function (root, option
 export const onAfterMake: BuildHook.onAfterMake = async function (root, options) {
     // console.log(`onAfterMake: root: ${root}, options: ${options}`);
 };
+
+//#region utils functions
+async function zipFolder(srcFolder: string, destFolder: string) {
+    const zip = new JSZip();
+
+    async function addFolderToZip(folderPath: string, zipFolder: JSZip) {
+        const items = await fs.readdirSync(folderPath);
+
+        for (const item of items) {
+            const fullPath = path.join(folderPath, item);
+            const stats = await fs.statSync(fullPath);
+
+            if (stats.isDirectory()) {
+                const folder = zipFolder.folder(item);
+                await addFolderToZip(fullPath, folder);
+            } else {
+                const fileData = await fs.readFileSync(fullPath);
+                zipFolder.file(item, fileData);
+            }
+        }
+    }
+
+    await addFolderToZip(srcFolder, zip);
+
+    const zipContent = await zip.generateAsync({ type: 'nodebuffer' });
+    await fs.writeFileSync(destFolder, zipContent);
+
+    console.log(`Folder ${srcFolder} has been zipped to ${destFolder}`);
+}

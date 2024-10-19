@@ -8,6 +8,7 @@ local/
 build/
 profiles/
 native
+h5lb-build-config/
 #//////////////////////////
 # NPM
 #//////////////////////////

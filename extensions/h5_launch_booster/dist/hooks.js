@@ -31,15 +31,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.onAfterMake = exports.onBeforeMake = exports.onError = exports.unload = exports.onAfterBuild = exports.onAfterCompressSettings = exports.onBeforeCompressSettings = exports.onBeforeBuild = exports.load = exports.throwError = void 0;
+const cc_1 = require("cc");
 const global_1 = require("./global");
 const fs = __importStar(require("fs"));
+const crypo = __importStar(require("crypto"));
+const jszip_1 = __importDefault(require("jszip"));
 function log(...arg) {
     return console.log(`[${global_1.PACKAGE_NAME}] `, ...arg);
 }
 let allAssets = [];
 exports.throwError = true;
+//#region lifecycle hooks
 const load = function () {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(`[${global_1.PACKAGE_NAME}] Load cocos plugin example in builder.`);
@@ -91,17 +98,45 @@ const onAfterBuild = function (options, result) {
         // // throw new Error('Test onError');
         const pkgOptions = options.packages[global_1.PACKAGE_NAME];
         if (pkgOptions) {
-            const assetsUrlListPath = `${Editor.Project.path}/h5lb-build-config/assetsUrlListRecord.json`;
-            const jsonString = fs.readFileSync(assetsUrlListPath, 'utf-8');
+            const BUILD_PROJECT_DEST_PATH = result.dest;
+            const H5LB_BUILD_CONFIG_PATH = `${Editor.Project.path}/h5lb-build-config`;
+            const TEMP_PATH = cc_1.path.join(H5LB_BUILD_CONFIG_PATH, 'temp');
+            // Clean/Create temp folder
+            if (fs.existsSync(TEMP_PATH))
+                fs.rmdirSync(TEMP_PATH, { recursive: true });
+            fs.mkdirSync(TEMP_PATH, { recursive: true });
+            // Copy assets to temp folder
+            const resultString = [];
+            const jsonString = fs.readFileSync(`${H5LB_BUILD_CONFIG_PATH}/assetsUrlListRecord.json`, 'utf-8');
             const assetsPathList = JSON.parse(jsonString);
             for (const assetPath of assetsPathList) {
-                const filePath = `${result.dest}/${assetPath}`;
-                if (fs.existsSync(filePath)) {
+                const assetName = cc_1.path.basename(assetPath);
+                const srcAssetPath = cc_1.path.join(BUILD_PROJECT_DEST_PATH, assetPath);
+                try {
+                    if (fs.existsSync(srcAssetPath)) {
+                        const destAssetPath = cc_1.path.join(TEMP_PATH, cc_1.path.dirname(assetPath), assetName);
+                        console.log(`[${global_1.PACKAGE_NAME}] Copying file: ${srcAssetPath} to ${destAssetPath}`);
+                        fs.mkdirSync(cc_1.path.dirname(destAssetPath), { recursive: true });
+                        fs.copyFileSync(srcAssetPath, destAssetPath);
+                        resultString.push(destAssetPath);
+                    }
+                    else {
+                        console.error(`[${global_1.PACKAGE_NAME}] file not exists: ${srcAssetPath} `);
+                    }
                 }
-                else {
-                    console.error(`[${global_1.PACKAGE_NAME}] file not exists: ${filePath} `);
+                catch (exp) {
+                    console.error(`[${global_1.PACKAGE_NAME}] copy file failed: ${exp}`);
                 }
             }
+            let md5Hash = '';
+            if (options.md5Cache) {
+                if (resultString.length > 0) {
+                    const hash = crypo.createHash('md5').update(resultString.join('')).digest('hex');
+                    md5Hash = hash.substring(0, 5);
+                }
+                console.log(`[${global_1.PACKAGE_NAME}] md5 hash: ${md5Hash}`);
+            }
+            yield zipFolder(TEMP_PATH, cc_1.path.join(H5LB_BUILD_CONFIG_PATH, md5Hash.length > 0 ? `h5lbResCache.${md5Hash}.zip` : 'h5lbResCache.zip'));
         }
     });
 };
@@ -131,3 +166,30 @@ const onAfterMake = function (root, options) {
     });
 };
 exports.onAfterMake = onAfterMake;
+//#region utils functions
+function zipFolder(srcFolder, destFolder) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const zip = new jszip_1.default();
+        function addFolderToZip(folderPath, zipFolder) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const items = yield fs.readdirSync(folderPath);
+                for (const item of items) {
+                    const fullPath = cc_1.path.join(folderPath, item);
+                    const stats = yield fs.statSync(fullPath);
+                    if (stats.isDirectory()) {
+                        const folder = zipFolder.folder(item);
+                        yield addFolderToZip(fullPath, folder);
+                    }
+                    else {
+                        const fileData = yield fs.readFileSync(fullPath);
+                        zipFolder.file(item, fileData);
+                    }
+                }
+            });
+        }
+        yield addFolderToZip(srcFolder, zip);
+        const zipContent = yield zip.generateAsync({ type: 'nodebuffer' });
+        yield fs.writeFileSync(destFolder, zipContent);
+        console.log(`Folder ${srcFolder} has been zipped to ${destFolder}`);
+    });
+}
