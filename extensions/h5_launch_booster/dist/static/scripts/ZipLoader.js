@@ -21,14 +21,25 @@ let ZipLoader = class ZipLoader extends cc_1.Component {
         this.resCache = new Map();
         this.isPressedLeftAlt = false;
     }
+    //#region public methods
+    downloadZipCache(url, callback) {
+    }
+    //#region lifecycle hooks
     onLoad() {
         this.inject('.cconb');
         this.inject('.json');
         this.inject('.png');
         this.inject('.jpg');
         this.inject('.webp');
+        const h5lbResCache = window['h5lbResCache'];
+        if (h5lbResCache !== undefined) {
+            for (let i = 0; i < h5lbResCache.length; i++) {
+                (0, cc_1.log)(`[${this.constructor.name}] onLoad ${h5lbResCache[i]}`);
+            }
+        }
     }
     start() {
+        cc_1.director.addPersistRootNode(this.node);
         cc_1.input.on(cc_1.Input.EventType.KEY_DOWN, (event) => {
             if (event.keyCode === cc_1.KeyCode.ALT_LEFT) {
                 this.isPressedLeftAlt = true;
@@ -46,7 +57,6 @@ let ZipLoader = class ZipLoader extends cc_1.Component {
         if (this.loadSceneName.trim() !== '') {
             cc_1.director.loadScene(this.loadSceneName);
         }
-        cc_1.director.addPersistRootNode(this.node);
     }
     inject(extension) {
         if (extension === '.cconb') {

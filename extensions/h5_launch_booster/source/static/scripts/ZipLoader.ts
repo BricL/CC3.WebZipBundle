@@ -16,15 +16,30 @@ export class ZipLoader extends Component {
     private resCache = new Map();
     private isPressedLeftAlt = false;
 
+    //#region public methods
+    public downloadZipCache(url: string, callback: (error: Error, data: any) => void) {
+
+    }
+
+    //#region lifecycle hooks
     protected onLoad(): void {
         this.inject('.cconb');
         this.inject('.json');
         this.inject('.png');
         this.inject('.jpg');
         this.inject('.webp');
+
+        const h5lbResCache = window['h5lbResCache'];
+        if (h5lbResCache !== undefined) {
+            for (let i = 0; i < h5lbResCache.length; i++) {
+                log(`[${this.constructor.name}] onLoad ${h5lbResCache[i]}`);
+            }
+        }
     }
 
     protected start(): void {
+        director.addPersistRootNode(this.node);
+
         input.on(Input.EventType.KEY_DOWN, (event) => {
             if (event.keyCode === KeyCode.ALT_LEFT) {
                 this.isPressedLeftAlt = true;
@@ -43,8 +58,6 @@ export class ZipLoader extends Component {
         if (this.loadSceneName.trim() !== '') {
             director.loadScene(this.loadSceneName);
         }
-
-        director.addPersistRootNode(this.node);
     }
 
     private inject(extension: string) {

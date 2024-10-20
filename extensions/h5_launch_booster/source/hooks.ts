@@ -118,20 +118,31 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
                 const hash = crypo.createHash('md5').update(resultString.join('')).digest('hex');
                 md5Hash = hash.substring(0, 5);
             }
-            console.log(`[${PACKAGE_NAME}] md5 hash: ${md5Hash}`);
         }
 
-        await zipFolder(TEMP_PATH, path.join(H5LB_BUILD_CONFIG_PATH, options.md5Cache ? `h5lbResCache.${md5Hash}.zip` : 'h5lbResCache.zip'));
+        // Generate h5lbResCache.zip
+        const h5lbResCacheZipName = options.md5Cache ? `h5lbResCache.${md5Hash}.zip` : 'h5lbResCache.zip';
+        await zipFolder(TEMP_PATH, path.join(H5LB_BUILD_CONFIG_PATH, h5lbResCacheZipName));
+
+        // // Generate h5lbResCache.json
+        // const h5lbResCacheJsonName = `h5lbResCache.${md5Hash}.json`;
+        // fs.writeFileSync(path.join(H5LB_BUILD_CONFIG_PATH, h5lbResCacheJsonName), JSON.stringify([h5lbResCacheZipName]));
+
+        // Copy file to build project
+        // fs.copyFileSync(path.join(H5LB_BUILD_CONFIG_PATH, h5lbResCacheJsonName), path.join(BUILD_PROJECT_DEST_PATH, h5lbResCacheJsonName));
+        fs.copyFileSync(path.join(H5LB_BUILD_CONFIG_PATH, h5lbResCacheZipName), path.join(BUILD_PROJECT_DEST_PATH, 'assets', h5lbResCacheZipName));
+
+        // Modify index.html to add 'h5lbResCache' gloable variable to window object which is used in ZipLoader.ts
+        const indexHtml = fs.readFileSync(path.join(BUILD_PROJECT_DEST_PATH, 'index.html'), 'utf-8');
+        const modifiedHtml = indexHtml.split('\n').map((line, index) => {
+            if (line.includes('./index')) {
+                return `${line}\nwindow['h5lbResCache'] = ['assets/${h5lbResCacheZipName}'];`;
+            }
+            return line;
+        }).join('\n');
+        fs.writeFileSync(path.join(BUILD_PROJECT_DEST_PATH, 'index.html'), modifiedHtml);
     }
 };
-
-function copyAsset(srcAssetPath: string, destAssetPath: string) {
-    // const destAssetPath = path.join(TEMP_PATH, path.dirname(assetPath), assetName);
-    console.log(`[${PACKAGE_NAME}] Copying file: ${srcAssetPath} to ${destAssetPath}`);
-
-    fs.mkdirSync(path.dirname(destAssetPath), { recursive: true });
-    fs.copyFileSync(srcAssetPath, destAssetPath);
-}
 
 export const unload: BuildHook.unload = async function () {
     // console.log(`[${PACKAGE_NAME}] Unload cocos plugin example in builder.`);
@@ -177,4 +188,12 @@ async function zipFolder(srcFolder: string, destFolder: string) {
     fs.writeFileSync(destFolder, zipContent);
 
     console.log(`[${PACKAGE_NAME}] Folder ${srcFolder} has been zipped to ${destFolder}`);
+}
+
+function copyAsset(srcAssetPath: string, destAssetPath: string) {
+    // const destAssetPath = path.join(TEMP_PATH, path.dirname(assetPath), assetName);
+    console.log(`[${PACKAGE_NAME}] Copying file: ${srcAssetPath} to ${destAssetPath}`);
+
+    fs.mkdirSync(path.dirname(destAssetPath), { recursive: true });
+    fs.copyFileSync(srcAssetPath, destAssetPath);
 }
