@@ -85,25 +85,6 @@ export class ZipLoader extends Component {
     private inject(extension: string) {
         if (extension === '.cconb') {
             this.injectXMLHttpRequest();
-        } else if (extension === '.json') {
-            // assetManager.downloader.register('.json', async (url, options, onComplete) => {
-            //     this.recordUrl(url);
-
-            //     if (this.zipCache.has(url)) {
-            //         const cache = this.zipCache.get(url);
-            //         const res = await cache.async("text");
-            //         onComplete(null, JSON.parse(res));
-            //         return;
-            //     }
-
-            //     try {
-            //         const response = await fetch(url);
-            //         const jsonStr = await response.json();
-            //         onComplete(null, jsonStr);
-            //     } catch (e) {
-            //         onComplete(new Error(e), null);
-            //     }
-            // });
         } else if (extension === '.png' || extension === '.jpg' || extension === '.webp') {
             assetManager.downloader.register(extension, async (url, options, onComplete) => {
                 this.recordUrl(url);
@@ -129,6 +110,25 @@ export class ZipLoader extends Component {
                     }
                 }
             });
+        } else if (extension === '.json') {
+            // assetManager.downloader.register('.json', async (url, options, onComplete) => {
+            //     this.recordUrl(url);
+
+            //     if (this.zipCache.has(url)) {
+            //         const cache = this.zipCache.get(url);
+            //         const res = await cache.async("text");
+            //         onComplete(null, JSON.parse(res));
+            //         return;
+            //     }
+
+            //     try {
+            //         const response = await fetch(url);
+            //         const jsonStr = await response.json();
+            //         onComplete(null, jsonStr);
+            //     } catch (e) {
+            //         onComplete(new Error(e), null);
+            //     }
+            // });
         } else {
             error(`[${this.constructor.name}].inject`, `Unknown extension: ${extension}`);
         }
