@@ -220,18 +220,9 @@
   {
     "__type__": "cc.SkyboxInfo",
     "_envLightingType": 0,
-    "_envmapHDR": {
-      "__uuid__": "d032ac98-05e1-4090-88bb-eb640dcb5fc1@b47c0",
-      "__expectedType__": "cc.TextureCube"
-    },
-    "_envmap": {
-      "__uuid__": "d032ac98-05e1-4090-88bb-eb640dcb5fc1@b47c0",
-      "__expectedType__": "cc.TextureCube"
-    },
-    "_envmapLDR": {
-      "__uuid__": "6f01cf7f-81bf-4a7e-bd5d-0afc19696480@b47c0",
-      "__expectedType__": "cc.TextureCube"
-    },
+    "_envmapHDR": null,
+    "_envmap": null,
+    "_envmapLDR": null,
     "_diffuseMapHDR": null,
     "_diffuseMapLDR": null,
     "_enabled": false,
