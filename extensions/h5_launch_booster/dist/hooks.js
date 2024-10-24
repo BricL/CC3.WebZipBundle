@@ -107,7 +107,7 @@ const onAfterBuild = function (options, result) {
             fs.mkdirSync(TEMP_PATH, { recursive: true });
             // Copy assets to temp folder
             const resultString = [];
-            const jsonString = fs.readFileSync(`${BUILD_CONFIG_PATH}/assetsUrlListRecord.json`, 'utf-8');
+            const jsonString = fs.readFileSync(cc_1.path.join(BUILD_CONFIG_PATH, global_1.ASSETS_URL_RECORD_LIST_JSON), 'utf-8');
             const assetsPathList = JSON.parse(jsonString);
             for (const assetPath of assetsPathList) {
                 let assetName = cc_1.path.basename(assetPath);

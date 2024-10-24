@@ -1,6 +1,6 @@
 import { path } from 'cc';
 import { BuildHook, IBuildResult, ITaskOptions } from '../@types';
-import { PACKAGE_NAME } from './global';
+import { ASSETS_URL_RECORD_LIST_JSON, PACKAGE_NAME } from './global';
 import * as fs from 'fs';
 import * as crypo from 'crypto';
 import JSZip from 'jszip';
@@ -68,7 +68,7 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
 
         // Copy assets to temp folder
         const resultString = [];
-        const jsonString = fs.readFileSync(`${BUILD_CONFIG_PATH}/assetsUrlListRecord.json`, 'utf-8');
+        const jsonString = fs.readFileSync(path.join(BUILD_CONFIG_PATH, ASSETS_URL_RECORD_LIST_JSON), 'utf-8');
         const assetsPathList = JSON.parse(jsonString);
 
         for (const assetPath of assetsPathList) {

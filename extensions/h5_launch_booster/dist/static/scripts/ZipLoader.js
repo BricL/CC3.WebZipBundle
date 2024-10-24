@@ -44,7 +44,7 @@ let ZipLoader = class ZipLoader extends cc_1.Component {
                 return zip;
             }
             catch (e) {
-                (0, cc_1.error)(`${this.constructor.name}.downloadResCache`, e);
+                (0, cc_1.error)(`[${this.constructor.name}].downloadResCache`, e);
             }
         });
     }
@@ -85,8 +85,8 @@ let ZipLoader = class ZipLoader extends cc_1.Component {
                     zip.forEach((relativePath, zipEntry) => {
                         if (zipEntry.dir)
                             return;
-                        (0, cc_1.log)(`${this.constructor.name}.assetsInCache: ${relativePath}`);
-                        this.zipCache.set(relativePath, zipEntry);
+                        else
+                            this.zipCache.set(relativePath, zipEntry);
                     });
                 }
             }
@@ -99,43 +99,52 @@ let ZipLoader = class ZipLoader extends cc_1.Component {
         if (extension === '.cconb') {
             this.injectXMLHttpRequest();
         }
-        else if (extension === '.json') {
-            cc_1.assetManager.downloader.register('.json', (url, options, onComplete) => __awaiter(this, void 0, void 0, function* () {
-                this.recordUrl(url);
-                if (this.zipCache.has(url)) {
-                    const cache = this.zipCache.get(url);
-                    const res = yield cache.async("text");
-                    onComplete(null, JSON.parse(res));
-                    return;
-                }
-                try {
-                    const response = yield fetch(url);
-                    const jsonStr = yield response.json();
-                    onComplete(null, jsonStr);
-                }
-                catch (e) {
-                    onComplete(new Error(e), null);
-                }
-            }));
-        }
         else if (extension === '.png' || extension === '.jpg' || extension === '.webp') {
             cc_1.assetManager.downloader.register(extension, (url, options, onComplete) => __awaiter(this, void 0, void 0, function* () {
                 this.recordUrl(url);
-                if (this.zipCache.has(url)) {
-                    const cache = this.zipCache.get(url);
-                    const res = yield cache.async("blob");
+                if (this.resCache.has(url)) {
+                    const res = this.resCache.get(url);
                     onComplete(null, res);
-                    return;
                 }
-                const img = new Image();
-                img.crossOrigin = 'anonymous';
-                img.onload = () => { onComplete(null, img); };
-                img.onerror = (e) => { onComplete(new Error(e instanceof Event ? e.type : e), null); };
-                img.src = url;
+                else {
+                    if (this.zipCache.has(url)) {
+                        const cache = this.zipCache.get(url);
+                        const res = yield cache.async("blob");
+                        this.resCache.set(url, res);
+                        this.zipCache.delete(url);
+                        onComplete(null, res);
+                        return;
+                    }
+                    else {
+                        const img = new Image();
+                        img.crossOrigin = 'anonymous';
+                        img.onload = () => { onComplete(null, img); };
+                        img.onerror = (e) => { onComplete(new Error(e instanceof Event ? e.type : e), null); };
+                        img.src = url;
+                    }
+                }
             }));
         }
+        else if (extension === '.json') {
+            // assetManager.downloader.register('.json', async (url, options, onComplete) => {
+            //     this.recordUrl(url);
+            //     if (this.zipCache.has(url)) {
+            //         const cache = this.zipCache.get(url);
+            //         const res = await cache.async("text");
+            //         onComplete(null, JSON.parse(res));
+            //         return;
+            //     }
+            //     try {
+            //         const response = await fetch(url);
+            //         const jsonStr = await response.json();
+            //         onComplete(null, jsonStr);
+            //     } catch (e) {
+            //         onComplete(new Error(e), null);
+            //     }
+            // });
+        }
         else {
-            (0, cc_1.error)(`${this.constructor.name}.inject`, `Unknown extension: ${extension}`);
+            (0, cc_1.error)(`[${this.constructor.name}].inject`, `Unknown extension: ${extension}`);
         }
     }
     /**
@@ -168,6 +177,7 @@ let ZipLoader = class ZipLoader extends cc_1.Component {
             }
             else {
                 this.zipCacheUrl = null;
+                (0, cc_1.warn)(`[${that.constructor.name}] The requested asset not in cache: ${url}`);
             }
             return oldOpen.apply(this, [method, url, async, user, password]);
         };
@@ -179,17 +189,15 @@ let ZipLoader = class ZipLoader extends cc_1.Component {
                     if (!that.resCache.has(this.zipCacheUrl)) {
                         const cache = that.zipCache.get(this.zipCacheUrl);
                         if (this.responseType === "json") {
-                            //如果 responseType 是 "json"，以文本格式獲取資料，並解析為 JSON
                             const text = yield cache.async("text");
                             that.resCache.set(this.zipCacheUrl, text);
                         }
                         else {
-                            //以原本的 responseType 獲取。
                             const res = yield cache.async(this.responseType);
                             that.resCache.set(this.zipCacheUrl, res);
                         }
+                        that.zipCache.delete(this.zipCacheUrl);
                     }
-                    // 解析完了直接调用 XMLHttpRequest 的 onload 事件，不做原有的真實請求了
                     if (typeof this.onload === "function") {
                         const event = new ProgressEvent('load', {
                             lengthComputable: false,
@@ -203,19 +211,15 @@ let ZipLoader = class ZipLoader extends cc_1.Component {
                 return oldSend.apply(this, [data]);
             });
         };
-        //Object.defineProperty 直接在對象上修改現有屬性，並返回這個對象
         Object.defineProperty((XMLHttpRequest.prototype), 'response', {
             get: function () {
-                // 如果當前的動態zipCacheUrl有值代表有被設定過，直接從ResCache取值
                 if (this.zipCacheUrl) {
                     const res = that.resCache.get(this.zipCacheUrl);
                     return this.responseType === "json" ? JSON.parse(res) : res;
                 }
-                // 調用原始的 getter，如果未定義，返回undefined，但前面已經判斷過了
                 return accessor.get ? accessor.get.call(this) : undefined;
             },
-            set: function () {
-            },
+            set: function () { },
             configurable: true
         });
         return true;

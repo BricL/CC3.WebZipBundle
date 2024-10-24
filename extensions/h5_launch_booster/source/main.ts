@@ -1,4 +1,6 @@
 import * as fs from 'fs';
+import { ASSETS_URL_RECORD_LIST_JSON } from './global';
+import path from 'path';
 
 /**
  * @en Registration method for the main process of Extension
@@ -22,11 +24,11 @@ export const load = function () {
         console.warn(`h5_launch_booster create build-config directory at '${buildConfigPath}.'`);
     }
 
-    // Check assetsUrlListRecord.json
-    if (!fs.existsSync(`${buildConfigPath}/assetsUrlListRecord.json`)) {
-        const assetsUrlListPath = `${buildConfigPath}/assetsUrlListRecord.json`;
-        fs.writeFileSync(assetsUrlListPath, JSON.stringify([]));
-        console.warn(`h5_launch_booster add assetsUrlListRecord.json at at '${assetsUrlListPath}.`);
+    // Check assetsUrlRecordList.json
+    const assetsUrlRecordListPath = path.join(buildConfigPath, ASSETS_URL_RECORD_LIST_JSON);
+    if (!fs.existsSync(assetsUrlRecordListPath)) {
+        fs.writeFileSync(assetsUrlRecordListPath, JSON.stringify([]));
+        console.warn(`h5_launch_booster add assetsUrlRecordList.json at at '${assetsUrlRecordListPath}.`);
     }
 };
 

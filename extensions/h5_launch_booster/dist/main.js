@@ -22,9 +22,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.unload = exports.load = exports.methods = void 0;
 const fs = __importStar(require("fs"));
+const global_1 = require("./global");
+const path_1 = __importDefault(require("path"));
 /**
  * @en Registration method for the main process of Extension
  * @zh 为扩展的主进程的注册方法
@@ -42,11 +47,11 @@ const load = function () {
         fs.mkdirSync(buildConfigPath);
         console.warn(`h5_launch_booster create build-config directory at '${buildConfigPath}.'`);
     }
-    // Check assetsUrlListRecord.json
-    if (!fs.existsSync(`${buildConfigPath}/assetsUrlListRecord.json`)) {
-        const assetsUrlListPath = `${buildConfigPath}/assetsUrlListRecord.json`;
-        fs.writeFileSync(assetsUrlListPath, JSON.stringify([]));
-        console.warn(`h5_launch_booster add assetsUrlListRecord.json at at '${assetsUrlListPath}.`);
+    // Check assetsUrlRecordList.json
+    const assetsUrlRecordListPath = path_1.default.join(buildConfigPath, global_1.ASSETS_URL_RECORD_LIST_JSON);
+    if (!fs.existsSync(assetsUrlRecordListPath)) {
+        fs.writeFileSync(assetsUrlRecordListPath, JSON.stringify([]));
+        console.warn(`h5_launch_booster add assetsUrlRecordList.json at at '${assetsUrlRecordListPath}.`);
     }
 };
 exports.load = load;
