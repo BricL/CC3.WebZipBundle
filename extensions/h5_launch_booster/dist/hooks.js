@@ -98,20 +98,20 @@ const onAfterBuild = function (options, result) {
         // // throw new Error('Test onError');
         const pkgOptions = options.packages[global_1.PACKAGE_NAME];
         if (pkgOptions) {
-            const BUILD_PROJECT_DEST_PATH = result.dest;
-            const H5LB_BUILD_CONFIG_PATH = `${Editor.Project.path}/h5lb-build-config`;
-            const TEMP_PATH = cc_1.path.join(H5LB_BUILD_CONFIG_PATH, 'temp');
+            const BUILD_DEST_PATH = result.dest;
+            const BUILD_CONFIG_PATH = `${Editor.Project.path}/h5lb-build-config`;
+            const TEMP_PATH = cc_1.path.join(BUILD_CONFIG_PATH, 'temp');
             // Clean/Create temp folder
             if (fs.existsSync(TEMP_PATH))
                 fs.rmdirSync(TEMP_PATH, { recursive: true });
             fs.mkdirSync(TEMP_PATH, { recursive: true });
             // Copy assets to temp folder
             const resultString = [];
-            const jsonString = fs.readFileSync(`${H5LB_BUILD_CONFIG_PATH}/assetsUrlListRecord.json`, 'utf-8');
+            const jsonString = fs.readFileSync(`${BUILD_CONFIG_PATH}/assetsUrlListRecord.json`, 'utf-8');
             const assetsPathList = JSON.parse(jsonString);
             for (const assetPath of assetsPathList) {
                 let assetName = cc_1.path.basename(assetPath);
-                let srcAssetPath = cc_1.path.join(BUILD_PROJECT_DEST_PATH, assetPath);
+                let srcAssetPath = cc_1.path.join(BUILD_DEST_PATH, assetPath);
                 try {
                     if (fs.existsSync(srcAssetPath)) {
                         const destAssetPath = cc_1.path.join(TEMP_PATH, cc_1.path.dirname(assetPath), assetName);
@@ -155,22 +155,22 @@ const onAfterBuild = function (options, result) {
             }
             // Generate h5lbResCache.zip
             const h5lbResCacheZipName = options.md5Cache ? `h5lbResCache.${md5Hash}.zip` : 'h5lbResCache.zip';
-            yield zipFolder(TEMP_PATH, cc_1.path.join(H5LB_BUILD_CONFIG_PATH, h5lbResCacheZipName));
+            yield zipFolder(TEMP_PATH, cc_1.path.join(BUILD_CONFIG_PATH, h5lbResCacheZipName));
             // // Generate h5lbResCache.json
             // const h5lbResCacheJsonName = `h5lbResCache.${md5Hash}.json`;
             // fs.writeFileSync(path.join(H5LB_BUILD_CONFIG_PATH, h5lbResCacheJsonName), JSON.stringify([h5lbResCacheZipName]));
             // Copy file to build project
             // fs.copyFileSync(path.join(H5LB_BUILD_CONFIG_PATH, h5lbResCacheJsonName), path.join(BUILD_PROJECT_DEST_PATH, h5lbResCacheJsonName));
-            fs.copyFileSync(cc_1.path.join(H5LB_BUILD_CONFIG_PATH, h5lbResCacheZipName), cc_1.path.join(BUILD_PROJECT_DEST_PATH, 'assets', h5lbResCacheZipName));
+            fs.copyFileSync(cc_1.path.join(BUILD_CONFIG_PATH, h5lbResCacheZipName), cc_1.path.join(BUILD_DEST_PATH, 'assets', h5lbResCacheZipName));
             // Modify index.html to add 'h5lbResCache' gloable variable to window object which is used in ZipLoader.ts
-            const indexHtml = fs.readFileSync(cc_1.path.join(BUILD_PROJECT_DEST_PATH, 'index.html'), 'utf-8');
+            const indexHtml = fs.readFileSync(cc_1.path.join(BUILD_DEST_PATH, 'index.html'), 'utf-8');
             const modifiedHtml = indexHtml.split('\n').map((line, index) => {
                 if (line.includes('./index')) {
-                    return `${line}\nwindow['h5lbResCache'] = ['assets/${h5lbResCacheZipName}'];`;
+                    return `${line}\nwindow['h5lbResZipList'] = ['assets/${h5lbResCacheZipName}'];`;
                 }
                 return line;
             }).join('\n');
-            fs.writeFileSync(cc_1.path.join(BUILD_PROJECT_DEST_PATH, 'index.html'), modifiedHtml);
+            fs.writeFileSync(cc_1.path.join(BUILD_DEST_PATH, 'index.html'), modifiedHtml);
         }
     });
 };
@@ -220,7 +220,7 @@ function zipFolder(srcFolder, destFolder) {
             }
         }
         addFolderToZip(srcFolder, zip);
-        const zipContent = yield zip.generateAsync({ type: 'nodebuffer' });
+        const zipContent = yield zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE', compressionOptions: { level: 6 } });
         fs.writeFileSync(destFolder, zipContent);
         console.log(`[${global_1.PACKAGE_NAME}] Folder ${srcFolder} has been zipped to ${destFolder}`);
     });

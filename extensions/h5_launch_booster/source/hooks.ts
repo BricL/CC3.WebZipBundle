@@ -57,9 +57,9 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
 
     const pkgOptions = options.packages[PACKAGE_NAME];
     if (pkgOptions) {
-        const BUILD_PROJECT_DEST_PATH = result.dest;
-        const H5LB_BUILD_CONFIG_PATH = `${Editor.Project.path}/h5lb-build-config`;
-        const TEMP_PATH = path.join(H5LB_BUILD_CONFIG_PATH, 'temp');
+        const BUILD_DEST_PATH = result.dest;
+        const BUILD_CONFIG_PATH = `${Editor.Project.path}/h5lb-build-config`;
+        const TEMP_PATH = path.join(BUILD_CONFIG_PATH, 'temp');
 
         // Clean/Create temp folder
         if (fs.existsSync(TEMP_PATH))
@@ -68,12 +68,12 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
 
         // Copy assets to temp folder
         const resultString = [];
-        const jsonString = fs.readFileSync(`${H5LB_BUILD_CONFIG_PATH}/assetsUrlListRecord.json`, 'utf-8');
+        const jsonString = fs.readFileSync(`${BUILD_CONFIG_PATH}/assetsUrlListRecord.json`, 'utf-8');
         const assetsPathList = JSON.parse(jsonString);
 
         for (const assetPath of assetsPathList) {
             let assetName = path.basename(assetPath);
-            let srcAssetPath = path.join(BUILD_PROJECT_DEST_PATH, assetPath);
+            let srcAssetPath = path.join(BUILD_DEST_PATH, assetPath);
 
             try {
                 if (fs.existsSync(srcAssetPath)) {
@@ -122,7 +122,7 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
 
         // Generate h5lbResCache.zip
         const h5lbResCacheZipName = options.md5Cache ? `h5lbResCache.${md5Hash}.zip` : 'h5lbResCache.zip';
-        await zipFolder(TEMP_PATH, path.join(H5LB_BUILD_CONFIG_PATH, h5lbResCacheZipName));
+        await zipFolder(TEMP_PATH, path.join(BUILD_CONFIG_PATH, h5lbResCacheZipName));
 
         // // Generate h5lbResCache.json
         // const h5lbResCacheJsonName = `h5lbResCache.${md5Hash}.json`;
@@ -130,17 +130,17 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
 
         // Copy file to build project
         // fs.copyFileSync(path.join(H5LB_BUILD_CONFIG_PATH, h5lbResCacheJsonName), path.join(BUILD_PROJECT_DEST_PATH, h5lbResCacheJsonName));
-        fs.copyFileSync(path.join(H5LB_BUILD_CONFIG_PATH, h5lbResCacheZipName), path.join(BUILD_PROJECT_DEST_PATH, 'assets', h5lbResCacheZipName));
+        fs.copyFileSync(path.join(BUILD_CONFIG_PATH, h5lbResCacheZipName), path.join(BUILD_DEST_PATH, 'assets', h5lbResCacheZipName));
 
         // Modify index.html to add 'h5lbResCache' gloable variable to window object which is used in ZipLoader.ts
-        const indexHtml = fs.readFileSync(path.join(BUILD_PROJECT_DEST_PATH, 'index.html'), 'utf-8');
+        const indexHtml = fs.readFileSync(path.join(BUILD_DEST_PATH, 'index.html'), 'utf-8');
         const modifiedHtml = indexHtml.split('\n').map((line, index) => {
             if (line.includes('./index')) {
-                return `${line}\nwindow['h5lbResCache'] = ['assets/${h5lbResCacheZipName}'];`;
+                return `${line}\nwindow['h5lbResZipList'] = ['assets/${h5lbResCacheZipName}'];`;
             }
             return line;
         }).join('\n');
-        fs.writeFileSync(path.join(BUILD_PROJECT_DEST_PATH, 'index.html'), modifiedHtml);
+        fs.writeFileSync(path.join(BUILD_DEST_PATH, 'index.html'), modifiedHtml);
     }
 };
 
@@ -184,7 +184,7 @@ async function zipFolder(srcFolder: string, destFolder: string) {
 
     addFolderToZip(srcFolder, zip);
 
-    const zipContent = await zip.generateAsync({ type: 'nodebuffer' });
+    const zipContent = await zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE', compressionOptions: { level: 6 } });
     fs.writeFileSync(destFolder, zipContent);
 
     console.log(`[${PACKAGE_NAME}] Folder ${srcFolder} has been zipped to ${destFolder}`);
