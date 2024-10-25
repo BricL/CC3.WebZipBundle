@@ -8,40 +8,40 @@ export const unload: BuildPlugin.load = function() {
     console.debug(`${PACKAGE_NAME} unload`);
 };
 
-const complexTestItems = {
-    number: {
-        label: `i18n:${PACKAGE_NAME}.options.complexTestNumber`,
-        description: `i18n:${PACKAGE_NAME}.options.complexTestNumber`,
-        default: 80,
-        render: {
-            ui: 'ui-num-input',
-            attributes: {
-                step: 1,
-                min: 0,
-            },
-        },
-    },
-    string: {
-        label: `i18n:${PACKAGE_NAME}.options.complexTestString`,
-        description: `i18n:${PACKAGE_NAME}.options.complexTestString`,
-        default: 'cocos',
-        render: {
-            ui: 'ui-input',
-            attributes: {
-                placeholder: `i18n:${PACKAGE_NAME}.options.enterCocos`,
-            },
-        },
-        verifyRules: ['ruleTest'],
-    },
-    boolean: {
-        label: `i18n:${PACKAGE_NAME}.options.complexTestBoolean`,
-        description: `i18n:${PACKAGE_NAME}.options.complexTestBoolean`,
-        default: true,
-        render: {
-            ui: 'ui-checkbox',
-        },
-    },
-};
+// const complexTestItems = {
+//     number: {
+//         label: `i18n:${PACKAGE_NAME}.options.complexTestNumber`,
+//         description: `i18n:${PACKAGE_NAME}.options.complexTestNumber`,
+//         default: 80,
+//         render: {
+//             ui: 'ui-num-input',
+//             attributes: {
+//                 step: 1,
+//                 min: 0,
+//             },
+//         },
+//     },
+//     string: {
+//         label: `i18n:${PACKAGE_NAME}.options.complexTestString`,
+//         description: `i18n:${PACKAGE_NAME}.options.complexTestString`,
+//         default: 'cocos',
+//         render: {
+//             ui: 'ui-input',
+//             attributes: {
+//                 placeholder: `i18n:${PACKAGE_NAME}.options.enterCocos`,
+//             },
+//         },
+//         verifyRules: ['ruleTest'],
+//     },
+//     boolean: {
+//         label: `i18n:${PACKAGE_NAME}.options.complexTestBoolean`,
+//         description: `i18n:${PACKAGE_NAME}.options.complexTestBoolean`,
+//         default: true,
+//         render: {
+//             ui: 'ui-checkbox',
+//         },
+//     },
+// };
 
 export const configs: BuildPlugin.Configs = {
     'web-mobile': {
@@ -83,24 +83,40 @@ export const configs: BuildPlugin.Configs = {
             //     verifyRules: ['ruleTest'],
             //     verifyLevel: 'warn',
             // },
-            // selectTest: {
-            //     label: `i18n:${PACKAGE_NAME}.options.selectTest`,
-            //     description: `i18n:${PACKAGE_NAME}.options.selectTest`,
-            //     default: 'option2',
-            //     render: {
-            //         ui: 'ui-select',
-            //         items: [
-            //             {
-            //                 label: `i18n:${PACKAGE_NAME}.options.selectTestOption1`,
-            //                 value: 'option1',
-            //             },
-            //             {
-            //                 label: `i18n:${PACKAGE_NAME}.options.selectTestOption2`,
-            //                 value: 'option2',
-            //             },
-            //         ],
-            //     },
-            // },
+            selectPackSize: {
+                label: `Set size limit per zip`,
+                description: `Set the maximum size for individual zip archives.`,
+                default: 'option2',
+                render: {
+                    ui: 'ui-select',
+                    items: [
+                        {
+                            label: `500kb`,
+                            value: 'option1',
+                        },
+                        {
+                            label: `1Mb`,
+                            value: 'option2',
+                        },
+                        {
+                            label: `2Mb`,
+                            value: 'option3',
+                        },
+                        {
+                            label: `3Mb`,
+                            value: 'option4',
+                        },
+                        {
+                            label: `4Mb`,
+                            value: 'option5',
+                        },
+                        {
+                            label: `Unlimited`,
+                            value: 'option6',
+                        },
+                    ],
+                },
+            },
             // objectTest: {
             //     label: `i18n:${PACKAGE_NAME}.options.objectTest`,
             //     description: `i18n:${PACKAGE_NAME}.options.objectTest`,

@@ -15,19 +15,20 @@ export interface ITaskOptions extends IBuildTaskOption {
     };
 }
 
-export interface ICustomPanelThis extends IPanelThis {
-    options: ITaskOption;
-    errorMap: any;
-    pkgName: string;
-    $: {
-        root: HTMLElement;
-        hideLink: Editor.UI.HTMLCustomElement<Checkbox>;
-        link: Editor.UI.HTMLCustomElement<Link>;
-    },
-}
+// export interface ICustomPanelThis extends IPanelThis {
+//     options: ITaskOption;
+//     errorMap: any;
+//     pkgName: string;
+//     $: {
+//         root: HTMLElement;
+//         hideLink: Editor.UI.HTMLCustomElement<Checkbox>;
+//         link: Editor.UI.HTMLCustomElement<Link>;
+//     },
+// }
 
 export interface IOptions {
     enable: boolean;
+    selectPackSize: string;
     // remoteAddress: string;
     // enterCocos: string;
     // selectTest: string;
@@ -38,10 +39,4 @@ export interface IOptions {
     // },
     // arrayTest: [number, string, boolean];
     // webTestOption: boolean;
-}
-
-export interface ITaskOptions extends IBuildTaskOption {
-    packages: {
-        ['cocos-build-template']: IOptions;
-    };
 }

@@ -56,7 +56,7 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
     // // throw new Error('Test onError');
 
     const pkgOptions = options.packages[PACKAGE_NAME];
-    if (pkgOptions) {
+    if (pkgOptions.enable) {
         const BUILD_DEST_PATH = result.dest;
         const BUILD_CONFIG_PATH = `${Editor.Project.path}/h5lb-build-config`;
         const TEMP_PATH = path.join(BUILD_CONFIG_PATH, 'temp');
@@ -71,44 +71,46 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
         const jsonString = fs.readFileSync(path.join(BUILD_CONFIG_PATH, ASSETS_URL_RECORD_LIST_JSON), 'utf-8');
         const assetsPathList = JSON.parse(jsonString);
 
+        const oneMB = parsePackSize(pkgOptions.selectPackSize); //  500KB in bytes
+        const zipPackages = [];
+        let assetsInZip = [];
+        let totalSize = 0;
         for (const assetPath of assetsPathList) {
-            let assetName = path.basename(assetPath);
             let srcAssetPath = path.join(BUILD_DEST_PATH, assetPath);
+            const assetStat = fs.statSync(srcAssetPath);
+            totalSize += assetStat.size;
+            assetsInZip.push(assetPath);
 
-            try {
-                if (fs.existsSync(srcAssetPath)) {
-                    const destAssetPath = path.join(TEMP_PATH, path.dirname(assetPath), assetName);
-                    copyAsset(srcAssetPath, destAssetPath);
-                    resultString.push(destAssetPath);
-                } else {
-                    let isFound = false;
+            if (totalSize >= oneMB) {
+                zipPackages.push(assetsInZip);
+                console.log(`[${PACKAGE_NAME}] assetsInZip size: ${totalSize}, assets: ${assetsInZip.length}`);
+                assetsInZip = [];
+                totalSize = 0;
+            }
+        }
 
-                    // Can't find the asset name with md5 hash, try to find the asset name without md5 hash
-                    const regexTemplate = /\.[a-z,A-Z,0-9]*\./;
-                    assetName = assetName.replace(regexTemplate, ".");
-                    assetName = assetName.replace(path.extname(assetName), "");
+        if (assetsInZip.length > 0) {
+            zipPackages.push(assetsInZip);
+            console.log(`[${PACKAGE_NAME}] assetsInZip size: ${totalSize}, assets: ${assetsInZip.length}`);
+        }
 
-                    const srcAssetDir = path.dirname(srcAssetPath);
-                    const items = fs.readdirSync(srcAssetDir);
+        console.log(`[${PACKAGE_NAME}] zipPackages: ${zipPackages.length}`);
 
-                    for (const item of items) {
-                        if (item.includes(assetName)) {
-                            srcAssetPath = path.join(srcAssetDir, item);
-                            const destAssetPath = path.join(TEMP_PATH, path.dirname(assetPath), item);
-                            copyAsset(srcAssetPath, destAssetPath);
-                            resultString.push(destAssetPath);
-                            isFound = true;
-                            break;
-                        }
+        for (let i = 0; i < zipPackages.length; i++) {
+            const assetsPathList = zipPackages[i];
+            for (const assetPath of assetsPathList) {
+                let assetName = path.basename(assetPath);
+                let srcAssetPath = path.join(BUILD_DEST_PATH, assetPath);
+
+                try {
+                    if (fs.existsSync(srcAssetPath)) {
+                        const destAssetPath = path.join(TEMP_PATH, `zipPackage${i}`, path.dirname(assetPath), assetName);
+                        copyAsset(srcAssetPath, destAssetPath);
+                        resultString.push(destAssetPath);
                     }
-
-                    if (!isFound) {
-                        // The asset file not exists
-                        console.error(`[${PACKAGE_NAME}] file not exists: ${srcAssetPath} `);
-                    }
+                } catch (exp) {
+                    console.error(`[${PACKAGE_NAME}] copy file failed: ${exp}`);
                 }
-            } catch (exp) {
-                console.error(`[${PACKAGE_NAME}] copy file failed: ${exp}`);
             }
         }
 
@@ -121,22 +123,24 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
         }
 
         // Generate h5lbResCache.zip
-        const h5lbResCacheZipName = options.md5Cache ? `h5lbResCache.${md5Hash}.zip` : 'h5lbResCache.zip';
-        await zipFolder(TEMP_PATH, path.join(BUILD_CONFIG_PATH, h5lbResCacheZipName));
+        let tempName = '';
+        for (let i = 0; i < zipPackages.length; i++) {
+            const h5lbResCacheZipName = options.md5Cache ? `h5lbResCache${i}.${md5Hash}.zip` : `h5lbResCache${i}.zip`;
+            await zipFolder(path.join(TEMP_PATH, `zipPackage${i}`), path.join(BUILD_CONFIG_PATH, h5lbResCacheZipName));
 
-        // // Generate h5lbResCache.json
-        // const h5lbResCacheJsonName = `h5lbResCache.${md5Hash}.json`;
-        // fs.writeFileSync(path.join(H5LB_BUILD_CONFIG_PATH, h5lbResCacheJsonName), JSON.stringify([h5lbResCacheZipName]));
-
-        // Copy file to build project
-        // fs.copyFileSync(path.join(H5LB_BUILD_CONFIG_PATH, h5lbResCacheJsonName), path.join(BUILD_PROJECT_DEST_PATH, h5lbResCacheJsonName));
-        fs.copyFileSync(path.join(BUILD_CONFIG_PATH, h5lbResCacheZipName), path.join(BUILD_DEST_PATH, 'assets', h5lbResCacheZipName));
+            // Do the cut and paste
+            const srcPath = path.join(BUILD_CONFIG_PATH, h5lbResCacheZipName);
+            const destPath = path.join(BUILD_DEST_PATH, 'assets', h5lbResCacheZipName);
+            fs.copyFileSync(srcPath, destPath);
+            fs.unlinkSync(srcPath);
+            tempName += `'assets/${h5lbResCacheZipName}'` + (i < zipPackages.length - 1 ? ', ' : '');
+        }
 
         // Modify index.html to add 'h5lbResCache' gloable variable to window object which is used in ZipLoader.ts
         const indexHtml = fs.readFileSync(path.join(BUILD_DEST_PATH, 'index.html'), 'utf-8');
         const modifiedHtml = indexHtml.split('\n').map((line, index) => {
             if (line.includes('./index')) {
-                return `${line}\nwindow['h5lbResZipList'] = ['assets/${h5lbResCacheZipName}'];`;
+                return `${line}\nwindow['h5lbResZipList'] = [${tempName}];`;
             }
             return line;
         }).join('\n');
@@ -162,6 +166,22 @@ export const onAfterMake: BuildHook.onAfterMake = async function (root, options)
 };
 
 //#region utils functions
+function parsePackSize(packSize: string) {
+    if (packSize === 'option1') { // 500KB
+        return 500 * 1024;
+    } else if (packSize === 'option2') { // 1MB
+        return 1024 * 1024;
+    } else if (packSize === 'option3') { // 2MB
+        return 2 * 1024 * 1024;
+    } else if (packSize === 'option4') { // 3MB
+        return 3 * 1024 * 1024;
+    } else if (packSize === 'option5') { // 4MB
+        return 4 * 1024 * 1024;
+    } else {
+        return Number.MAX_SAFE_INTEGER;
+    }
+}
+
 async function zipFolder(srcFolder: string, destFolder: string) {
     const zip = new JSZip();
 
@@ -191,9 +211,7 @@ async function zipFolder(srcFolder: string, destFolder: string) {
 }
 
 function copyAsset(srcAssetPath: string, destAssetPath: string) {
-    // const destAssetPath = path.join(TEMP_PATH, path.dirname(assetPath), assetName);
     console.log(`[${PACKAGE_NAME}] Copying file: ${srcAssetPath} to ${destAssetPath}`);
-
     fs.mkdirSync(path.dirname(destAssetPath), { recursive: true });
     fs.copyFileSync(srcAssetPath, destAssetPath);
 }
