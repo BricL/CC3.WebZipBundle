@@ -1,7 +1,7 @@
 {
     "$schema": "./@types/schema/package/index.json",
     "package_version": 2,
-    "name": "h5_launch_booster",
+    "name": "h5-launch-booster",
     "version": "1.0.0",
     "author": "ericlin09@gmail.com",
     "editor": ">=3.8.1",
