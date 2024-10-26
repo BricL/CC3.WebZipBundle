@@ -29,59 +29,7 @@ export class ZipLoader extends Component {
         }
     }
 
-    //#region lifecycle hooks
-    protected onLoad(): void {
-        this.inject('.cconb');
-        this.inject('.json');
-        this.inject('.png');
-        this.inject('.jpg');
-        this.inject('.webp');
-    }
-
-    protected start(): void {
-        director.addPersistRootNode(this.node);
-
-        if (DEBUG || DEV) {
-            input.on(Input.EventType.KEY_DOWN, (event) => {
-                if (event.keyCode === KeyCode.ALT_LEFT) {
-                    this.isPressedLeftAlt = true;
-                } else if (event.keyCode === KeyCode.KEY_W && this.isPressedLeftAlt) {
-                    console.log(this.recordAssetsUrlList);
-                }
-            });
-
-            input.on(Input.EventType.KEY_UP, (event) => {
-                if (event.keyCode === KeyCode.ALT_LEFT) {
-                    this.isPressedLeftAlt = false;
-                }
-            });
-        }
-
-        (async () => {
-            const h5lbResZipList = (window as any).h5lbResZipList;
-            if (h5lbResZipList !== undefined && h5lbResZipList.length > 0) {
-                const promises = [];
-                for (let i = 0; i < h5lbResZipList.length; i++) {
-                    promises.push(this.downloadResCache(h5lbResZipList[i]));
-                }
-
-                const zips = await Promise.all(promises);
-                for (const zip of zips) {
-                    zip.forEach((relativePath: string, zipEntry: JSZip.JSZipObject) => {
-                        if (zipEntry.dir)
-                            return;
-                        else
-                            this.zipCache.set(relativePath, zipEntry);
-                    });
-                }
-            }
-
-            if (this.loadSceneName.trim() !== '') {
-                director.loadScene(this.loadSceneName);
-            }
-        })();
-    }
-
+    //#region private methods
     private inject(extension: string) {
         if (extension === '.cconb') {
             this.injectXMLHttpRequest();
@@ -215,5 +163,58 @@ export class ZipLoader extends Component {
         });
 
         return true;
+    }
+
+    //#region lifecycle hooks
+    protected onLoad(): void {
+        this.inject('.cconb');
+        this.inject('.json');
+        this.inject('.png');
+        this.inject('.jpg');
+        this.inject('.webp');
+    }
+
+    protected start(): void {
+        director.addPersistRootNode(this.node);
+
+        if (DEBUG || DEV) {
+            input.on(Input.EventType.KEY_DOWN, (event) => {
+                if (event.keyCode === KeyCode.ALT_LEFT) {
+                    this.isPressedLeftAlt = true;
+                } else if (event.keyCode === KeyCode.KEY_W && this.isPressedLeftAlt) {
+                    console.log(this.recordAssetsUrlList);
+                }
+            });
+
+            input.on(Input.EventType.KEY_UP, (event) => {
+                if (event.keyCode === KeyCode.ALT_LEFT) {
+                    this.isPressedLeftAlt = false;
+                }
+            });
+        }
+
+        (async () => {
+            const h5lbResZipList = (window as any).h5lbResZipList;
+            if (h5lbResZipList !== undefined && h5lbResZipList.length > 0) {
+                const promises = [];
+                for (let i = 0; i < h5lbResZipList.length; i++) {
+                    promises.push(this.downloadResCache(h5lbResZipList[i]));
+                }
+
+                const zips = await Promise.all(promises);
+                for (const zip of zips) {
+                    zip.forEach((relativePath: string, zipEntry: JSZip.JSZipObject) => {
+                        if (zipEntry.dir)
+                            return;
+                        else
+                            this.zipCache.set(relativePath, zipEntry);
+                    });
+                }
+            }
+
+            if (this.loadSceneName.trim() !== '') {
+                director.loadScene(this.loadSceneName);
+            }
+        })();
     }
 }
