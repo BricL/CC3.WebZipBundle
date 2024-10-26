@@ -41,15 +41,12 @@ const global_1 = require("./global");
 const fs = __importStar(require("fs"));
 const crypo = __importStar(require("crypto"));
 const jszip_1 = __importDefault(require("jszip"));
-// function log(...arg: any[]) {
-//     return console.log(`[${PACKAGE_NAME}] `, ...arg);
-// }
 // let allAssets = [];
 exports.throwError = true;
 //#region lifecycle hooks
 const load = function () {
     return __awaiter(this, void 0, void 0, function* () {
-        // console.log(`[${PACKAGE_NAME}] Load cocos plugin example in builder.`);
+        // log(`Load cocos plugin example in builder.`);
         // allAssets = await Editor.Message.request('asset-db', 'query-assets');
     });
 };
@@ -57,9 +54,6 @@ exports.load = load;
 const onBeforeBuild = function (options, result) {
     return __awaiter(this, void 0, void 0, function* () {
         // TODO some thing
-        // log(`${PACKAGE_NAME}.enable`, 'onBeforeBuild');
-        // const pkgOptions = options.packages[PACKAGE_NAME];
-        // log(`H5 Launch Booster: ${pkgOptions.enable}`);
     });
 };
 exports.onBeforeBuild = onBeforeBuild;
@@ -67,17 +61,17 @@ const onBeforeCompressSettings = function (options, result) {
     return __awaiter(this, void 0, void 0, function* () {
         // const pkgOptions = options.packages[PACKAGE_NAME];
         // if (pkgOptions.webTestOption) {
-        //     console.debug('webTestOption', true);
+        //     logDebug('webTestOption', true);
         // }
         // // Todo some thing
-        // console.debug('get settings test', result.settings);
+        // logDebug('get settings test', result.settings);
     });
 };
 exports.onBeforeCompressSettings = onBeforeCompressSettings;
 const onAfterCompressSettings = function (options, result) {
     return __awaiter(this, void 0, void 0, function* () {
         // // Todo some thing
-        // console.log('webTestOption', 'onAfterCompressSettings');
+        // log('webTestOption', 'onAfterCompressSettings');
     });
 };
 exports.onAfterCompressSettings = onAfterCompressSettings;
@@ -89,10 +83,10 @@ const onAfterBuild = function (options, result) {
         // };
         // for (const name of Object.keys(uuidTestMap)) {
         //     const uuid = uuidTestMap[name];
-        //     console.debug(`containsAsset of ${name}`, result.containsAsset(uuid));
-        //     console.debug(`getAssetPathInfo of ${name}`, result.getAssetPathInfo(uuid));
-        //     console.debug(`getRawAssetPaths of ${name}`, result.getRawAssetPaths(uuid));
-        //     console.debug(`getJsonPathInfo of ${name}`, result.getJsonPathInfo(uuid));
+        //     logDebug(`containsAsset of ${name}`, result.containsAsset(uuid));
+        //     logDebug(`getAssetPathInfo of ${name}`, result.getAssetPathInfo(uuid));
+        //     logDebug(`getRawAssetPaths of ${name}`, result.getRawAssetPaths(uuid));
+        //     logDebug(`getJsonPathInfo of ${name}`, result.getJsonPathInfo(uuid));
         // }
         // // test onError hook
         // // throw new Error('Test onError');
@@ -120,16 +114,16 @@ const onAfterBuild = function (options, result) {
                 assetsInZip.push(assetPath);
                 if (totalSize >= oneMB) {
                     zipPackages.push(assetsInZip);
-                    console.log(`[${global_1.PACKAGE_NAME}] assetsInZip size: ${totalSize}, assets: ${assetsInZip.length}`);
+                    (0, global_1.log)(`AssetsInZip size: ${totalSize}, assets: ${assetsInZip.length}`);
                     assetsInZip = [];
                     totalSize = 0;
                 }
             }
             if (assetsInZip.length > 0) {
                 zipPackages.push(assetsInZip);
-                console.log(`[${global_1.PACKAGE_NAME}] assetsInZip size: ${totalSize}, assets: ${assetsInZip.length}`);
+                (0, global_1.log)(`AssetsInZip size: ${totalSize}, assets: ${assetsInZip.length}`);
             }
-            console.log(`[${global_1.PACKAGE_NAME}] zipPackages: ${zipPackages.length}`);
+            (0, global_1.log)(`ZipPackages: ${zipPackages.length}`);
             for (let i = 0; i < zipPackages.length; i++) {
                 const assetsPathList = zipPackages[i];
                 for (const assetPath of assetsPathList) {
@@ -143,7 +137,7 @@ const onAfterBuild = function (options, result) {
                         }
                     }
                     catch (exp) {
-                        console.error(`[${global_1.PACKAGE_NAME}] copy file failed: ${exp}`);
+                        (0, global_1.logError)(`Copy file failed: ${exp}`);
                     }
                 }
             }
@@ -181,26 +175,26 @@ const onAfterBuild = function (options, result) {
 exports.onAfterBuild = onAfterBuild;
 const unload = function () {
     return __awaiter(this, void 0, void 0, function* () {
-        // console.log(`[${PACKAGE_NAME}] Unload cocos plugin example in builder.`);
+        // log(`Unload cocos plugin example in builder.`);
     });
 };
 exports.unload = unload;
 const onError = function (options, result) {
     return __awaiter(this, void 0, void 0, function* () {
         // Todo some thing
-        // console.warn(`${PACKAGE_NAME} run onError`);
+        // logWarn(`Run onError`);
     });
 };
 exports.onError = onError;
 const onBeforeMake = function (root, options) {
     return __awaiter(this, void 0, void 0, function* () {
-        // console.log(`onBeforeMake: root: ${root}, options: ${options}`);
+        // log(`onBeforeMake: root: ${root}, options: ${options}`);
     });
 };
 exports.onBeforeMake = onBeforeMake;
 const onAfterMake = function (root, options) {
     return __awaiter(this, void 0, void 0, function* () {
-        // console.log(`onAfterMake: root: ${root}, options: ${options}`);
+        // log(`onAfterMake: root: ${root}, options: ${options}`);
     });
 };
 exports.onAfterMake = onAfterMake;
@@ -246,11 +240,11 @@ function zipFolder(srcFolder, destFolder) {
         addFolderToZip(srcFolder, zip);
         const zipContent = yield zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE', compressionOptions: { level: 6 } });
         fs.writeFileSync(destFolder, zipContent);
-        console.log(`[${global_1.PACKAGE_NAME}] Folder ${srcFolder} has been zipped to ${destFolder}`);
+        (0, global_1.log)(`Folder ${srcFolder} has been zipped to ${destFolder}`);
     });
 }
 function copyAsset(srcAssetPath, destAssetPath) {
-    console.log(`[${global_1.PACKAGE_NAME}] Copying file: ${srcAssetPath} to ${destAssetPath}`);
+    (0, global_1.log)(`Copying file: ${srcAssetPath} to ${destAssetPath}`);
     fs.mkdirSync(cc_1.path.dirname(destAssetPath), { recursive: true });
     fs.copyFileSync(srcAssetPath, destAssetPath);
 }

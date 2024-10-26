@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { ASSETS_URL_RECORD_LIST_JSON, PACKAGE_NAME } from './global';
+import { ASSETS_URL_RECORD_LIST_JSON, PACKAGE_NAME, log, logWarn } from './global';
 import path from 'path';
 
 /**
@@ -16,19 +16,19 @@ export const methods: { [key: string]: (...any: any) => any } = {
  */
 export const load = function () {
     // Check build-config directory
-    console.log(`[${PACKAGE_NAME}] loaded: ${Editor.Project.path}`);
+    log(`Loaded: ${Editor.Project.path}`);
     const buildConfigPath = `${Editor.Project.path}/h5lb-build-config`;
 
     if (!fs.existsSync(buildConfigPath)) {
         fs.mkdirSync(buildConfigPath);
-        console.warn(`[${PACKAGE_NAME}] create build-config directory at '${buildConfigPath}.'`);
+        logWarn(`Create build-config directory at '${buildConfigPath}.'`);
     }
 
     // Check assetsUrlRecordList.json
     const assetsUrlRecordListPath = path.join(buildConfigPath, ASSETS_URL_RECORD_LIST_JSON);
     if (!fs.existsSync(assetsUrlRecordListPath)) {
         fs.writeFileSync(assetsUrlRecordListPath, JSON.stringify([]));
-        console.warn(`[${PACKAGE_NAME}] add assetsUrlRecordList.json at at '${assetsUrlRecordListPath}.`);
+        logWarn(`Add assetsUrlRecordList.json at at '${assetsUrlRecordListPath}.`);
     }
 };
 
@@ -37,5 +37,5 @@ export const load = function () {
  * @zh 扩展卸载完成后触发的钩子
  */
 export const unload = function () {
-    console.log(`[${PACKAGE_NAME}] unloaded`);
+    log(`Unloaded`);
 };

@@ -41,17 +41,17 @@ exports.methods = {};
  */
 const load = function () {
     // Check build-config directory
-    console.log(`[${global_1.PACKAGE_NAME}] loaded: ${Editor.Project.path}`);
+    (0, global_1.log)(`Loaded: ${Editor.Project.path}`);
     const buildConfigPath = `${Editor.Project.path}/h5lb-build-config`;
     if (!fs.existsSync(buildConfigPath)) {
         fs.mkdirSync(buildConfigPath);
-        console.warn(`[${global_1.PACKAGE_NAME}] create build-config directory at '${buildConfigPath}.'`);
+        (0, global_1.logWarn)(`Create build-config directory at '${buildConfigPath}.'`);
     }
     // Check assetsUrlRecordList.json
     const assetsUrlRecordListPath = path_1.default.join(buildConfigPath, global_1.ASSETS_URL_RECORD_LIST_JSON);
     if (!fs.existsSync(assetsUrlRecordListPath)) {
         fs.writeFileSync(assetsUrlRecordListPath, JSON.stringify([]));
-        console.warn(`[${global_1.PACKAGE_NAME}] add assetsUrlRecordList.json at at '${assetsUrlRecordListPath}.`);
+        (0, global_1.logWarn)(`Add assetsUrlRecordList.json at at '${assetsUrlRecordListPath}.`);
     }
 };
 exports.load = load;
@@ -60,6 +60,6 @@ exports.load = load;
  * @zh 扩展卸载完成后触发的钩子
  */
 const unload = function () {
-    console.log(`[${global_1.PACKAGE_NAME}] unloaded`);
+    (0, global_1.log)(`Unloaded`);
 };
 exports.unload = unload;

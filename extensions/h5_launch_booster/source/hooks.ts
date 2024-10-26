@@ -1,13 +1,9 @@
 import { path } from 'cc';
 import { BuildHook, IBuildResult, ITaskOptions } from '../@types';
-import { ASSETS_URL_RECORD_LIST_JSON, PACKAGE_NAME } from './global';
+import { ASSETS_URL_RECORD_LIST_JSON, PACKAGE_NAME, log, logError } from './global';
 import * as fs from 'fs';
 import * as crypo from 'crypto';
 import JSZip from 'jszip';
-
-// function log(...arg: any[]) {
-//     return console.log(`[${PACKAGE_NAME}] `, ...arg);
-// }
 
 // let allAssets = [];
 
@@ -15,29 +11,26 @@ export const throwError: BuildHook.throwError = true;
 
 //#region lifecycle hooks
 export const load: BuildHook.load = async function () {
-    // console.log(`[${PACKAGE_NAME}] Load cocos plugin example in builder.`);
+    // log(`Load cocos plugin example in builder.`);
     // allAssets = await Editor.Message.request('asset-db', 'query-assets');
 };
 
 export const onBeforeBuild: BuildHook.onBeforeBuild = async function (options: ITaskOptions, result: IBuildResult) {
     // TODO some thing
-    // log(`${PACKAGE_NAME}.enable`, 'onBeforeBuild');
-    // const pkgOptions = options.packages[PACKAGE_NAME];
-    // log(`H5 Launch Booster: ${pkgOptions.enable}`);
 };
 
 export const onBeforeCompressSettings: BuildHook.onBeforeCompressSettings = async function (options: ITaskOptions, result: IBuildResult) {
     // const pkgOptions = options.packages[PACKAGE_NAME];
     // if (pkgOptions.webTestOption) {
-    //     console.debug('webTestOption', true);
+    //     logDebug('webTestOption', true);
     // }
     // // Todo some thing
-    // console.debug('get settings test', result.settings);
+    // logDebug('get settings test', result.settings);
 };
 
 export const onAfterCompressSettings: BuildHook.onAfterCompressSettings = async function (options: ITaskOptions, result: IBuildResult) {
     // // Todo some thing
-    // console.log('webTestOption', 'onAfterCompressSettings');
+    // log('webTestOption', 'onAfterCompressSettings');
 };
 
 export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITaskOptions, result: IBuildResult) {
@@ -47,10 +40,10 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
     // };
     // for (const name of Object.keys(uuidTestMap)) {
     //     const uuid = uuidTestMap[name];
-    //     console.debug(`containsAsset of ${name}`, result.containsAsset(uuid));
-    //     console.debug(`getAssetPathInfo of ${name}`, result.getAssetPathInfo(uuid));
-    //     console.debug(`getRawAssetPaths of ${name}`, result.getRawAssetPaths(uuid));
-    //     console.debug(`getJsonPathInfo of ${name}`, result.getJsonPathInfo(uuid));
+    //     logDebug(`containsAsset of ${name}`, result.containsAsset(uuid));
+    //     logDebug(`getAssetPathInfo of ${name}`, result.getAssetPathInfo(uuid));
+    //     logDebug(`getRawAssetPaths of ${name}`, result.getRawAssetPaths(uuid));
+    //     logDebug(`getJsonPathInfo of ${name}`, result.getJsonPathInfo(uuid));
     // }
     // // test onError hook
     // // throw new Error('Test onError');
@@ -83,7 +76,7 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
 
             if (totalSize >= oneMB) {
                 zipPackages.push(assetsInZip);
-                console.log(`[${PACKAGE_NAME}] assetsInZip size: ${totalSize}, assets: ${assetsInZip.length}`);
+                log(`AssetsInZip size: ${totalSize}, assets: ${assetsInZip.length}`);
                 assetsInZip = [];
                 totalSize = 0;
             }
@@ -91,10 +84,10 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
 
         if (assetsInZip.length > 0) {
             zipPackages.push(assetsInZip);
-            console.log(`[${PACKAGE_NAME}] assetsInZip size: ${totalSize}, assets: ${assetsInZip.length}`);
+            log(`AssetsInZip size: ${totalSize}, assets: ${assetsInZip.length}`);
         }
 
-        console.log(`[${PACKAGE_NAME}] zipPackages: ${zipPackages.length}`);
+        log(`ZipPackages: ${zipPackages.length}`);
 
         for (let i = 0; i < zipPackages.length; i++) {
             const assetsPathList = zipPackages[i];
@@ -109,7 +102,7 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
                         resultString.push(destAssetPath);
                     }
                 } catch (exp) {
-                    console.error(`[${PACKAGE_NAME}] copy file failed: ${exp}`);
+                    logError(`Copy file failed: ${exp}`);
                 }
             }
         }
@@ -149,20 +142,20 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
 };
 
 export const unload: BuildHook.unload = async function () {
-    // console.log(`[${PACKAGE_NAME}] Unload cocos plugin example in builder.`);
+    // log(`Unload cocos plugin example in builder.`);
 };
 
 export const onError: BuildHook.onError = async function (options, result) {
     // Todo some thing
-    // console.warn(`${PACKAGE_NAME} run onError`);
+    // logWarn(`Run onError`);
 };
 
 export const onBeforeMake: BuildHook.onBeforeMake = async function (root, options) {
-    // console.log(`onBeforeMake: root: ${root}, options: ${options}`);
+    // log(`onBeforeMake: root: ${root}, options: ${options}`);
 };
 
 export const onAfterMake: BuildHook.onAfterMake = async function (root, options) {
-    // console.log(`onAfterMake: root: ${root}, options: ${options}`);
+    // log(`onAfterMake: root: ${root}, options: ${options}`);
 };
 
 // #region utils functions
@@ -207,11 +200,11 @@ async function zipFolder(srcFolder: string, destFolder: string) {
     const zipContent = await zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE', compressionOptions: { level: 6 } });
     fs.writeFileSync(destFolder, zipContent);
 
-    console.log(`[${PACKAGE_NAME}] Folder ${srcFolder} has been zipped to ${destFolder}`);
+    log(`Folder ${srcFolder} has been zipped to ${destFolder}`);
 }
 
 function copyAsset(srcAssetPath: string, destAssetPath: string) {
-    console.log(`[${PACKAGE_NAME}] Copying file: ${srcAssetPath} to ${destAssetPath}`);
+    log(`Copying file: ${srcAssetPath} to ${destAssetPath}`);
     fs.mkdirSync(path.dirname(destAssetPath), { recursive: true });
     fs.copyFileSync(srcAssetPath, destAssetPath);
 }

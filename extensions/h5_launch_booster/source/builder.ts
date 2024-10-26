@@ -1,11 +1,11 @@
 import { BuildPlugin } from '../@types';
-import { PACKAGE_NAME } from './global';
+import { PACKAGE_NAME, logDebug } from './global';
 
 export const load: BuildPlugin.load = function() {
-    console.debug(`${PACKAGE_NAME} load`);
+    logDebug(`${PACKAGE_NAME} load`);
 };
 export const unload: BuildPlugin.load = function() {
-    console.debug(`${PACKAGE_NAME} unload`);
+    logDebug(`${PACKAGE_NAME} unload`);
 };
 
 // const complexTestItems = {
