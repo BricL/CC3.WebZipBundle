@@ -8,28 +8,61 @@ const { ccclass, property } = _decorator;
 @ccclass('ZipLoader')
 export class ZipLoader extends Component {
     @property
-    public loadSceneName: string = '';
-    @property
     public isRecordAssetsUrl: boolean = true;
+    @property
+    public isAwaitResCacheDwonload: boolean = true;
+    @property
+    public loadSceneName: string = '';
 
+    private static instance: ZipLoader = null;
+    private downloadResCachePromise: Promise<void> = null;
     private recordAssetsUrlList = [];
     private zipCache = new Map<string, JSZip.JSZipObject>();
     private resCache = new Map();
     private isPressedLeftAlt = false;
 
     //#region public methods
-    public async downloadResCache(url: string) {
+    public static get inst(): ZipLoader {
+        return ZipLoader.instance;
+    }
+    
+    public get getDownloadResCachePromise(): Promise<void> {
+        return this.downloadResCachePromise;
+    }
+
+    public async downloadResCache() {
+        const h5lbResZipList = (window as any).h5lbResZipList;
+        if (h5lbResZipList !== undefined && h5lbResZipList.length > 0) {
+            const promises: Promise<JSZip>[] = [];
+            for (let i = 0; i < h5lbResZipList.length; i++) {
+                promises.push(this.downloadZip(h5lbResZipList[i]));
+            }
+
+            const zips = await Promise.all(promises);
+
+            for (const zip of zips) {
+                zip.forEach((relativePath: string, zipEntry: JSZip.JSZipObject) => {
+                    if (zipEntry.dir)
+                        return;
+                    else
+                        this.zipCache.set(relativePath, zipEntry);
+                });
+            }
+        }
+    }
+
+    //#region private methods
+    private async downloadZip(url: string) {
         try {
             const response = await fetch(url);
             const buffer = await response.arrayBuffer();
             const zip = await JSZip.loadAsync(buffer);
             return zip;
         } catch (e) {
-            error(`[${this.constructor.name}].downloadResCache`, e);
+            error(`[${this.constructor.name}].downloadZip`, e);
         }
     }
 
-    //#region private methods
     private inject(extension: string) {
         if (extension === '.cconb') {
             this.injectXMLHttpRequest();
@@ -167,6 +200,7 @@ export class ZipLoader extends Component {
 
     //#region lifecycle hooks
     protected onLoad(): void {
+        ZipLoader.instance = this;
         this.inject('.cconb');
         this.inject('.json');
         this.inject('.png');
@@ -194,22 +228,10 @@ export class ZipLoader extends Component {
         }
 
         (async () => {
-            const h5lbResZipList = (window as any).h5lbResZipList;
-            if (h5lbResZipList !== undefined && h5lbResZipList.length > 0) {
-                const promises = [];
-                for (let i = 0; i < h5lbResZipList.length; i++) {
-                    promises.push(this.downloadResCache(h5lbResZipList[i]));
-                }
+            this.downloadResCachePromise = this.downloadResCache();
 
-                const zips = await Promise.all(promises);
-                for (const zip of zips) {
-                    zip.forEach((relativePath: string, zipEntry: JSZip.JSZipObject) => {
-                        if (zipEntry.dir)
-                            return;
-                        else
-                            this.zipCache.set(relativePath, zipEntry);
-                    });
-                }
+            if (this.isAwaitResCacheDwonload) {
+                await this.downloadResCachePromise;
             }
 
             if (this.loadSceneName.trim() !== '') {

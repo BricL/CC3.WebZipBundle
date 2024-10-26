@@ -17,6 +17,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var ZipLoader_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ZipLoader = void 0;
 const cc_1 = require("cc");
@@ -24,61 +25,32 @@ const cc_1 = require("cc");
 const env_1 = require("cc/env");
 const jszip_1 = __importDefault(require("jszip"));
 const { ccclass, property } = cc_1._decorator;
-let ZipLoader = class ZipLoader extends cc_1.Component {
+let ZipLoader = ZipLoader_1 = class ZipLoader extends cc_1.Component {
     constructor() {
         super(...arguments);
+        this.isRecordAssetsUrl = true;
+        this.isAwaitResCacheDwonload = true;
         this.loadSceneName = '';
-        this.stopLogAssetsUrl = false;
+        this.downloadResCachePromise = null;
         this.recordAssetsUrlList = [];
         this.zipCache = new Map();
         this.resCache = new Map();
         this.isPressedLeftAlt = false;
     }
     //#region public methods
-    downloadResCache(url) {
+    static get inst() {
+        return ZipLoader_1.instance;
+    }
+    get getDownloadResCachePromise() {
+        return this.downloadResCachePromise;
+    }
+    downloadResCache() {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const response = yield fetch(url);
-                const buffer = yield response.arrayBuffer();
-                const zip = yield jszip_1.default.loadAsync(buffer);
-                return zip;
-            }
-            catch (e) {
-                (0, cc_1.error)(`[${this.constructor.name}].downloadResCache`, e);
-            }
-        });
-    }
-    //#region lifecycle hooks
-    onLoad() {
-        this.inject('.cconb');
-        this.inject('.json');
-        this.inject('.png');
-        this.inject('.jpg');
-        this.inject('.webp');
-    }
-    start() {
-        cc_1.director.addPersistRootNode(this.node);
-        if (env_1.DEBUG || env_1.DEV) {
-            cc_1.input.on(cc_1.Input.EventType.KEY_DOWN, (event) => {
-                if (event.keyCode === cc_1.KeyCode.ALT_LEFT) {
-                    this.isPressedLeftAlt = true;
-                }
-                else if (event.keyCode === cc_1.KeyCode.KEY_W && this.isPressedLeftAlt) {
-                    console.log(this.recordAssetsUrlList);
-                }
-            });
-            cc_1.input.on(cc_1.Input.EventType.KEY_UP, (event) => {
-                if (event.keyCode === cc_1.KeyCode.ALT_LEFT) {
-                    this.isPressedLeftAlt = false;
-                }
-            });
-        }
-        (() => __awaiter(this, void 0, void 0, function* () {
             const h5lbResZipList = window.h5lbResZipList;
             if (h5lbResZipList !== undefined && h5lbResZipList.length > 0) {
                 const promises = [];
                 for (let i = 0; i < h5lbResZipList.length; i++) {
-                    promises.push(this.downloadResCache(h5lbResZipList[i]));
+                    promises.push(this.downloadZip(h5lbResZipList[i]));
                 }
                 const zips = yield Promise.all(promises);
                 for (const zip of zips) {
@@ -90,10 +62,21 @@ let ZipLoader = class ZipLoader extends cc_1.Component {
                     });
                 }
             }
-            if (this.loadSceneName.trim() !== '') {
-                cc_1.director.loadScene(this.loadSceneName);
+        });
+    }
+    //#region private methods
+    downloadZip(url) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield fetch(url);
+                const buffer = yield response.arrayBuffer();
+                const zip = yield jszip_1.default.loadAsync(buffer);
+                return zip;
             }
-        }))();
+            catch (e) {
+                (0, cc_1.error)(`[${this.constructor.name}].downloadZip`, e);
+            }
+        });
     }
     inject(extension) {
         if (extension === '.cconb') {
@@ -153,7 +136,7 @@ let ZipLoader = class ZipLoader extends cc_1.Component {
      */
     recordUrl(url) {
         if (env_1.DEBUG || env_1.DEV) {
-            if (!this.stopLogAssetsUrl) {
+            if (this.isRecordAssetsUrl) {
                 this.recordAssetsUrlList.push(url);
             }
         }
@@ -224,11 +207,54 @@ let ZipLoader = class ZipLoader extends cc_1.Component {
         });
         return true;
     }
+    //#region lifecycle hooks
+    onLoad() {
+        ZipLoader_1.instance = this;
+        this.inject('.cconb');
+        this.inject('.json');
+        this.inject('.png');
+        this.inject('.jpg');
+        this.inject('.webp');
+    }
+    start() {
+        cc_1.director.addPersistRootNode(this.node);
+        if (env_1.DEBUG || env_1.DEV) {
+            cc_1.input.on(cc_1.Input.EventType.KEY_DOWN, (event) => {
+                if (event.keyCode === cc_1.KeyCode.ALT_LEFT) {
+                    this.isPressedLeftAlt = true;
+                }
+                else if (event.keyCode === cc_1.KeyCode.KEY_W && this.isPressedLeftAlt) {
+                    console.log(this.recordAssetsUrlList);
+                }
+            });
+            cc_1.input.on(cc_1.Input.EventType.KEY_UP, (event) => {
+                if (event.keyCode === cc_1.KeyCode.ALT_LEFT) {
+                    this.isPressedLeftAlt = false;
+                }
+            });
+        }
+        (() => __awaiter(this, void 0, void 0, function* () {
+            this.downloadResCachePromise = this.downloadResCache();
+            if (this.isAwaitResCacheDwonload) {
+                yield this.downloadResCachePromise;
+            }
+            if (this.loadSceneName.trim() !== '') {
+                cc_1.director.loadScene(this.loadSceneName);
+            }
+        }))();
+    }
 };
+ZipLoader.instance = null;
+__decorate([
+    property
+], ZipLoader.prototype, "isRecordAssetsUrl", void 0);
+__decorate([
+    property
+], ZipLoader.prototype, "isAwaitResCacheDwonload", void 0);
 __decorate([
     property
 ], ZipLoader.prototype, "loadSceneName", void 0);
-ZipLoader = __decorate([
+ZipLoader = ZipLoader_1 = __decorate([
     ccclass('ZipLoader')
 ], ZipLoader);
 exports.ZipLoader = ZipLoader;
