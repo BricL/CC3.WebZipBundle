@@ -9,8 +9,8 @@ const { ccclass, property } = _decorator;
 export class ZipLoader extends Component {
     @property
     public loadSceneName: string = '';
-
-    public stopLogAssetsUrl: boolean = false;
+    @property
+    public isRecordAssetsUrl: boolean = false;
 
     private recordAssetsUrlList = [];
     private zipCache = new Map<string, JSZip.JSZipObject>();
@@ -140,7 +140,7 @@ export class ZipLoader extends Component {
      */
     private recordUrl(url: string) {
         if (DEBUG || DEV) {
-            if (!this.stopLogAssetsUrl) {
+            if (this.isRecordAssetsUrl) {
                 this.recordAssetsUrlList.push(url);
             }
         }
