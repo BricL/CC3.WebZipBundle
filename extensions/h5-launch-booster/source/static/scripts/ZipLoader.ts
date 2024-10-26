@@ -10,7 +10,7 @@ export class ZipLoader extends Component {
     @property
     public loadSceneName: string = '';
     @property
-    public isRecordAssetsUrl: boolean = false;
+    public isRecordAssetsUrl: boolean = true;
 
     private recordAssetsUrlList = [];
     private zipCache = new Map<string, JSZip.JSZipObject>();
