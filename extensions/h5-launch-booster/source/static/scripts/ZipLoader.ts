@@ -1,4 +1,4 @@
-import { _decorator, assetManager, Component, director, error, find, Input, input, instantiate, KeyCode, log, path, Prefab, resources, warn } from "cc";
+import { _decorator, assetManager, Component, director, error, Input, input, KeyCode, warn } from "cc";
 // @ts-ignore
 import { DEBUG, DEV } from 'cc/env';
 import JSZip from "jszip";
