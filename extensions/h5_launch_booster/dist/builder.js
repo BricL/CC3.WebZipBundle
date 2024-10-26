@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.assetHandlers = exports.configs = exports.unload = exports.load = void 0;
+exports.configs = exports.unload = exports.load = void 0;
 const global_1 = require("./global");
 const load = function () {
     console.debug(`${global_1.PACKAGE_NAME} load`);
@@ -138,17 +138,17 @@ exports.configs = {
             // },
         },
         // panel: './panel',
-        verifyRuleMap: {
-        // ruleTest: {
-        //     message: `i18n:${PACKAGE_NAME}.options.ruleTest_msg`,
-        //     func(val, buildOptions) {
-        //         if (val === 'cocos') {
-        //             return true;
-        //         }
-        //         return false;
+        // verifyRuleMap: {
+        //     ruleTest: {
+        //         message: `i18n:${PACKAGE_NAME}.options.ruleTest_msg`,
+        //         func(val, buildOptions) {
+        //             if (val === 'cocos') {
+        //                 return true;
+        //             }
+        //             return false;
+        //         },
         //     },
         // },
-        },
     },
 };
-exports.assetHandlers = './asset-handlers';
+// export const assetHandlers: BuildPlugin.AssetHandlers = './asset-handlers';

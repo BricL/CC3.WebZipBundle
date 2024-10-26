@@ -41,16 +41,16 @@ const global_1 = require("./global");
 const fs = __importStar(require("fs"));
 const crypo = __importStar(require("crypto"));
 const jszip_1 = __importDefault(require("jszip"));
-function log(...arg) {
-    return console.log(`[${global_1.PACKAGE_NAME}] `, ...arg);
-}
-let allAssets = [];
+// function log(...arg: any[]) {
+//     return console.log(`[${PACKAGE_NAME}] `, ...arg);
+// }
+// let allAssets = [];
 exports.throwError = true;
 //#region lifecycle hooks
 const load = function () {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(`[${global_1.PACKAGE_NAME}] Load cocos plugin example in builder.`);
-        allAssets = yield Editor.Message.request('asset-db', 'query-assets');
+        // console.log(`[${PACKAGE_NAME}] Load cocos plugin example in builder.`);
+        // allAssets = await Editor.Message.request('asset-db', 'query-assets');
     });
 };
 exports.load = load;
@@ -58,8 +58,8 @@ const onBeforeBuild = function (options, result) {
     return __awaiter(this, void 0, void 0, function* () {
         // TODO some thing
         // log(`${PACKAGE_NAME}.enable`, 'onBeforeBuild');
-        const pkgOptions = options.packages[global_1.PACKAGE_NAME];
-        log(`H5 Launch Booster: ${pkgOptions.enable}`);
+        // const pkgOptions = options.packages[PACKAGE_NAME];
+        // log(`H5 Launch Booster: ${pkgOptions.enable}`);
     });
 };
 exports.onBeforeBuild = onBeforeBuild;
@@ -204,7 +204,7 @@ const onAfterMake = function (root, options) {
     });
 };
 exports.onAfterMake = onAfterMake;
-//#region utils functions
+// #region utils functions
 function parsePackSize(packSize) {
     if (packSize === 'option1') { // 500KB
         return 500 * 1024;

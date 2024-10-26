@@ -5,25 +5,25 @@ import * as fs from 'fs';
 import * as crypo from 'crypto';
 import JSZip from 'jszip';
 
-function log(...arg: any[]) {
-    return console.log(`[${PACKAGE_NAME}] `, ...arg);
-}
+// function log(...arg: any[]) {
+//     return console.log(`[${PACKAGE_NAME}] `, ...arg);
+// }
 
-let allAssets = [];
+// let allAssets = [];
 
 export const throwError: BuildHook.throwError = true;
 
 //#region lifecycle hooks
 export const load: BuildHook.load = async function () {
-    console.log(`[${PACKAGE_NAME}] Load cocos plugin example in builder.`);
-    allAssets = await Editor.Message.request('asset-db', 'query-assets');
+    // console.log(`[${PACKAGE_NAME}] Load cocos plugin example in builder.`);
+    // allAssets = await Editor.Message.request('asset-db', 'query-assets');
 };
 
 export const onBeforeBuild: BuildHook.onBeforeBuild = async function (options: ITaskOptions, result: IBuildResult) {
     // TODO some thing
     // log(`${PACKAGE_NAME}.enable`, 'onBeforeBuild');
-    const pkgOptions = options.packages[PACKAGE_NAME];
-    log(`H5 Launch Booster: ${pkgOptions.enable}`);
+    // const pkgOptions = options.packages[PACKAGE_NAME];
+    // log(`H5 Launch Booster: ${pkgOptions.enable}`);
 };
 
 export const onBeforeCompressSettings: BuildHook.onBeforeCompressSettings = async function (options: ITaskOptions, result: IBuildResult) {
@@ -165,7 +165,7 @@ export const onAfterMake: BuildHook.onAfterMake = async function (root, options)
     // console.log(`onAfterMake: root: ${root}, options: ${options}`);
 };
 
-//#region utils functions
+// #region utils functions
 function parsePackSize(packSize: string) {
     if (packSize === 'option1') { // 500KB
         return 500 * 1024;

@@ -137,18 +137,18 @@ export const configs: BuildPlugin.Configs = {
             // },
         },
         // panel: './panel',
-        verifyRuleMap: {
-            // ruleTest: {
-            //     message: `i18n:${PACKAGE_NAME}.options.ruleTest_msg`,
-            //     func(val, buildOptions) {
-            //         if (val === 'cocos') {
-            //             return true;
-            //         }
-            //         return false;
-            //     },
-            // },
-        },
+        // verifyRuleMap: {
+        //     ruleTest: {
+        //         message: `i18n:${PACKAGE_NAME}.options.ruleTest_msg`,
+        //         func(val, buildOptions) {
+        //             if (val === 'cocos') {
+        //                 return true;
+        //             }
+        //             return false;
+        //         },
+        //     },
+        // },
     },
 };
 
-export const assetHandlers: BuildPlugin.AssetHandlers = './asset-handlers';
+// export const assetHandlers: BuildPlugin.AssetHandlers = './asset-handlers';
