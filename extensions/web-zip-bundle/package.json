@@ -4,7 +4,7 @@
     "name": "web-zip-bundle",
     "version": "1.0.0",
     "author": "ericlin09@gmail.com",
-    "editor": ">=3.8.1",
+    "editor": ">=3.8.0",
     "scripts": {
         "preinstall": "node ./scripts/preinstall.js",
         "build": "tsc"
