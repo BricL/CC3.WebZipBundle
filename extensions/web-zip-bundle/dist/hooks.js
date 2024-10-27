@@ -237,19 +237,18 @@ function zipFolder(srcFolder, destFolder) {
         (0, global_1.log)(`Folder ${srcFolder} has been zipped to ${destFolder}`);
     });
 }
-function addFileToZip(folderPath, zipFolder) {
-    const items = fs.readdirSync(folderPath);
-    for (const item of items) {
-        const fullPath = path_1.default.join(folderPath, item);
+function addFileToZip(dirPath, zip) {
+    const contentsInDir = fs.readdirSync(dirPath);
+    for (const item of contentsInDir) {
+        const fullPath = path_1.default.join(dirPath, item);
         try {
             const stats = fs.statSync(fullPath);
             if (stats.isDirectory()) {
-                const folder = zipFolder.folder(item);
-                addFileToZip(fullPath, folder);
+                addFileToZip(fullPath, zip.folder(item));
             }
             else {
-                const fileData = fs.readFileSync(fullPath);
-                zipFolder.file(item, fileData);
+                const data = fs.readFileSync(fullPath);
+                zip.file(item, data);
             }
         }
         catch (exp) {

@@ -191,18 +191,17 @@ async function zipFolder(srcFolder: string, destFolder: string) {
     log(`Folder ${srcFolder} has been zipped to ${destFolder}`);
 }
 
-function addFileToZip(folderPath: string, zipFolder: JSZip) {
-    const items = fs.readdirSync(folderPath);
-    for (const item of items) {
-        const fullPath = path.join(folderPath, item);
+function addFileToZip(dirPath: string, zip: JSZip) {
+    const contentsInDir = fs.readdirSync(dirPath);
+    for (const item of contentsInDir) {
+        const fullPath = path.join(dirPath, item);
         try {
             const stats = fs.statSync(fullPath);
             if (stats.isDirectory()) {
-                const folder = zipFolder.folder(item);
-                addFileToZip(fullPath, folder);
+                addFileToZip(fullPath, zip.folder(item));
             } else {
-                const fileData = fs.readFileSync(fullPath);
-                zipFolder.file(item, fileData);
+                const data = fs.readFileSync(fullPath);
+                zip.file(item, data);
             }
         } catch (exp) {
             if (exp.code === 'ENOENT') {
