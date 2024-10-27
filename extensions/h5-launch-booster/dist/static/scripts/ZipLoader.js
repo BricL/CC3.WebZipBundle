@@ -46,11 +46,11 @@ let ZipLoader = ZipLoader_1 = class ZipLoader extends cc_1.Component {
     }
     downloadResCache() {
         return __awaiter(this, void 0, void 0, function* () {
-            const h5lbResZipList = window.h5lbResZipList;
-            if (h5lbResZipList !== undefined && h5lbResZipList.length > 0) {
+            const resZipList = window.wzbResZipList;
+            if (resZipList !== undefined && resZipList.length > 0) {
                 const promises = [];
-                for (let i = 0; i < h5lbResZipList.length; i++) {
-                    promises.push(this.downloadZip(h5lbResZipList[i]));
+                for (let i = 0; i < resZipList.length; i++) {
+                    promises.push(this.downloadZip(resZipList[i]));
                 }
                 const zips = yield Promise.all(promises);
                 for (const zip of zips) {

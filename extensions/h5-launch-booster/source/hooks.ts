@@ -1,5 +1,5 @@
 import { BuildHook, IBuildResult, ITaskOptions } from '../@types';
-import { ASSETS_URL_RECORD_LIST_JSON, BUILD_CONFIG_FOLDER, PACKAGE_NAME, log, logError } from './global';
+import { ASSETS_URL_RECORD_LIST_JSON, BUILD_CONFIG_FOLDER, PACKAGE_NAME, ZIP_NAME, log, logError } from './global';
 import * as fs from 'fs';
 import * as crypo from 'crypto';
 import JSZip from 'jszip';
@@ -94,7 +94,7 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
 
                 try {
                     if (fs.existsSync(srcAssetPath)) {
-                        const destAssetPath = path.join(TEMP_PATH, `h5lbResCache${i}`, path.dirname(assetPath), assetName);
+                        const destAssetPath = path.join(TEMP_PATH, `${ZIP_NAME}${i}`, path.dirname(assetPath), assetName);
                         copyAsset(srcAssetPath, destAssetPath);
                         resultString.push(destAssetPath);
                     }
@@ -113,25 +113,25 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
             }
         }
 
-        // Generate h5lbResCache.zip
+        // Generate ${ZIP_NAME}.zip
         let tempName = '';
         for (let i = 0; i < zipPackages.length; i++) {
-            const h5lbResCacheZipName = options.md5Cache ? `h5lbResCache${i}.${md5Hash}.zip` : `h5lbResCache${i}.zip`;
-            await zipFolder(path.join(TEMP_PATH, `h5lbResCache${i}`), path.join(BUILD_CONFIG_PATH, h5lbResCacheZipName));
+            const resCacheZipName = options.md5Cache ? `${ZIP_NAME}${i}.${md5Hash}.zip` : `${ZIP_NAME}${i}.zip`;
+            await zipFolder(path.join(TEMP_PATH, `${ZIP_NAME}${i}`), path.join(BUILD_CONFIG_PATH, resCacheZipName));
 
             // Do the cut and paste
-            const srcPath = path.join(BUILD_CONFIG_PATH, h5lbResCacheZipName);
-            const destPath = path.join(BUILD_DEST_PATH, 'assets', h5lbResCacheZipName);
+            const srcPath = path.join(BUILD_CONFIG_PATH, resCacheZipName);
+            const destPath = path.join(BUILD_DEST_PATH, 'assets', resCacheZipName);
             fs.copyFileSync(srcPath, destPath);
             fs.unlinkSync(srcPath);
-            tempName += `'assets/${h5lbResCacheZipName}'` + (i < zipPackages.length - 1 ? ', ' : '');
+            tempName += `'assets/${resCacheZipName}'` + (i < zipPackages.length - 1 ? ', ' : '');
         }
 
-        // Modify index.html to add 'h5lbResCache' gloable variable to window object which is used in ZipLoader.ts
+        // Modify index.html to add ${ZIP_NAME} gloable variable to window object which is used in ZipLoader.ts
         const indexHtml = fs.readFileSync(path.join(BUILD_DEST_PATH, 'index.html'), 'utf-8');
         const modifiedHtml = indexHtml.split('\n').map((line, index) => {
             if (line.includes('./index')) {
-                return `${line}\nwindow['h5lbResZipList'] = [${tempName}];`;
+                return `${line}\nwindow['wzbResZipList'] = [${tempName}];`;
             }
             return line;
         }).join('\n');

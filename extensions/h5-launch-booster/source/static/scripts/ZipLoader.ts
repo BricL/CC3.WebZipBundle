@@ -31,11 +31,11 @@ export class ZipLoader extends Component {
     }
 
     public async downloadResCache() {
-        const h5lbResZipList = (window as any).h5lbResZipList;
-        if (h5lbResZipList !== undefined && h5lbResZipList.length > 0) {
+        const resZipList = (window as any).wzbResZipList;
+        if (resZipList !== undefined && resZipList.length > 0) {
             const promises: Promise<JSZip>[] = [];
-            for (let i = 0; i < h5lbResZipList.length; i++) {
-                promises.push(this.downloadZip(h5lbResZipList[i]));
+            for (let i = 0; i < resZipList.length; i++) {
+                promises.push(this.downloadZip(resZipList[i]));
             }
 
             const zips = await Promise.all(promises);
