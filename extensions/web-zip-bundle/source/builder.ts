@@ -84,8 +84,8 @@ export const configs: BuildPlugin.Configs = {
             //     verifyLevel: 'warn',
             // },
             selectPackSize: {
-                label: `Set size limit per zip`,
-                description: `Set the maximum size for individual zip archives.`,
+                label: `i18n:${PACKAGE_NAME}.options.selectPackSize`,
+                description: `i18n:${PACKAGE_NAME}.options.selectPackSize`,
                 default: 'option2',
                 render: {
                     ui: 'ui-select',
