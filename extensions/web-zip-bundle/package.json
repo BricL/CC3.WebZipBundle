@@ -9,8 +9,8 @@
         "preinstall": "node ./scripts/preinstall.js",
         "build": "tsc"
     },
-    "title": "i18n:h5_launch_booster.title",
-    "description": "i18n:h5_launch_booster.description",
+    "title": "i18n:web-zip-bundle.title",
+    "description": "i18n:web-zip-bundle.description",
     "main": "./dist/main.js",
     "dependencies": {
         "fs-extra": "^10.0.0",

@@ -1,5 +1,5 @@
 module.exports = {
-    title: "H5 Launch Booster",
+    title: "Web Zip Bundle",
     ruleTest_msg: "The filled text does not meet the rules, please enter 'cocos'",
     options: {
         enable: "Enable",

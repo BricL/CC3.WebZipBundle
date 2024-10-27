@@ -1,5 +1,5 @@
 module.exports = {
-    title: "H5 加速啟動器",
+    title: "Web Zip Bundle",
     ruleTest_msg: "填写字段不满足规则，请输入 'cocos'",
     options: {
         enable: "启用",

@@ -8,7 +8,7 @@ export * from '@cocos/creator-types/editor/packages/builder/@types/public';
 import { IPanelThis, IBuildTaskOption } from '@cocos/creator-types/editor/packages/builder/@types/public';
 import { Link, Checkbox } from '@editor/creator-ui-kit/dist/renderer';
 
-const PACKAGE_NAME = 'h5_launch_booster';
+const PACKAGE_NAME = 'web-zip-bundle';
 export interface ITaskOptions extends IBuildTaskOption {
     packages: {
         [PACKAGE_NAME]: IOptions;
