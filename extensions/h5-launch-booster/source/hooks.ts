@@ -1,9 +1,9 @@
-import { path } from 'cc';
 import { BuildHook, IBuildResult, ITaskOptions } from '../@types';
-import { ASSETS_URL_RECORD_LIST_JSON, PACKAGE_NAME, log, logError } from './global';
+import { ASSETS_URL_RECORD_LIST_JSON, BUILD_CONFIG_FOLDER, PACKAGE_NAME, log, logError } from './global';
 import * as fs from 'fs';
 import * as crypo from 'crypto';
 import JSZip from 'jszip';
+import path from 'path';
 
 // let allAssets = [];
 
@@ -51,7 +51,7 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
     const pkgOptions = options.packages[PACKAGE_NAME];
     if (pkgOptions.enable) {
         const BUILD_DEST_PATH = result.dest;
-        const BUILD_CONFIG_PATH = `${Editor.Project.path}/h5lb-build-config`;
+        const BUILD_CONFIG_PATH = path.join(Editor.Project.path, BUILD_CONFIG_FOLDER);
         const TEMP_PATH = path.join(BUILD_CONFIG_PATH, 'temp');
 
         // Clean/Create temp folder
@@ -76,7 +76,6 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
 
             if (totalSize >= oneMB) {
                 zipPackages.push(assetsInZip);
-                log(`AssetsInZip size: ${totalSize}, assets: ${assetsInZip.length}`);
                 assetsInZip = [];
                 totalSize = 0;
             }
@@ -84,11 +83,9 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
 
         if (assetsInZip.length > 0) {
             zipPackages.push(assetsInZip);
-            log(`AssetsInZip size: ${totalSize}, assets: ${assetsInZip.length}`);
         }
 
-        log(`ZipPackages: ${zipPackages.length}`);
-
+        // Copy assets to temp folder
         for (let i = 0; i < zipPackages.length; i++) {
             const assetsPathList = zipPackages[i];
             for (const assetPath of assetsPathList) {
@@ -97,7 +94,7 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
 
                 try {
                     if (fs.existsSync(srcAssetPath)) {
-                        const destAssetPath = path.join(TEMP_PATH, `zipPackage${i}`, path.dirname(assetPath), assetName);
+                        const destAssetPath = path.join(TEMP_PATH, `h5lbResCache${i}`, path.dirname(assetPath), assetName);
                         copyAsset(srcAssetPath, destAssetPath);
                         resultString.push(destAssetPath);
                     }
@@ -107,6 +104,7 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
             }
         }
 
+        // Calcaulte md5 hash this time
         let md5Hash = '';
         if (options.md5Cache) {
             if (resultString.length > 0) {
@@ -119,7 +117,7 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
         let tempName = '';
         for (let i = 0; i < zipPackages.length; i++) {
             const h5lbResCacheZipName = options.md5Cache ? `h5lbResCache${i}.${md5Hash}.zip` : `h5lbResCache${i}.zip`;
-            await zipFolder(path.join(TEMP_PATH, `zipPackage${i}`), path.join(BUILD_CONFIG_PATH, h5lbResCacheZipName));
+            await zipFolder(path.join(TEMP_PATH, `h5lbResCache${i}`), path.join(BUILD_CONFIG_PATH, h5lbResCacheZipName));
 
             // Do the cut and paste
             const srcPath = path.join(BUILD_CONFIG_PATH, h5lbResCacheZipName);
