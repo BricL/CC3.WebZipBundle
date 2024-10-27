@@ -27,8 +27,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.unload = exports.load = exports.methods = void 0;
-const fs = __importStar(require("fs"));
 const global_1 = require("./global");
+const fs = __importStar(require("fs"));
 const path_1 = __importDefault(require("path"));
 /**
  * @en Registration method for the main process of Extension
@@ -40,18 +40,18 @@ exports.methods = {};
  * @zh 扩展加载完成后触发的钩子
  */
 const load = function () {
-    // Check build-config directory
+    // Check BUILD_CONFIG_FOLDER
     (0, global_1.log)(`Loaded: ${Editor.Project.path}`);
-    const buildConfigPath = `${Editor.Project.path}/h5lb-build-config`;
+    const buildConfigPath = path_1.default.join(Editor.Project.path, global_1.BUILD_CONFIG_FOLDER);
     if (!fs.existsSync(buildConfigPath)) {
         fs.mkdirSync(buildConfigPath);
-        (0, global_1.logWarn)(`Create build-config directory at '${buildConfigPath}.'`);
+        (0, global_1.logWarn)(`Create config folder at '${buildConfigPath}.'`);
     }
-    // Check assetsUrlRecordList.json
+    // Check ASSETS_URL_RECORD_LIST_JSON
     const assetsUrlRecordListPath = path_1.default.join(buildConfigPath, global_1.ASSETS_URL_RECORD_LIST_JSON);
     if (!fs.existsSync(assetsUrlRecordListPath)) {
         fs.writeFileSync(assetsUrlRecordListPath, JSON.stringify([]));
-        (0, global_1.logWarn)(`Add assetsUrlRecordList.json at at '${assetsUrlRecordListPath}.`);
+        (0, global_1.logWarn)(`Add record list at '${assetsUrlRecordListPath}.`);
     }
 };
 exports.load = load;
