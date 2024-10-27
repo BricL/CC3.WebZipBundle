@@ -6,18 +6,18 @@ exports.ASSETS_URL_RECORD_LIST_JSON = 'assetsUrlRecordList.json';
 exports.BUILD_CONFIG_FOLDER = 'wzb-build-config';
 exports.ZIP_NAME = 'wzbResCache';
 function log(...args) {
-    console.log(`[${exports.PACKAGE_NAME}]`, ...args);
+    console.log(`[${exports.PACKAGE_NAME}] ${args.join(' ')}`);
 }
 exports.log = log;
 function logDebug(...args) {
-    console.debug(`[${exports.PACKAGE_NAME}]`, ...args);
+    console.debug(`[${exports.PACKAGE_NAME}] ${args.join(' ')}`);
 }
 exports.logDebug = logDebug;
 function logWarn(...args) {
-    console.warn(`[${exports.PACKAGE_NAME}]`, ...args);
+    console.warn(`[${exports.PACKAGE_NAME}] ${args.join(' ')}`);
 }
 exports.logWarn = logWarn;
 function logError(...args) {
-    console.error(`[${exports.PACKAGE_NAME}]`, ...args);
+    console.error(`[${exports.PACKAGE_NAME}] ${args.join(' ')}`);
 }
 exports.logError = logError;
