@@ -109,13 +109,23 @@ const onAfterBuild = function (options, result) {
             let totalSize = 0;
             for (const assetPath of assetsPathList) {
                 let srcAssetPath = path_1.default.join(BUILD_DEST_PATH, assetPath);
-                const assetStat = fs.statSync(srcAssetPath);
-                totalSize += assetStat.size;
-                assetsInZip.push(assetPath);
-                if (totalSize >= oneMB) {
-                    zipPackages.push(assetsInZip);
-                    assetsInZip = [];
-                    totalSize = 0;
+                try {
+                    const assetStat = fs.statSync(srcAssetPath);
+                    totalSize += assetStat.size;
+                    assetsInZip.push(assetPath);
+                    if (totalSize >= oneMB) {
+                        zipPackages.push(assetsInZip);
+                        assetsInZip = [];
+                        totalSize = 0;
+                    }
+                }
+                catch (exp) {
+                    if (exp.code === 'ENOENT') {
+                        (0, global_1.logWarn)(`onAfterBuild: File not found, ${srcAssetPath}`);
+                    }
+                    else {
+                        (0, global_1.logError)(`onAfterBuild: An error occurred while checking the file, ${exp.message}`);
+                    }
                 }
             }
             if (assetsInZip.length > 0) {
@@ -225,14 +235,24 @@ function zipFolder(srcFolder, destFolder) {
             const items = fs.readdirSync(folderPath);
             for (const item of items) {
                 const fullPath = path_1.default.join(folderPath, item);
-                const stats = fs.statSync(fullPath);
-                if (stats.isDirectory()) {
-                    const folder = zipFolder.folder(item);
-                    addFolderToZip(fullPath, folder);
+                try {
+                    const stats = fs.statSync(fullPath);
+                    if (stats.isDirectory()) {
+                        const folder = zipFolder.folder(item);
+                        addFolderToZip(fullPath, folder);
+                    }
+                    else {
+                        const fileData = fs.readFileSync(fullPath);
+                        zipFolder.file(item, fileData);
+                    }
                 }
-                else {
-                    const fileData = fs.readFileSync(fullPath);
-                    zipFolder.file(item, fileData);
+                catch (exp) {
+                    if (exp.code === 'ENOENT') {
+                        (0, global_1.logWarn)(`zipFolder: File not found, ${fullPath}`);
+                    }
+                    else {
+                        (0, global_1.logError)(`zipFolder: An error occurred while checking the file, ${exp.message}`);
+                    }
                 }
             }
         }

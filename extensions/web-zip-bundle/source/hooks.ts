@@ -1,5 +1,5 @@
 import { BuildHook, IBuildResult, ITaskOptions } from '../@types';
-import { ASSETS_URL_RECORD_LIST_JSON, BUILD_CONFIG_FOLDER, PACKAGE_NAME, ZIP_NAME, log, logError } from './global';
+import { ASSETS_URL_RECORD_LIST_JSON, BUILD_CONFIG_FOLDER, PACKAGE_NAME, ZIP_NAME, log, logError, logWarn } from './global';
 import * as fs from 'fs';
 import * as crypo from 'crypto';
 import JSZip from 'jszip';
@@ -70,14 +70,22 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
         let totalSize = 0;
         for (const assetPath of assetsPathList) {
             let srcAssetPath = path.join(BUILD_DEST_PATH, assetPath);
-            const assetStat = fs.statSync(srcAssetPath);
-            totalSize += assetStat.size;
-            assetsInZip.push(assetPath);
-
-            if (totalSize >= oneMB) {
-                zipPackages.push(assetsInZip);
-                assetsInZip = [];
-                totalSize = 0;
+            try {
+                const assetStat = fs.statSync(srcAssetPath);
+                totalSize += assetStat.size;
+                assetsInZip.push(assetPath);
+    
+                if (totalSize >= oneMB) {
+                    zipPackages.push(assetsInZip);
+                    assetsInZip = [];
+                    totalSize = 0;
+                }
+            } catch (exp) {
+                if (exp.code === 'ENOENT') {
+                    logWarn(`onAfterBuild: File not found, ${srcAssetPath}`);
+                } else {
+                    logError(`onAfterBuild: An error occurred while checking the file, ${exp.message}`);
+                }
             }
         }
 
@@ -181,14 +189,21 @@ async function zipFolder(srcFolder: string, destFolder: string) {
 
         for (const item of items) {
             const fullPath = path.join(folderPath, item);
-            const stats = fs.statSync(fullPath);
-
-            if (stats.isDirectory()) {
-                const folder = zipFolder.folder(item);
-                addFolderToZip(fullPath, folder);
-            } else {
-                const fileData = fs.readFileSync(fullPath);
-                zipFolder.file(item, fileData);
+            try {
+                const stats = fs.statSync(fullPath);
+                if (stats.isDirectory()) {
+                    const folder = zipFolder.folder(item);
+                    addFolderToZip(fullPath, folder);
+                } else {
+                    const fileData = fs.readFileSync(fullPath);
+                    zipFolder.file(item, fileData);
+                }
+            } catch (exp) {
+                if (exp.code === 'ENOENT') {
+                    logWarn(`zipFolder: File not found, ${fullPath}`);
+                } else {
+                    logError(`zipFolder: An error occurred while checking the file, ${exp.message}`);
+                }
             }
         }
     }
