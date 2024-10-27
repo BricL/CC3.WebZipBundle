@@ -8,7 +8,6 @@ local/
 build/
 profiles/
 native
-h5lb-build-config/
 #//////////////////////////
 # NPM
 #//////////////////////////
@@ -27,4 +26,4 @@ node_modules/
 #//////////////////////////
 # WebZipBundle
 #//////////////////////////
-assetsUrlRecordList.json
+wzb-build-config/
