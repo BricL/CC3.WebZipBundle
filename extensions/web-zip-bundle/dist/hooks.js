@@ -41,13 +41,11 @@ const fs = __importStar(require("fs"));
 const crypo = __importStar(require("crypto"));
 const jszip_1 = __importDefault(require("jszip"));
 const path_1 = __importDefault(require("path"));
-// let allAssets = [];
 exports.throwError = true;
 //#region lifecycle hooks
 const load = function () {
     return __awaiter(this, void 0, void 0, function* () {
         // log(`Load cocos plugin example in builder.`);
-        // allAssets = await Editor.Message.request('asset-db', 'query-assets');
     });
 };
 exports.load = load;

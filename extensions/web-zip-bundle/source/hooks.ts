@@ -5,14 +5,11 @@ import * as crypo from 'crypto';
 import JSZip from 'jszip';
 import path from 'path';
 
-// let allAssets = [];
-
 export const throwError: BuildHook.throwError = true;
 
 //#region lifecycle hooks
 export const load: BuildHook.load = async function () {
     // log(`Load cocos plugin example in builder.`);
-    // allAssets = await Editor.Message.request('asset-db', 'query-assets');
 };
 
 export const onBeforeBuild: BuildHook.onBeforeBuild = async function (options: ITaskOptions, result: IBuildResult) {
