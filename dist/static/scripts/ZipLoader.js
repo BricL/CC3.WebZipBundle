@@ -151,7 +151,7 @@ let ZipLoader = ZipLoader_1 = class ZipLoader extends cc_1.Component {
         // @ts-ignore
         (XMLHttpRequest.prototype).open = function (method, url, async, user, password) {
             const extension = url.split('.').pop();
-            if (extension === 'cconb') {
+            if (extension === 'cconb' || extension === 'json') {
                 that.recordUrl(url);
             }
             // 檢查zip 加載時是否有這個url

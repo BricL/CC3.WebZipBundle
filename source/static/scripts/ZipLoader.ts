@@ -139,7 +139,7 @@ export class ZipLoader extends Component {
         // @ts-ignore
         (XMLHttpRequest.prototype).open = function (method: string, url: string, async: boolean, user: string, password: string) {
             const extension = url.split('.').pop();
-            if (extension === 'cconb') {
+            if (extension === 'cconb' || extension === 'json') {
                 that.recordUrl(url);
             }
 
