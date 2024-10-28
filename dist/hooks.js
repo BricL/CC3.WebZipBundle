@@ -45,7 +45,7 @@ exports.throwError = true;
 //#region lifecycle hooks
 const load = function () {
     return __awaiter(this, void 0, void 0, function* () {
-        // log(`Load cocos plugin example in builder.`);
+        // TODO some thing
     });
 };
 exports.load = load;
@@ -57,37 +57,18 @@ const onBeforeBuild = function (options, result) {
 exports.onBeforeBuild = onBeforeBuild;
 const onBeforeCompressSettings = function (options, result) {
     return __awaiter(this, void 0, void 0, function* () {
-        // const pkgOptions = options.packages[PACKAGE_NAME];
-        // if (pkgOptions.webTestOption) {
-        //     logDebug('webTestOption', true);
-        // }
-        // // Todo some thing
-        // logDebug('get settings test', result.settings);
+        // TODO some thing
     });
 };
 exports.onBeforeCompressSettings = onBeforeCompressSettings;
 const onAfterCompressSettings = function (options, result) {
     return __awaiter(this, void 0, void 0, function* () {
-        // // Todo some thing
-        // log('webTestOption', 'onAfterCompressSettings');
+        // TODO some thing
     });
 };
 exports.onAfterCompressSettings = onAfterCompressSettings;
 const onAfterBuild = function (options, result) {
     return __awaiter(this, void 0, void 0, function* () {
-        // // change the uuid to test
-        // const uuidTestMap = {
-        //     image: '57520716-48c8-4a19-8acf-41c9f8777fb0',
-        // };
-        // for (const name of Object.keys(uuidTestMap)) {
-        //     const uuid = uuidTestMap[name];
-        //     logDebug(`containsAsset of ${name}`, result.containsAsset(uuid));
-        //     logDebug(`getAssetPathInfo of ${name}`, result.getAssetPathInfo(uuid));
-        //     logDebug(`getRawAssetPaths of ${name}`, result.getRawAssetPaths(uuid));
-        //     logDebug(`getJsonPathInfo of ${name}`, result.getJsonPathInfo(uuid));
-        // }
-        // // test onError hook
-        // // throw new Error('Test onError');
         const pkgOptions = options.packages[global_1.PACKAGE_NAME];
         if (pkgOptions.enable) {
             const BUILD_DEST_PATH = result.dest;
@@ -182,26 +163,25 @@ const onAfterBuild = function (options, result) {
 exports.onAfterBuild = onAfterBuild;
 const unload = function () {
     return __awaiter(this, void 0, void 0, function* () {
-        // log(`Unload cocos plugin example in builder.`);
+        // TODO some thing
     });
 };
 exports.unload = unload;
 const onError = function (options, result) {
     return __awaiter(this, void 0, void 0, function* () {
-        // Todo some thing
-        // logWarn(`Run onError`);
+        // TODO some thing
     });
 };
 exports.onError = onError;
 const onBeforeMake = function (root, options) {
     return __awaiter(this, void 0, void 0, function* () {
-        // log(`onBeforeMake: root: ${root}, options: ${options}`);
+        // TODO some thing
     });
 };
 exports.onBeforeMake = onBeforeMake;
 const onAfterMake = function (root, options) {
     return __awaiter(this, void 0, void 0, function* () {
-        // log(`onAfterMake: root: ${root}, options: ${options}`);
+        // TODO some thing
     });
 };
 exports.onAfterMake = onAfterMake;

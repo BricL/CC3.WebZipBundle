@@ -9,7 +9,7 @@ export const throwError: BuildHook.throwError = true;
 
 //#region lifecycle hooks
 export const load: BuildHook.load = async function () {
-    // log(`Load cocos plugin example in builder.`);
+// TODO some thing
 };
 
 export const onBeforeBuild: BuildHook.onBeforeBuild = async function (options: ITaskOptions, result: IBuildResult) {
@@ -17,34 +17,14 @@ export const onBeforeBuild: BuildHook.onBeforeBuild = async function (options: I
 };
 
 export const onBeforeCompressSettings: BuildHook.onBeforeCompressSettings = async function (options: ITaskOptions, result: IBuildResult) {
-    // const pkgOptions = options.packages[PACKAGE_NAME];
-    // if (pkgOptions.webTestOption) {
-    //     logDebug('webTestOption', true);
-    // }
-    // // Todo some thing
-    // logDebug('get settings test', result.settings);
+    // TODO some thing
 };
 
 export const onAfterCompressSettings: BuildHook.onAfterCompressSettings = async function (options: ITaskOptions, result: IBuildResult) {
-    // // Todo some thing
-    // log('webTestOption', 'onAfterCompressSettings');
+    // TODO some thing
 };
 
 export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITaskOptions, result: IBuildResult) {
-    // // change the uuid to test
-    // const uuidTestMap = {
-    //     image: '57520716-48c8-4a19-8acf-41c9f8777fb0',
-    // };
-    // for (const name of Object.keys(uuidTestMap)) {
-    //     const uuid = uuidTestMap[name];
-    //     logDebug(`containsAsset of ${name}`, result.containsAsset(uuid));
-    //     logDebug(`getAssetPathInfo of ${name}`, result.getAssetPathInfo(uuid));
-    //     logDebug(`getRawAssetPaths of ${name}`, result.getRawAssetPaths(uuid));
-    //     logDebug(`getJsonPathInfo of ${name}`, result.getJsonPathInfo(uuid));
-    // }
-    // // test onError hook
-    // // throw new Error('Test onError');
-
     const pkgOptions = options.packages[PACKAGE_NAME];
     if (pkgOptions.enable) {
         const BUILD_DEST_PATH = result.dest;
@@ -145,20 +125,19 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
 };
 
 export const unload: BuildHook.unload = async function () {
-    // log(`Unload cocos plugin example in builder.`);
+    // TODO some thing
 };
 
 export const onError: BuildHook.onError = async function (options, result) {
-    // Todo some thing
-    // logWarn(`Run onError`);
+    // TODO some thing
 };
 
 export const onBeforeMake: BuildHook.onBeforeMake = async function (root, options) {
-    // log(`onBeforeMake: root: ${root}, options: ${options}`);
+    // TODO some thing
 };
 
 export const onAfterMake: BuildHook.onAfterMake = async function (root, options) {
-    // log(`onAfterMake: root: ${root}, options: ${options}`);
+    // TODO some thing
 };
 
 // #region utils functions
