@@ -1,25 +1,30 @@
-# 自定义构建插件模板使用指南
+# Web Zip Bundle
+用於將 `web platform` 用到的資源，如：圖檔(png、jpg、astc、webp)、json、cconb，打包成單個 Zip 檔案下載，減少對網路的請求數量 (web requests) 加速遊戲啟動速度。
 
-首先欢迎体验自定义构建插件功能，这是一份自定义构建插件的简单模板，里面写了一些简单的添加构建配置以及自定义钩子函数的代码示例，更多的用法可以参考官方文档。
+## 安裝方法
 
-## 基本使用流程
+1. 下載專案成 zip。
 
-- 插件模板内使用了一些 `node` 模块方法，目前在 `packages.json` 内添加了插件支持的模块 `types`，安装后才能正常编译通过以及得到更好的类型提示。
+2. 解壓縮後將內容複製到 `your_project_path/extensions/web-zip-bundle` 中。
 
-```bash
-    npm install
-```
+3. 至 Editor menu 裡 `Extension/Extension Manager/Installed` 中，找到 web-zip-bunld 並啟動。
 
-- 通过直接修改该文件夹内的代码，编译后，再 **扩展管理器** 中找到对应的构建插件，然后点击 **重新载入** 图标按钮重启插件即可。
+   <p align="center"><img src="doc/img/extension_manager.png" width="450"></p>
 
-    ![image](https://github.com/cocos/creator-runtime-extensions/assets/27424848/8130c9db-cf44-4854-8804-920bf8bf9ec7)
+4. 至 `Build Setting` 中，下拉至最底會看到 web-zip-bundle 的參數選項。
 
-    示例代码使用 ts 编写，在使用之前请先在当前目录下执行 `npm run build` 编译代码。如果直接在当前文件夹内修改使用，可以执行 `tsc -w` 监听编译。
+   * Enable (啟動)：啟動或關閉功能。
 
-    如果还不知道如何编译代码或者如何使用 ts 编写，可以参考 [TypeScript 的官方文档](https://typescript.bootcss.com/tutorials/typescript-in-5-minutes.html)。
+   * Select Pack Size (選擇zip分割大小)：設定單一包 zip 檔案大小的約略上限，超過就會分包。
 
-    在使用过程中有任何建议反馈，欢迎在**论坛**上和我们交流。
+   <p align="center"><img src="doc/img/build_setting.png" width="450"></p>
 
-- 启用插件后打开构建插件面板，选择任意平台，即可看到构建插件注入的新参数。
+## [itch.io Demo](https://bricl.itch.io/cc3webzipbundledemo)
 
-    ![plugin-template](https://github.com/cocos/creator-runtime-extensions/assets/27424848/e0d16062-b077-4f29-8260-9e9090756fda)
+修改官方 [cocos-example-ui](https://github.com/cocos/cocos-example-ui)，建置為 `Web Platform` 應用，並匯入擴展 `Web Zip Bundle` 量測遊戲啟動速度的改進。
+
+<p align="center"><img src="doc/img/itch.io_demo.png" width="450"></p>
+
+## 版本
+* v1.0.0
+    * 第一個可用版本
