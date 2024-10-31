@@ -28,6 +28,7 @@ export interface ITaskOptions extends IBuildTaskOption {
 
 export interface IOptions {
     enable: boolean;
+    downloadZipAtIndexHtml: boolean;
     selectPackSize: string;
     // remoteAddress: string;
     // enterCocos: string;

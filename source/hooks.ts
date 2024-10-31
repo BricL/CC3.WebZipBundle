@@ -7,9 +7,37 @@ import path from 'path';
 
 export const throwError: BuildHook.throwError = true;
 
+const downloadResCacheJSCodeSnippet = `
+async function downloadResCache() {
+    async function downloadZip(url) {
+        try {
+            const response = await fetch(url);
+            const buffer = await response.arrayBuffer();
+            return buffer;
+        } catch (e) {
+            error(e.message);
+        }
+    }
+
+    const resZipList = window['wzbResZipList'];
+
+    if (resZipList !== undefined && resZipList.length > 0) {
+        const promises = [];
+        for (let i = 0; i < resZipList.length; i++) {
+            promises.push(downloadZip(resZipList[i]));
+        }
+        window['wzbDownloadResCache'] = promises;
+        return;
+    } else {
+        error("[WebZipBundle].downloadResCache: resZipList is empty");
+    }
+}
+
+downloadResCache();`;
+
 //#region lifecycle hooks
 export const load: BuildHook.load = async function () {
-// TODO some thing
+    // TODO some thing
 };
 
 export const onBeforeBuild: BuildHook.onBeforeBuild = async function (options: ITaskOptions, result: IBuildResult) {
@@ -51,7 +79,7 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
                 const assetStat = fs.statSync(srcAssetPath);
                 totalSize += assetStat.size;
                 assetsInZip.push(assetPath);
-    
+
                 if (totalSize >= oneMB) {
                     zipPackages.push(assetsInZip);
                     assetsInZip = [];
@@ -116,7 +144,11 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
         const indexHtml = fs.readFileSync(path.join(BUILD_DEST_PATH, 'index.html'), 'utf-8');
         const modifiedHtml = indexHtml.split('\n').map((line, index) => {
             if (line.includes('./index')) {
-                return `${line}\nwindow['wzbResZipList'] = [${tempName}];`;
+                if (pkgOptions.downloadZipAtIndexHtml) {
+                    return `${line}\nwindow['wzbResZipList'] = [${tempName}];\n${downloadResCacheJSCodeSnippet}`;
+                } else {
+                    return `${line}\nwindow['wzbResZipList'] = [${tempName}];`;
+                }
             }
             return line;
         }).join('\n');

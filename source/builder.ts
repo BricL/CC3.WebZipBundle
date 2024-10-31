@@ -20,6 +20,14 @@ export const configs: BuildPlugin.Configs = {
                     ui: 'ui-checkbox',
                 }
             },
+            downloadZipAtIndexHtml: {
+                label: `i18n:${PACKAGE_NAME}.options.downloadZipAtIndexHtml`,
+                description: `i18n:${PACKAGE_NAME}.options.downloadZipAtIndexHtml`,
+                default: false,
+                render: {
+                    ui: 'ui-checkbox',
+                }
+            },
             selectPackSize: {
                 label: `i18n:${PACKAGE_NAME}.options.selectPackSize`,
                 description: `i18n:${PACKAGE_NAME}.options.selectPackSize`,

@@ -42,6 +42,33 @@ const crypo = __importStar(require("crypto"));
 const jszip_1 = __importDefault(require("jszip"));
 const path_1 = __importDefault(require("path"));
 exports.throwError = true;
+const downloadResCacheJSCodeSnippet = `
+async function downloadResCache() {
+    async function downloadZip(url) {
+        try {
+            const response = await fetch(url);
+            const buffer = await response.arrayBuffer();
+            return buffer;
+        } catch (e) {
+            error(e.message);
+        }
+    }
+
+    const resZipList = window['wzbResZipList'];
+
+    if (resZipList !== undefined && resZipList.length > 0) {
+        const promises = [];
+        for (let i = 0; i < resZipList.length; i++) {
+            promises.push(downloadZip(resZipList[i]));
+        }
+        window['wzbDownloadResCache'] = promises;
+        return;
+    } else {
+        error("[WebZipBundle].downloadResCache: resZipList is empty");
+    }
+}
+
+downloadResCache();`;
 //#region lifecycle hooks
 const load = function () {
     return __awaiter(this, void 0, void 0, function* () {
@@ -152,7 +179,12 @@ const onAfterBuild = function (options, result) {
             const indexHtml = fs.readFileSync(path_1.default.join(BUILD_DEST_PATH, 'index.html'), 'utf-8');
             const modifiedHtml = indexHtml.split('\n').map((line, index) => {
                 if (line.includes('./index')) {
-                    return `${line}\nwindow['wzbResZipList'] = [${tempName}];`;
+                    if (pkgOptions.downloadZipAtIndexHtml) {
+                        return `${line}\nwindow['wzbResZipList'] = [${tempName}];\n${downloadResCacheJSCodeSnippet}`;
+                    }
+                    else {
+                        return `${line}\nwindow['wzbResZipList'] = [${tempName}];`;
+                    }
                 }
                 return line;
             }).join('\n');

@@ -22,6 +22,14 @@ exports.configs = {
                     ui: 'ui-checkbox',
                 }
             },
+            downloadZipAtIndexHtml: {
+                label: `i18n:${global_1.PACKAGE_NAME}.options.downloadZipAtIndexHtml`,
+                description: `i18n:${global_1.PACKAGE_NAME}.options.downloadZipAtIndexHtml`,
+                default: false,
+                render: {
+                    ui: 'ui-checkbox',
+                }
+            },
             selectPackSize: {
                 label: `i18n:${global_1.PACKAGE_NAME}.options.selectPackSize`,
                 description: `i18n:${global_1.PACKAGE_NAME}.options.selectPackSize`,
