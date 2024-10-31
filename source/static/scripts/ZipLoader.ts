@@ -25,28 +25,42 @@ export class ZipLoader extends Component {
     public static get inst(): ZipLoader {
         return ZipLoader.instance;
     }
-    
+
     public get getDownloadResCachePromise(): Promise<void> {
         return this.downloadResCachePromise;
     }
 
     public async downloadResCache() {
-        const resZipList = (window as any).wzbResZipList;
-        if (resZipList !== undefined && resZipList.length > 0) {
-            const promises: Promise<JSZip>[] = [];
-            for (let i = 0; i < resZipList.length; i++) {
-                promises.push(this.downloadZip(resZipList[i]));
-            }
-
-            const zips = await Promise.all(promises);
-
-            for (const zip of zips) {
+        const wzbDownloadResCache = (window as any)['wzbDownloadResCache'];
+        if (wzbDownloadResCache !== undefined) {
+            const bufferArray = await Promise.all(wzbDownloadResCache);
+            for (const buffer of bufferArray) {
+                const zip = await JSZip.loadAsync(buffer);
                 zip.forEach((relativePath: string, zipEntry: JSZip.JSZipObject) => {
                     if (zipEntry.dir)
                         return;
                     else
                         this.zipCache.set(relativePath, zipEntry);
                 });
+            }
+        } else {
+            const resZipList = (window as any).wzbResZipList;
+            if (resZipList !== undefined && resZipList.length > 0) {
+                const promises: Promise<JSZip>[] = [];
+                for (let i = 0; i < resZipList.length; i++) {
+                    promises.push(this.downloadZip(resZipList[i]));
+                }
+
+                const zips = await Promise.all(promises);
+
+                for (const zip of zips) {
+                    zip.forEach((relativePath: string, zipEntry: JSZip.JSZipObject) => {
+                        if (zipEntry.dir)
+                            return;
+                        else
+                            this.zipCache.set(relativePath, zipEntry);
+                    });
+                }
             }
         }
     }
@@ -63,58 +77,6 @@ export class ZipLoader extends Component {
         }
     }
 
-    private inject(extension: string) {
-        if (extension === '.cconb') {
-            this.injectXMLHttpRequest();
-        } else if (extension === '.png' || extension === '.jpg' || extension === '.webp') {
-            assetManager.downloader.register(extension, async (url, options, onComplete) => {
-                this.recordUrl(url);
-
-                if (this.resCache.has(url)) {
-                    const res = this.resCache.get(url);
-                    onComplete(null, res);
-                } else {
-                    if (this.zipCache.has(url)) {
-                        const cache = this.zipCache.get(url);
-                        const res = await cache.async("blob");
-                        this.resCache.set(url, res);
-                        this.zipCache.delete(url);
-
-                        onComplete(null, res);
-                        return;
-                    } else {
-                        const img = new Image();
-                        img.crossOrigin = 'anonymous';
-                        img.onload = () => { onComplete(null, img); };
-                        img.onerror = (e) => { onComplete(new Error(e instanceof Event ? e.type : e), null); };
-                        img.src = url;
-                    }
-                }
-            });
-        } else if (extension === '.json') {
-            // assetManager.downloader.register('.json', async (url, options, onComplete) => {
-            //     this.recordUrl(url);
-
-            //     if (this.zipCache.has(url)) {
-            //         const cache = this.zipCache.get(url);
-            //         const res = await cache.async("text");
-            //         onComplete(null, JSON.parse(res));
-            //         return;
-            //     }
-
-            //     try {
-            //         const response = await fetch(url);
-            //         const jsonStr = await response.json();
-            //         onComplete(null, jsonStr);
-            //     } catch (e) {
-            //         onComplete(new Error(e), null);
-            //     }
-            // });
-        } else {
-            error(`[${this.constructor.name}].inject`, `Unknown extension: ${extension}`);
-        }
-    }
-
     /**
      * Only record the url of the assets when DEBUG or DEV is true.
      * @param url 
@@ -127,6 +89,41 @@ export class ZipLoader extends Component {
         }
     }
 
+    /**
+     * Support the file formate was dwonloaded using Image, like .png, .jpg, .bmp, .jpeg, .gif, .ico, .tiff, .webp, .image.
+     * @param extension 
+     */
+    private injectDownloadImage(extension: string) {
+        assetManager.downloader.register(extension, async (url, options, onComplete) => {
+            this.recordUrl(url);
+
+            if (this.resCache.has(url)) {
+                const res = this.resCache.get(url);
+                onComplete(null, res);
+            } else {
+                if (this.zipCache.has(url)) {
+                    const cache = this.zipCache.get(url);
+                    const res = await cache.async("blob");
+                    this.resCache.set(url, res);
+                    this.zipCache.delete(url);
+
+                    onComplete(null, res);
+                    return;
+                } else {
+                    const img = new Image();
+                    img.crossOrigin = 'anonymous';
+                    img.onload = () => { onComplete(null, img); };
+                    img.onerror = (e) => { onComplete(new Error(e instanceof Event ? e.type : e), null); };
+                    img.src = url;
+                }
+            }
+        });
+    }
+
+    /**
+     * Support the file formate was dwonloaded using XMLHttpRequest, like .cconb, .astc, .json.
+     * @returns 
+     */
     private injectXMLHttpRequest(): boolean {
         const accessor = Object.getOwnPropertyDescriptor(XMLHttpRequest.prototype, 'response');
         if (accessor === undefined)
@@ -139,7 +136,7 @@ export class ZipLoader extends Component {
         // @ts-ignore
         (XMLHttpRequest.prototype).open = function (method: string, url: string, async: boolean, user: string, password: string) {
             const extension = url.split('.').pop();
-            if (extension === 'cconb' || extension === 'json') {
+            if (extension === 'cconb' || extension === 'astc' || extension === 'json') {
                 that.recordUrl(url);
             }
 
@@ -201,11 +198,16 @@ export class ZipLoader extends Component {
     //#region lifecycle hooks
     protected onLoad(): void {
         ZipLoader.instance = this;
-        this.inject('.cconb');
-        this.inject('.json');
-        this.inject('.png');
-        this.inject('.jpg');
-        this.inject('.webp');
+        this.injectXMLHttpRequest();
+        this.injectDownloadImage('.png');
+        this.injectDownloadImage('.jpg');
+        this.injectDownloadImage('.bmp');
+        this.injectDownloadImage('.jpeg');
+        this.injectDownloadImage('.gif');
+        this.injectDownloadImage('.ico');
+        this.injectDownloadImage('.tiff');
+        this.injectDownloadImage('.webp');
+        this.injectDownloadImage('.image');
     }
 
     protected start(): void {

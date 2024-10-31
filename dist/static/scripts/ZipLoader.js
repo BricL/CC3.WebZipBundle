@@ -46,20 +46,35 @@ let ZipLoader = ZipLoader_1 = class ZipLoader extends cc_1.Component {
     }
     downloadResCache() {
         return __awaiter(this, void 0, void 0, function* () {
-            const resZipList = window.wzbResZipList;
-            if (resZipList !== undefined && resZipList.length > 0) {
-                const promises = [];
-                for (let i = 0; i < resZipList.length; i++) {
-                    promises.push(this.downloadZip(resZipList[i]));
-                }
-                const zips = yield Promise.all(promises);
-                for (const zip of zips) {
+            const wzbDownloadResCache = window['wzbDownloadResCache'];
+            if (wzbDownloadResCache !== undefined) {
+                const bufferArray = yield Promise.all(wzbDownloadResCache);
+                for (const buffer of bufferArray) {
+                    const zip = yield jszip_1.default.loadAsync(buffer);
                     zip.forEach((relativePath, zipEntry) => {
                         if (zipEntry.dir)
                             return;
                         else
                             this.zipCache.set(relativePath, zipEntry);
                     });
+                }
+            }
+            else {
+                const resZipList = window.wzbResZipList;
+                if (resZipList !== undefined && resZipList.length > 0) {
+                    const promises = [];
+                    for (let i = 0; i < resZipList.length; i++) {
+                        promises.push(this.downloadZip(resZipList[i]));
+                    }
+                    const zips = yield Promise.all(promises);
+                    for (const zip of zips) {
+                        zip.forEach((relativePath, zipEntry) => {
+                            if (zipEntry.dir)
+                                return;
+                            else
+                                this.zipCache.set(relativePath, zipEntry);
+                        });
+                    }
                 }
             }
         });
@@ -78,58 +93,6 @@ let ZipLoader = ZipLoader_1 = class ZipLoader extends cc_1.Component {
             }
         });
     }
-    inject(extension) {
-        if (extension === '.cconb') {
-            this.injectXMLHttpRequest();
-        }
-        else if (extension === '.png' || extension === '.jpg' || extension === '.webp') {
-            cc_1.assetManager.downloader.register(extension, (url, options, onComplete) => __awaiter(this, void 0, void 0, function* () {
-                this.recordUrl(url);
-                if (this.resCache.has(url)) {
-                    const res = this.resCache.get(url);
-                    onComplete(null, res);
-                }
-                else {
-                    if (this.zipCache.has(url)) {
-                        const cache = this.zipCache.get(url);
-                        const res = yield cache.async("blob");
-                        this.resCache.set(url, res);
-                        this.zipCache.delete(url);
-                        onComplete(null, res);
-                        return;
-                    }
-                    else {
-                        const img = new Image();
-                        img.crossOrigin = 'anonymous';
-                        img.onload = () => { onComplete(null, img); };
-                        img.onerror = (e) => { onComplete(new Error(e instanceof Event ? e.type : e), null); };
-                        img.src = url;
-                    }
-                }
-            }));
-        }
-        else if (extension === '.json') {
-            // assetManager.downloader.register('.json', async (url, options, onComplete) => {
-            //     this.recordUrl(url);
-            //     if (this.zipCache.has(url)) {
-            //         const cache = this.zipCache.get(url);
-            //         const res = await cache.async("text");
-            //         onComplete(null, JSON.parse(res));
-            //         return;
-            //     }
-            //     try {
-            //         const response = await fetch(url);
-            //         const jsonStr = await response.json();
-            //         onComplete(null, jsonStr);
-            //     } catch (e) {
-            //         onComplete(new Error(e), null);
-            //     }
-            // });
-        }
-        else {
-            (0, cc_1.error)(`[${this.constructor.name}].inject`, `Unknown extension: ${extension}`);
-        }
-    }
     /**
      * Only record the url of the assets when DEBUG or DEV is true.
      * @param url
@@ -141,6 +104,40 @@ let ZipLoader = ZipLoader_1 = class ZipLoader extends cc_1.Component {
             }
         }
     }
+    /**
+     * Support the file formate was dwonloaded using Image, like .png, .jpg, .bmp, .jpeg, .gif, .ico, .tiff, .webp, .image.
+     * @param extension
+     */
+    injectDownloadImage(extension) {
+        cc_1.assetManager.downloader.register(extension, (url, options, onComplete) => __awaiter(this, void 0, void 0, function* () {
+            this.recordUrl(url);
+            if (this.resCache.has(url)) {
+                const res = this.resCache.get(url);
+                onComplete(null, res);
+            }
+            else {
+                if (this.zipCache.has(url)) {
+                    const cache = this.zipCache.get(url);
+                    const res = yield cache.async("blob");
+                    this.resCache.set(url, res);
+                    this.zipCache.delete(url);
+                    onComplete(null, res);
+                    return;
+                }
+                else {
+                    const img = new Image();
+                    img.crossOrigin = 'anonymous';
+                    img.onload = () => { onComplete(null, img); };
+                    img.onerror = (e) => { onComplete(new Error(e instanceof Event ? e.type : e), null); };
+                    img.src = url;
+                }
+            }
+        }));
+    }
+    /**
+     * Support the file formate was dwonloaded using XMLHttpRequest, like .cconb, .astc, .json.
+     * @returns
+     */
     injectXMLHttpRequest() {
         const accessor = Object.getOwnPropertyDescriptor(XMLHttpRequest.prototype, 'response');
         if (accessor === undefined)
@@ -151,7 +148,7 @@ let ZipLoader = ZipLoader_1 = class ZipLoader extends cc_1.Component {
         // @ts-ignore
         (XMLHttpRequest.prototype).open = function (method, url, async, user, password) {
             const extension = url.split('.').pop();
-            if (extension === 'cconb' || extension === 'json') {
+            if (extension === 'cconb' || extension === 'astc' || extension === 'json') {
                 that.recordUrl(url);
             }
             // 檢查zip 加載時是否有這個url
@@ -210,11 +207,16 @@ let ZipLoader = ZipLoader_1 = class ZipLoader extends cc_1.Component {
     //#region lifecycle hooks
     onLoad() {
         ZipLoader_1.instance = this;
-        this.inject('.cconb');
-        this.inject('.json');
-        this.inject('.png');
-        this.inject('.jpg');
-        this.inject('.webp');
+        this.injectXMLHttpRequest();
+        this.injectDownloadImage('.png');
+        this.injectDownloadImage('.jpg');
+        this.injectDownloadImage('.bmp');
+        this.injectDownloadImage('.jpeg');
+        this.injectDownloadImage('.gif');
+        this.injectDownloadImage('.ico');
+        this.injectDownloadImage('.tiff');
+        this.injectDownloadImage('.webp');
+        this.injectDownloadImage('.image');
     }
     start() {
         cc_1.director.addPersistRootNode(this.node);
