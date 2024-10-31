@@ -30,33 +30,33 @@ export const configs: BuildPlugin.Configs = {
             },
             selectPackSize: {
                 label: `i18n:${PACKAGE_NAME}.options.selectPackSize`,
-                description: `i18n:${PACKAGE_NAME}.options.selectPackSize`,
+                description: `i18n:${PACKAGE_NAME}.options.selectPackSizeDescription`,
                 default: 'option2',
                 render: {
                     ui: 'ui-select',
                     items: [
                         {
-                            label: `500kb`,
+                            label: `i18n:${PACKAGE_NAME}.options.selectPackSizeOptions.option1`,
                             value: 'option1',
                         },
                         {
-                            label: `1Mb`,
+                            label: `i18n:${PACKAGE_NAME}.options.selectPackSizeOptions.option2`,
                             value: 'option2',
                         },
                         {
-                            label: `2Mb`,
+                            label: `i18n:${PACKAGE_NAME}.options.selectPackSizeOptions.option3`,
                             value: 'option3',
                         },
                         {
-                            label: `3Mb`,
+                            label: `i18n:${PACKAGE_NAME}.options.selectPackSizeOptions.option4`,
                             value: 'option4',
                         },
                         {
-                            label: `4Mb`,
+                            label: `i18n:${PACKAGE_NAME}.options.selectPackSizeOptions.option5`,
                             value: 'option5',
                         },
                         {
-                            label: `Unlimited`,
+                            label: `i18n:${PACKAGE_NAME}.options.selectPackSizeOptions.option6`,
                             value: 'option6',
                         },
                     ],
