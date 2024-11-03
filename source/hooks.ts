@@ -55,54 +55,52 @@ export const onAfterCompressSettings: BuildHook.onAfterCompressSettings = async 
 export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITaskOptions, result: IBuildResult) {
     const pkgOptions = options.packages[PACKAGE_NAME];
     if (pkgOptions.enable) {
-        const BUILD_DEST_PATH = result.dest;
-        const BUILD_CONFIG_PATH = path.join(Editor.Project.path, BUILD_CONFIG_FOLDER);
-        const TEMP_PATH = path.join(BUILD_CONFIG_PATH, 'temp');
-        const destAssetPathString = [];
+        const BUILD_DEST_DIR = result.dest;
+        const BUILD_CONFIG_DIR = path.join(Editor.Project.path, BUILD_CONFIG_FOLDER);
+        const TEMP_DIR = path.join(BUILD_CONFIG_DIR, 'temp');
+        const md5HashString = [];
 
         // Clean/Create temp folder
-        if (fs.existsSync(TEMP_PATH))
-            fs.rmdirSync(TEMP_PATH, { recursive: true });
-        fs.mkdirSync(TEMP_PATH, { recursive: true });
+        if (fs.existsSync(TEMP_DIR))
+            fs.rmdirSync(TEMP_DIR, { recursive: true });
+        fs.mkdirSync(TEMP_DIR, { recursive: true });
 
         // Copy assets to temp folder
-        const jsonString = fs.readFileSync(path.join(BUILD_CONFIG_PATH, ASSETS_URL_RECORD_LIST_JSON), 'utf-8');
+        const jsonString = fs.readFileSync(path.join(BUILD_CONFIG_DIR, ASSETS_URL_RECORD_LIST_JSON), 'utf-8');
         const assetsUrlRecordList = JSON.parse(jsonString);
-        const sizeInMBPerPack = parsePackSize(pkgOptions.selectPackSize);
+        const splitSizePerPack = parsePackSize(pkgOptions.selectPackSize);
+
         const packs = [];
-
         let assetsUrlInPack = [];
-        let accumlatedMB = 0;
+        let accumlatedSize = 0;
+
         for (const assetUrl of assetsUrlRecordList) {
-            const srcAssets = [];
-            let srcAssetPath = path.join(BUILD_DEST_PATH, assetUrl);
+            const srcAssetsUrl = [];
 
-            let assetDirPath = path.dirname(srcAssetPath);
-            let assetName = path.basename(srcAssetPath);
-            assetName = assetName.replace(/\.[a-zA-Z0-9]+\./g, '.');
-            const name = assetName.split('.')[0];
+            let srcAssetPath = path.join(BUILD_DEST_DIR, assetUrl);
+            let srcAssetDir = path.dirname(srcAssetPath);
+            let srcAssetName = path.basename(srcAssetPath); srcAssetName = srcAssetName.replace(/\.[a-zA-Z0-9]+\./g, '.');
+            const srcAssetBasename = srcAssetName.split('.')[0];
 
-            let matchingFiles = fs.readdirSync(assetDirPath).filter((file) => file.includes(name));
+            let matchingFiles = fs.readdirSync(srcAssetDir).filter((file) => file.includes(srcAssetBasename));
             if (matchingFiles.length === 0) {
                 logWarn(`onAfterBuild: File not found, ${srcAssetPath}`);
                 continue;
             }
 
-            for (let i = 0; i < matchingFiles.length; i++) {
-                const srcAsset = path.join(path.dirname(assetUrl), matchingFiles[i]);
-                srcAssets.push(srcAsset);
-            }
+            for (let i = 0; i < matchingFiles.length; i++)
+                srcAssetsUrl.push(path.join(path.dirname(assetUrl), matchingFiles[i]));
 
             try {
-                for (const srcAsset of srcAssets) {
-                    const stat = fs.statSync(path.join(BUILD_DEST_PATH, srcAsset));
-                    accumlatedMB += stat.size;
-                    assetsUrlInPack.push(srcAsset);
+                for (const srcAssetUrl of srcAssetsUrl) {
+                    const stat = fs.statSync(path.join(BUILD_DEST_DIR, srcAssetUrl));
+                    accumlatedSize += stat.size;
+                    assetsUrlInPack.push(srcAssetUrl);
 
-                    if (accumlatedMB >= sizeInMBPerPack) {
+                    if (accumlatedSize >= splitSizePerPack) {
                         packs.push(assetsUrlInPack);
                         assetsUrlInPack = [];
-                        accumlatedMB = 0;
+                        accumlatedSize = 0;
                     }
                 }
             } catch (exp) {
@@ -117,13 +115,14 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
         // Copy assets to temp folder
         for (let i = 0; i < packs.length; i++) {
             for (const assetUrl of packs[i]) {
-                let assetName = path.basename(assetUrl);
-                let srcAssetPath = path.join(BUILD_DEST_PATH, assetUrl);
+                let srcAssetName = path.basename(assetUrl);
+                let srcAssetPath = path.join(BUILD_DEST_DIR, assetUrl);
                 try {
                     if (fs.existsSync(srcAssetPath)) {
-                        const destAssetPath = path.join(TEMP_PATH, `${ZIP_NAME}${i}`, path.dirname(assetUrl), assetName);
+                        const destAssetPath = path.join(TEMP_DIR, `${ZIP_NAME}${i}`, path.dirname(assetUrl), srcAssetName);
                         copyAsset(srcAssetPath, destAssetPath);
-                        destAssetPathString.push(destAssetPath);
+
+                        md5HashString.push(destAssetPath);
                     }
                 } catch (exp) {
                     logError(`Copy file failed: ${exp}`);
@@ -133,8 +132,8 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
 
         // Calcaulte md5 hash this time
         let md5Hash = '';
-        if (options.md5Cache && destAssetPathString.length > 0) {
-            const hash = crypo.createHash('md5').update(destAssetPathString.join('')).digest('hex');
+        if (options.md5Cache && md5HashString.length > 0) {
+            const hash = crypo.createHash('md5').update(md5HashString.join('')).digest('hex');
             md5Hash = hash.substring(0, 5);
         }
 
@@ -142,18 +141,18 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
         let tempName = '';
         for (let i = 0; i < packs.length; i++) {
             const resCacheZipName = options.md5Cache ? `${ZIP_NAME}${i}.${md5Hash}.zip` : `${ZIP_NAME}${i}.zip`;
-            await zipFolder(path.join(TEMP_PATH, `${ZIP_NAME}${i}`), path.join(BUILD_CONFIG_PATH, resCacheZipName));
+            await zipFolder(path.join(TEMP_DIR, `${ZIP_NAME}${i}`), path.join(BUILD_CONFIG_DIR, resCacheZipName));
 
             // Do the cut and paste
-            const srcPath = path.join(BUILD_CONFIG_PATH, resCacheZipName);
-            const destPath = path.join(BUILD_DEST_PATH, 'assets', resCacheZipName);
+            const srcPath = path.join(BUILD_CONFIG_DIR, resCacheZipName);
+            const destPath = path.join(BUILD_DEST_DIR, 'assets', resCacheZipName);
             fs.copyFileSync(srcPath, destPath);
             fs.unlinkSync(srcPath);
             tempName += `'assets/${resCacheZipName}'` + (i < packs.length - 1 ? ', ' : '');
         }
 
         // Modify index.html to add ${ZIP_NAME} gloable variable to window object which is used in ZipLoader.ts
-        const indexHtml = fs.readFileSync(path.join(BUILD_DEST_PATH, 'index.html'), 'utf-8');
+        const indexHtml = fs.readFileSync(path.join(BUILD_DEST_DIR, 'index.html'), 'utf-8');
         const modifiedHtml = indexHtml.split('\n').map((line, index) => {
             if (line.includes('./index')) {
                 if (pkgOptions.downloadZipAtIndexHtml) {
@@ -164,7 +163,7 @@ export const onAfterBuild: BuildHook.onAfterBuild = async function (options: ITa
             }
             return line;
         }).join('\n');
-        fs.writeFileSync(path.join(BUILD_DEST_PATH, 'index.html'), modifiedHtml);
+        fs.writeFileSync(path.join(BUILD_DEST_DIR, 'index.html'), modifiedHtml);
     }
 };
 
