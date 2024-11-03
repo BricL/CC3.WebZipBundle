@@ -101,100 +101,12 @@ const onAfterBuild = function (options, result) {
             const BUILD_DEST_DIR = result.dest;
             const BUILD_CONFIG_DIR = path_1.default.join(Editor.Project.path, global_1.BUILD_CONFIG_FOLDER);
             const TEMP_DIR = path_1.default.join(BUILD_CONFIG_DIR, 'temp');
-            const md5HashString = [];
-            // Clean/Create temp folder
-            if (fs.existsSync(TEMP_DIR))
-                fs.rmdirSync(TEMP_DIR, { recursive: true });
-            fs.mkdirSync(TEMP_DIR, { recursive: true });
-            // Copy assets to temp folder
-            const jsonString = fs.readFileSync(path_1.default.join(BUILD_CONFIG_DIR, global_1.ASSETS_URL_RECORD_LIST_JSON), 'utf-8');
-            const assetsUrlRecordList = JSON.parse(jsonString);
-            const splitSizePerPack = parsePackSize(pkgOptions.selectPackSize);
-            const packs = [];
-            let assetsUrlInPack = [];
-            let accumlatedSize = 0;
-            for (const assetUrl of assetsUrlRecordList) {
-                const srcAssetsUrl = [];
-                let srcAssetPath = path_1.default.join(BUILD_DEST_DIR, assetUrl);
-                let srcAssetDir = path_1.default.dirname(srcAssetPath);
-                let srcAssetName = path_1.default.basename(srcAssetPath);
-                srcAssetName = srcAssetName.replace(/\.[a-zA-Z0-9]+\./g, '.');
-                const srcAssetBasename = srcAssetName.split('.')[0];
-                let matchingFiles = fs.readdirSync(srcAssetDir).filter((file) => file.includes(srcAssetBasename));
-                if (matchingFiles.length === 0) {
-                    (0, global_1.logWarn)(`onAfterBuild: File not found, ${srcAssetPath}`);
-                    continue;
-                }
-                for (let i = 0; i < matchingFiles.length; i++)
-                    srcAssetsUrl.push(path_1.default.join(path_1.default.dirname(assetUrl), matchingFiles[i]));
-                try {
-                    for (const srcAssetUrl of srcAssetsUrl) {
-                        const stat = fs.statSync(path_1.default.join(BUILD_DEST_DIR, srcAssetUrl));
-                        accumlatedSize += stat.size;
-                        assetsUrlInPack.push(srcAssetUrl);
-                        if (accumlatedSize >= splitSizePerPack) {
-                            packs.push(assetsUrlInPack);
-                            assetsUrlInPack = [];
-                            accumlatedSize = 0;
-                        }
-                    }
-                }
-                catch (exp) {
-                    (0, global_1.logError)(`onAfterBuild: An error occurred while checking the file, ${exp.message}`);
-                }
-            }
-            if (assetsUrlInPack.length > 0) {
-                packs.push(assetsUrlInPack);
-            }
-            // Copy assets to temp folder
-            for (let i = 0; i < packs.length; i++) {
-                for (const assetUrl of packs[i]) {
-                    let srcAssetName = path_1.default.basename(assetUrl);
-                    let srcAssetPath = path_1.default.join(BUILD_DEST_DIR, assetUrl);
-                    try {
-                        if (fs.existsSync(srcAssetPath)) {
-                            const destAssetPath = path_1.default.join(TEMP_DIR, `${global_1.ZIP_NAME}${i}`, path_1.default.dirname(assetUrl), srcAssetName);
-                            copyAsset(srcAssetPath, destAssetPath);
-                            md5HashString.push(destAssetPath);
-                        }
-                    }
-                    catch (exp) {
-                        (0, global_1.logError)(`Copy file failed: ${exp}`);
-                    }
-                }
-            }
-            // Calcaulte md5 hash this time
-            let md5Hash = '';
-            if (options.md5Cache && md5HashString.length > 0) {
-                const hash = crypo.createHash('md5').update(md5HashString.join('')).digest('hex');
-                md5Hash = hash.substring(0, 5);
-            }
+            // Get packs from assetsUrlRecordList.json
+            const packs = getPacksFromAssetsUrlReocrdList(path_1.default.join(BUILD_CONFIG_DIR, global_1.ASSETS_URL_RECORD_LIST_JSON), BUILD_DEST_DIR, parsePackSize(pkgOptions.selectPackSize));
+            // Create temp folder and Copy assets to temp folder, then return md5 hash
+            const md5Hash = copyAssetsToTempFolder(packs, BUILD_DEST_DIR, TEMP_DIR, options.md5Cache);
             // Generate ${ZIP_NAME}.zip
-            let tempName = '';
-            for (let i = 0; i < packs.length; i++) {
-                const resCacheZipName = options.md5Cache ? `${global_1.ZIP_NAME}${i}.${md5Hash}.zip` : `${global_1.ZIP_NAME}${i}.zip`;
-                yield zipFolder(path_1.default.join(TEMP_DIR, `${global_1.ZIP_NAME}${i}`), path_1.default.join(BUILD_CONFIG_DIR, resCacheZipName));
-                // Do the cut and paste
-                const srcPath = path_1.default.join(BUILD_CONFIG_DIR, resCacheZipName);
-                const destPath = path_1.default.join(BUILD_DEST_DIR, 'assets', resCacheZipName);
-                fs.copyFileSync(srcPath, destPath);
-                fs.unlinkSync(srcPath);
-                tempName += `'assets/${resCacheZipName}'` + (i < packs.length - 1 ? ', ' : '');
-            }
-            // Modify index.html to add ${ZIP_NAME} gloable variable to window object which is used in ZipLoader.ts
-            const indexHtml = fs.readFileSync(path_1.default.join(BUILD_DEST_DIR, 'index.html'), 'utf-8');
-            const modifiedHtml = indexHtml.split('\n').map((line, index) => {
-                if (line.includes('./index')) {
-                    if (pkgOptions.downloadZipAtIndexHtml) {
-                        return `${line}\nwindow['wzbResZipList'] = [${tempName}];\n${downloadResCacheJSCodeSnippet}`;
-                    }
-                    else {
-                        return `${line}\nwindow['wzbResZipList'] = [${tempName}];`;
-                    }
-                }
-                return line;
-            }).join('\n');
-            fs.writeFileSync(path_1.default.join(BUILD_DEST_DIR, 'index.html'), modifiedHtml);
+            yield generateZipFiles(packs, md5Hash, BUILD_DEST_DIR, BUILD_CONFIG_DIR, TEMP_DIR, options.md5Cache, pkgOptions.downloadZipAtIndexHtml);
         }
     });
 };
@@ -224,6 +136,129 @@ const onAfterMake = function (root, options) {
 };
 exports.onAfterMake = onAfterMake;
 // #region utils functions
+/**
+ * Copy assets to temp folder
+ * @param assetsUrlRecordListPath
+ * @param BUILD_DEST_DIR
+ * @param splitSizePerPack
+ * @returns
+ */
+function getPacksFromAssetsUrlReocrdList(assetsUrlRecordListPath, BUILD_DEST_DIR, splitSizePerPack) {
+    const jsonString = fs.readFileSync(assetsUrlRecordListPath, 'utf-8');
+    const assetsUrlRecordList = JSON.parse(jsonString);
+    const packs = [];
+    let assetsUrlInPack = [];
+    let accumlatedSize = 0;
+    for (const assetUrl of assetsUrlRecordList) {
+        const srcAssetsUrl = [];
+        let srcAssetPath = path_1.default.join(BUILD_DEST_DIR, assetUrl);
+        let srcAssetDir = path_1.default.dirname(srcAssetPath);
+        let srcAssetName = path_1.default.basename(srcAssetPath);
+        srcAssetName = srcAssetName.replace(/\.[a-zA-Z0-9]+\./g, '.');
+        const srcAssetBasename = srcAssetName.split('.')[0];
+        let matchingFiles = fs.readdirSync(srcAssetDir).filter((file) => file.includes(srcAssetBasename));
+        if (matchingFiles.length === 0) {
+            (0, global_1.logWarn)(`onAfterBuild: File not found, ${srcAssetPath}`);
+            continue;
+        }
+        for (let i = 0; i < matchingFiles.length; i++)
+            srcAssetsUrl.push(path_1.default.join(path_1.default.dirname(assetUrl), matchingFiles[i]));
+        try {
+            for (const srcAssetUrl of srcAssetsUrl) {
+                const stat = fs.statSync(path_1.default.join(BUILD_DEST_DIR, srcAssetUrl));
+                accumlatedSize += stat.size;
+                assetsUrlInPack.push(srcAssetUrl);
+                if (accumlatedSize >= splitSizePerPack) {
+                    packs.push(assetsUrlInPack);
+                    assetsUrlInPack = [];
+                    accumlatedSize = 0;
+                }
+            }
+        }
+        catch (exp) {
+            (0, global_1.logError)(`onAfterBuild: An error occurred while checking the file, ${exp.message}`);
+        }
+    }
+    if (assetsUrlInPack.length > 0) {
+        packs.push(assetsUrlInPack);
+    }
+    return packs;
+}
+/**
+ * Clean/Create temp folder and Copy assets to temp folder
+ * @param packs
+ * @param BUILD_DEST_DIR
+ * @param TEMP_DIR
+ * @param isMd5Cache
+ * @returns
+ */
+function copyAssetsToTempFolder(packs, BUILD_DEST_DIR, TEMP_DIR, isMd5Cache) {
+    const md5HashString = [];
+    if (fs.existsSync(TEMP_DIR))
+        fs.rmdirSync(TEMP_DIR, { recursive: true });
+    fs.mkdirSync(TEMP_DIR, { recursive: true });
+    for (let i = 0; i < packs.length; i++) {
+        for (const assetUrl of packs[i]) {
+            let srcAssetName = path_1.default.basename(assetUrl);
+            let srcAssetPath = path_1.default.join(BUILD_DEST_DIR, assetUrl);
+            try {
+                if (fs.existsSync(srcAssetPath)) {
+                    const destAssetPath = path_1.default.join(TEMP_DIR, `${global_1.ZIP_NAME}${i}`, path_1.default.dirname(assetUrl), srcAssetName);
+                    copyAsset(srcAssetPath, destAssetPath);
+                    md5HashString.push(destAssetPath);
+                }
+            }
+            catch (exp) {
+                (0, global_1.logError)(`Copy file failed: ${exp}`);
+            }
+        }
+    }
+    let md5Hash = '';
+    if (isMd5Cache && md5HashString.length > 0) {
+        const hash = crypo.createHash('md5').update(md5HashString.join('')).digest('hex');
+        md5Hash = hash.substring(0, 5);
+    }
+    return md5Hash;
+}
+/**
+ * Generate ${ZIP_NAME}.zip
+ * @param packs
+ * @param md5Hash
+ * @param BUILD_DEST_DIR
+ * @param BUILD_CONFIG_DIR
+ * @param TEMP_DIR
+ * @param md5Cache
+ * @param downloadZipAtIndexHtml
+ */
+function generateZipFiles(packs, md5Hash, BUILD_DEST_DIR, BUILD_CONFIG_DIR, TEMP_DIR, md5Cache, downloadZipAtIndexHtml) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let tempName = '';
+        for (let i = 0; i < packs.length; i++) {
+            const resCacheZipName = md5Cache ? `${global_1.ZIP_NAME}${i}.${md5Hash}.zip` : `${global_1.ZIP_NAME}${i}.zip`;
+            yield zipFolder(path_1.default.join(TEMP_DIR, `${global_1.ZIP_NAME}${i}`), path_1.default.join(BUILD_CONFIG_DIR, resCacheZipName));
+            // Do the cut and paste
+            const srcPath = path_1.default.join(BUILD_CONFIG_DIR, resCacheZipName);
+            const destPath = path_1.default.join(BUILD_DEST_DIR, 'assets', resCacheZipName);
+            fs.copyFileSync(srcPath, destPath);
+            fs.unlinkSync(srcPath);
+            tempName += `'assets/${resCacheZipName}'` + (i < packs.length - 1 ? ', ' : '');
+        }
+        // Modify index.html to add ${ZIP_NAME} gloable variable to window object which is used in ZipLoader.ts
+        const indexHtml = fs.readFileSync(path_1.default.join(BUILD_DEST_DIR, 'index.html'), 'utf-8');
+        const modifiedHtml = indexHtml.split('\n').map((line, index) => {
+            if (line.includes('./index')) {
+                if (downloadZipAtIndexHtml) {
+                    return `${line}\nwindow['wzbResZipList'] = [${tempName}];\n${downloadResCacheJSCodeSnippet}`;
+                }
+                else {
+                    return `${line}\nwindow['wzbResZipList'] = [${tempName}];`;
+                }
+            }
+            return line;
+        }).join('\n');
+        fs.writeFileSync(path_1.default.join(BUILD_DEST_DIR, 'index.html'), modifiedHtml);
+    });
+}
 function parsePackSize(packSize) {
     if (packSize === 'option1') { // 500KB
         return 500 * 1024;
