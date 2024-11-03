@@ -19,11 +19,6 @@
 
    <p align="center"><img src="doc/img/build_setting.png" width="450"></p>
 
-## [itch.io Demo](https://bricl.itch.io/cc3webzipbundledemo)
-
-修改官方 [cocos-example-ui](https://github.com/cocos/cocos-example-ui)，建置為 `Web Platform` 應用，並匯入擴展 `Web Zip Bundle` 量測遊戲啟動速度的改進。
-
-<p align="center"><img src="doc/img/itch.io_demo.png" width="450"></p>
 
 ## 如何決定 Zip 資源包的切割數量?
 
@@ -57,6 +52,10 @@ HTTP2.0 透過單一 TCP 連線，理論上可以超過 6 個下載併發數非�
 ### 小結
 
 單一連線的下載併發數上限決定了初始資源包的切分大小，最佳切割數量應該 < 併發數上限，為最合適之設定。
+
+## [itch.io Demo](https://bricl.itch.io/cc3webzipbundledemo)
+
+<p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
 
 ## 版本
 * v1.0.0
