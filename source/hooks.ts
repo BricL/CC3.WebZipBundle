@@ -224,7 +224,9 @@ async function generateZipFiles(packs: any[], md5Hash: string, buildDestDir: str
 }
 
 function parsePackSize(packSize: string) {
-    if (packSize === 'option1') { // 500KB
+    if (packSize === 'option0') { // 250KB
+        return 250 * 1024;
+    } else if (packSize === 'option1') { // 500KB
         return 500 * 1024;
     } else if (packSize === 'option2') { // 1MB
         return 1024 * 1024;

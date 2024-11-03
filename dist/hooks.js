@@ -260,7 +260,10 @@ function generateZipFiles(packs, md5Hash, buildDestDir, buildConfigDir, tempDir,
     });
 }
 function parsePackSize(packSize) {
-    if (packSize === 'option1') { // 500KB
+    if (packSize === 'option0') { // 250KB
+        return 250 * 1024;
+    }
+    else if (packSize === 'option1') { // 500KB
         return 500 * 1024;
     }
     else if (packSize === 'option2') { // 1MB

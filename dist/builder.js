@@ -38,6 +38,10 @@ exports.configs = {
                     ui: 'ui-select',
                     items: [
                         {
+                            label: `i18n:${global_1.PACKAGE_NAME}.options.selectPackSizeOptions.option0`,
+                            value: 'option0',
+                        },
+                        {
                             label: `i18n:${global_1.PACKAGE_NAME}.options.selectPackSizeOptions.option1`,
                             value: 'option1',
                         },

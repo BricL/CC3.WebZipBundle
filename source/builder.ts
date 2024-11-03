@@ -36,6 +36,10 @@ export const configs: BuildPlugin.Configs = {
                     ui: 'ui-select',
                     items: [
                         {
+                            label: `i18n:${PACKAGE_NAME}.options.selectPackSizeOptions.option0`,
+                            value: 'option0',
+                        },
+                        {
                             label: `i18n:${PACKAGE_NAME}.options.selectPackSizeOptions.option1`,
                             value: 'option1',
                         },
