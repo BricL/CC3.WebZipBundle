@@ -32,14 +32,14 @@
 
 我們用官方範例 [Cocos UI Example](https://github.com/cocos/cocos-example-ui) 進行測試，透過不同的 Select Pack Size 設定，將啟動所需資源分隔成 1各、3各、6各、12各 Zip 包測試啟動速度，結果如下：
 
-| Zip 數 | 瀏覽器 | 連線規格 | 網速 | 耗時啟動 | 網路請求
-| ---- | ---- | ---- | ---- | ---- | ---- |
-| 1 各 | Chrome | http1.1 | Fast 4G | 9.62秒 | 30各 |
-| 3 各 | Chrome | http1.1 | Fast 4G | 11.40秒 | 32各 |
-| 6 各 | Chrome | http1.1 | Fast 4G | 12.36秒 | 35各 |
-| 12 各 | Chrome | http1.1 | Fast 4G | 12.47秒 | 41各 |
-| ---- | ---- | ---- | ---- | ---- | ---- |
-| 關閉 ZipBundle | Chrome | http1.1 | Fast 4G | 17.22秒 | 261各 |
+| ZipBundle | Zip 數 | 瀏覽器 | 連線規格 | 網速 | 耗時啟動 | 網路請求
+| ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| On | 1 各 | Chrome | http1.1 | Fast 4G | 9.62秒 | 30 reqs |
+| On | 3 各 | Chrome | http1.1 | Fast 4G | 11.40秒 | 32 reqs |
+| On | 6 各 | Chrome | http1.1 | Fast 4G | 12.36秒 | 35 reqs |
+| On | 12 各 | Chrome | http1.1 | Fast 4G | 12.47秒 | 41 reqs |
+| ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| Off | 0 各 | Chrome | http1.1 | Fast 4G | 17.22秒 | 261 reqs |
 
 從 12 各下載併發來看，可以明顯觀察到前面的下載併發數到達上限，導致後面的下載請求排隊等待。圖中可知，排隊等待也耽誤了 CC 引擎的載入，致整體啟動速度慢了下來。
 
