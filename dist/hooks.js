@@ -139,11 +139,11 @@ exports.onAfterMake = onAfterMake;
 /**
  * Copy assets to temp folder
  * @param assetsUrlRecordListPath
- * @param BUILD_DEST_DIR
+ * @param buildDestDir
  * @param splitSizePerPack
  * @returns
  */
-function getPacksFromAssetsUrlReocrdList(assetsUrlRecordListPath, BUILD_DEST_DIR, splitSizePerPack) {
+function getPacksFromAssetsUrlReocrdList(assetsUrlRecordListPath, buildDestDir, splitSizePerPack) {
     const jsonString = fs.readFileSync(assetsUrlRecordListPath, 'utf-8');
     const assetsUrlRecordList = JSON.parse(jsonString);
     const packs = [];
@@ -151,7 +151,7 @@ function getPacksFromAssetsUrlReocrdList(assetsUrlRecordListPath, BUILD_DEST_DIR
     let accumlatedSize = 0;
     for (const assetUrl of assetsUrlRecordList) {
         const srcAssetsUrl = [];
-        let srcAssetPath = path_1.default.join(BUILD_DEST_DIR, assetUrl);
+        let srcAssetPath = path_1.default.join(buildDestDir, assetUrl);
         let srcAssetDir = path_1.default.dirname(srcAssetPath);
         let srcAssetName = path_1.default.basename(srcAssetPath);
         srcAssetName = srcAssetName.replace(/\.[a-zA-Z0-9]+\./g, '.');
@@ -165,7 +165,7 @@ function getPacksFromAssetsUrlReocrdList(assetsUrlRecordListPath, BUILD_DEST_DIR
             srcAssetsUrl.push(path_1.default.join(path_1.default.dirname(assetUrl), matchingFiles[i]));
         try {
             for (const srcAssetUrl of srcAssetsUrl) {
-                const stat = fs.statSync(path_1.default.join(BUILD_DEST_DIR, srcAssetUrl));
+                const stat = fs.statSync(path_1.default.join(buildDestDir, srcAssetUrl));
                 accumlatedSize += stat.size;
                 assetsUrlInPack.push(srcAssetUrl);
                 if (accumlatedSize >= splitSizePerPack) {
@@ -187,23 +187,23 @@ function getPacksFromAssetsUrlReocrdList(assetsUrlRecordListPath, BUILD_DEST_DIR
 /**
  * Clean/Create temp folder and Copy assets to temp folder
  * @param packs
- * @param BUILD_DEST_DIR
- * @param TEMP_DIR
+ * @param buildDestDir
+ * @param tempDir
  * @param isMd5Cache
  * @returns
  */
-function copyAssetsToTempFolder(packs, BUILD_DEST_DIR, TEMP_DIR, isMd5Cache) {
+function copyAssetsToTempFolder(packs, buildDestDir, tempDir, isMd5Cache) {
     const md5HashString = [];
-    if (fs.existsSync(TEMP_DIR))
-        fs.rmdirSync(TEMP_DIR, { recursive: true });
-    fs.mkdirSync(TEMP_DIR, { recursive: true });
+    if (fs.existsSync(tempDir))
+        fs.rmdirSync(tempDir, { recursive: true });
+    fs.mkdirSync(tempDir, { recursive: true });
     for (let i = 0; i < packs.length; i++) {
         for (const assetUrl of packs[i]) {
             let srcAssetName = path_1.default.basename(assetUrl);
-            let srcAssetPath = path_1.default.join(BUILD_DEST_DIR, assetUrl);
+            let srcAssetPath = path_1.default.join(buildDestDir, assetUrl);
             try {
                 if (fs.existsSync(srcAssetPath)) {
-                    const destAssetPath = path_1.default.join(TEMP_DIR, `${global_1.ZIP_NAME}${i}`, path_1.default.dirname(assetUrl), srcAssetName);
+                    const destAssetPath = path_1.default.join(tempDir, `${global_1.ZIP_NAME}${i}`, path_1.default.dirname(assetUrl), srcAssetName);
                     copyAsset(srcAssetPath, destAssetPath);
                     md5HashString.push(destAssetPath);
                 }
@@ -224,27 +224,27 @@ function copyAssetsToTempFolder(packs, BUILD_DEST_DIR, TEMP_DIR, isMd5Cache) {
  * Generate ${ZIP_NAME}.zip
  * @param packs
  * @param md5Hash
- * @param BUILD_DEST_DIR
- * @param BUILD_CONFIG_DIR
- * @param TEMP_DIR
+ * @param buildDestDir
+ * @param buildConfigDir
+ * @param tempDir
  * @param md5Cache
  * @param downloadZipAtIndexHtml
  */
-function generateZipFiles(packs, md5Hash, BUILD_DEST_DIR, BUILD_CONFIG_DIR, TEMP_DIR, md5Cache, downloadZipAtIndexHtml) {
+function generateZipFiles(packs, md5Hash, buildDestDir, buildConfigDir, tempDir, md5Cache, downloadZipAtIndexHtml) {
     return __awaiter(this, void 0, void 0, function* () {
         let tempName = '';
         for (let i = 0; i < packs.length; i++) {
             const resCacheZipName = md5Cache ? `${global_1.ZIP_NAME}${i}.${md5Hash}.zip` : `${global_1.ZIP_NAME}${i}.zip`;
-            yield zipFolder(path_1.default.join(TEMP_DIR, `${global_1.ZIP_NAME}${i}`), path_1.default.join(BUILD_CONFIG_DIR, resCacheZipName));
+            yield zipFolder(path_1.default.join(tempDir, `${global_1.ZIP_NAME}${i}`), path_1.default.join(buildConfigDir, resCacheZipName));
             // Do the cut and paste
-            const srcPath = path_1.default.join(BUILD_CONFIG_DIR, resCacheZipName);
-            const destPath = path_1.default.join(BUILD_DEST_DIR, 'assets', resCacheZipName);
+            const srcPath = path_1.default.join(buildConfigDir, resCacheZipName);
+            const destPath = path_1.default.join(buildDestDir, 'assets', resCacheZipName);
             fs.copyFileSync(srcPath, destPath);
             fs.unlinkSync(srcPath);
             tempName += `'assets/${resCacheZipName}'` + (i < packs.length - 1 ? ', ' : '');
         }
         // Modify index.html to add ${ZIP_NAME} gloable variable to window object which is used in ZipLoader.ts
-        const indexHtml = fs.readFileSync(path_1.default.join(BUILD_DEST_DIR, 'index.html'), 'utf-8');
+        const indexHtml = fs.readFileSync(path_1.default.join(buildDestDir, 'index.html'), 'utf-8');
         const modifiedHtml = indexHtml.split('\n').map((line, index) => {
             if (line.includes('./index')) {
                 if (downloadZipAtIndexHtml) {
@@ -256,7 +256,7 @@ function generateZipFiles(packs, md5Hash, BUILD_DEST_DIR, BUILD_CONFIG_DIR, TEMP
             }
             return line;
         }).join('\n');
-        fs.writeFileSync(path_1.default.join(BUILD_DEST_DIR, 'index.html'), modifiedHtml);
+        fs.writeFileSync(path_1.default.join(buildDestDir, 'index.html'), modifiedHtml);
     });
 }
 function parsePackSize(packSize) {
