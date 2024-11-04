@@ -1,4 +1,7 @@
 # Web Zip Bundle
+
+*English | [中文](/README-CN.md)
+
 將 `web platform` 啟動時用到的資源 (如：png、jpg、astc、webp、json、cconb) 紀錄後打包成 zip 檔 ，藉此減少遊戲啟動時對網路請求數量加速啟動時間。
 
 ## 安裝方法
