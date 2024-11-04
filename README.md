@@ -40,7 +40,7 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    subgraph Async Download
+    subgraph Async Engien/Assets Download
         C(Game Engine JS)
         D(ZipBundle Scene)
     end
