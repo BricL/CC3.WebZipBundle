@@ -22,18 +22,35 @@
 
 ## 下載工作流程
 
+一般來說，Web Game 啟動流程如下：
+
 ```mermaid
 flowchart LR
-    A[Host Server] -->|Download| B(Index.html)
-    B -->|Download| C(Game Engine JS)
-    C -->|Download| D(Game Scene)
-    D -->|Download| E(Init Assets)
-    E -->|Run| F(Game)
+   A[Host Server] -->|Download| B(Index.html)
+   B -->|Download| C(Game Engine JS)
+   C -->|Download| D(Game Scene & Init Assets)
+   D -->|Run| E(Game)
 ```
 
-### 方法1：Index.html嵌入
+遊戲的第一個 Scene 與對應的 Assets 會以 `On Demind` 的方式下載後啟動，也因此產生大量的`網路請求`。而 Web Zip Bundle 主要就是將途中 (Game Scene & Init Assets) 所需請求下載的 Assets，包在一個或少量幾個 zip 下載，進而達到減少網路請求的數量。
 
-### 方法2：從場景下載
+### 方法1：Index.html嵌入 (速度最快)
+
+```mermaid
+flowchart LR
+    subgraph Async Download
+        C(Game Engine JS)
+        D(ZipBundle Scene)
+    end
+
+    A[Host Server] -->|Download| B(Index.html)
+    B --> C(Game Engine JS) & D(Assets Zip files)
+    C & D --> E("ZipBundle Scene
+    'Use injection to add local caching functionality to XMLHttpRequest.'")
+    E -- Run --> F(Game)
+```
+
+### 方法2：從場景下載 (較通用)
 
 
 ## 如何決定 Zip 資源包的切割數量?
