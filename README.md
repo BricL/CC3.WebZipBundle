@@ -28,8 +28,7 @@
 flowchart LR
    A[Host Server] -->|Download| B(Index.html)
    B -->|Download| C(Game Engine JS)
-   C -->|Download| D(Game Scene & Init Assets)
-   D -->|Run| E(Game)
+   C -->|Download&Run| D(Game Scene & Init Assets)
 ```
 
 * 遊戲的第一個 `場景 (Scene)` 與 `相關聯的資源 (Assets)` 以 `On Demind` 的方式下載後啟動，因此產生大量且零散的 `網路請求`。
@@ -49,7 +48,7 @@ flowchart LR
     B --> C(Game Engine JS) & D(Assets Zip files)
     C & D --> E("ZipBundle Scene
     'Use injection to add local caching functionality to XMLHttpRequest.'")
-    E -- Run --> F(Game)
+    E -- Download&Run --> F(Game)
 ```
 
 * 採非同步讓 `zip 檔案` 與 `遊戲引擎核心` 同時下載，節省時間速度最快。
