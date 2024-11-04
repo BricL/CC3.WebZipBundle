@@ -60,11 +60,19 @@ flowchart LR
 
 ```mermaid
 flowchart LR
+    subgraph Engine Download
+        C(Game Engine JS)
+    end
+    subgraph Assets Download
+        E(Dwonload Assets Zip files)
+    end
+
    A[Host Server] -->|Download| B(Index.html)
-   B -->|Download| C(Game Engine JS)
-   C -->|Download| D("ZipBundle Scene
+   B --> C(Game Engine JS)
+   C -- Download&Run --> D("ZipBundle Scene
     'Use injection to add local caching functionality to XMLHttpRequest.'")
-   D -->|Dwonload Assets Zip Files| E(Game)
+   D --> E(Dwonload Assets Zip files)
+   E -- Download&Run --> F(Game)
 ```
 
 * 在原本 `Game.scene` 之前，先載入一個 `Init.scene` 進行 injection 修改 `XMLHttpRequest` 功能，加入 local cache 讀取機制，若 cahce 命中則無需發出網路請求。
