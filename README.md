@@ -34,7 +34,7 @@ flowchart LR
 
 遊戲的第一個 Scene 與對應的 Assets 會以 `On Demind` 的方式下載後啟動，也因此產生大量的`網路請求`。而 Web Zip Bundle 主要就是將途中 (Game Scene & Init Assets) 所需請求下載的 Assets，包在一個或少量幾個 zip 下載，進而達到減少網路請求的數量。
 
-### 方法1：Index.html嵌入 (速度最快)
+### 方法1：Download Zip At Index.html (速度最快)
 
 ```mermaid
 flowchart LR
@@ -49,6 +49,7 @@ flowchart LR
     'Use injection to add local caching functionality to XMLHttpRequest.'")
     E -- Run --> F(Game)
 ```
+* 採非同步讓 `zip 檔案` 與 `遊戲引擎核心` 同時下載，節省時間速度最快。
 
 ### 方法2：從場景下載 (較通用)
 
