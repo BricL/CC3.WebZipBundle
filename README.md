@@ -20,7 +20,7 @@
    <p align="center"><img src="doc/img/build_setting.png" width="450"></p>
 
 
-## 下載工作流程
+## 下載流程
 
 一般來說，Web Game 啟動流程如下：
 
