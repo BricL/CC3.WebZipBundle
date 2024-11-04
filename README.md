@@ -49,10 +49,25 @@ flowchart LR
     'Use injection to add local caching functionality to XMLHttpRequest.'")
     E -- Run --> F(Game)
 ```
+
 * 採非同步讓 `zip 檔案` 與 `遊戲引擎核心` 同時下載，節省時間速度最快。
+
+* 在原本 `Game.scene` 之前，先載入一個 `Init.scene` 進行 injection 修改 `XMLHttpRequest` 功能，加入 local cache 讀取機制，若 cahce 命中則無需發出網路請求。
 
 ### 方法2：從場景下載 (較通用)
 
+```mermaid
+flowchart LR
+   A[Host Server] -->|Download| B(Index.html)
+   B -->|Download| C(Game Engine JS)
+   C -->|Download| D("ZipBundle Scene
+    'Use injection to add local caching functionality to XMLHttpRequest.'")
+   D -->|Dwonload Assets Zip Files| E(Game)
+```
+
+* 在原本 `Game.scene` 之前，先載入一個 `Init.scene` 進行 injection 修改 `XMLHttpRequest` 功能，加入 local cache 讀取機制，若 cahce 命中則無需發出網路請求。
+
+* 在 Init.scene 完成 injection 後，開始啟動 Assets Zip Files 的下載 (因為沒有偷到時間，因此速度較慢)。
 
 ## 如何決定 Zip 資源包的切割數量?
 
