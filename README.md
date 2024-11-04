@@ -32,7 +32,9 @@ flowchart LR
    D -->|Run| E(Game)
 ```
 
-遊戲的第一個 Scene 與對應的 Assets 會以 `On Demind` 的方式下載後啟動，也因此產生大量的`網路請求`。而 Web Zip Bundle 主要就是將途中 (Game Scene & Init Assets) 所需請求下載的 Assets，包在一個或少量幾個 zip 下載，進而達到減少網路請求的數量。
+* 遊戲的第一個 `場景 (Scene)` 與 `相關聯的資源 (Assets)` 以 `On Demind` 的方式下載後啟動，因此產生大量且零散的 `網路請求`。
+
+* 而本擴展主要就是將 `場景 (Scene)` 與 `相關聯的資源 (Assets)` 打包成一個或少量 zip 檔案進行下載，達到減少網路請求加速啟動。
 
 ### 方法1：Download Zip At Index.html (速度最快)
 
