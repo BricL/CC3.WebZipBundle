@@ -20,6 +20,22 @@
    <p align="center"><img src="doc/img/build_setting.png" width="450"></p>
 
 
+## 下載工作流程
+
+```mermaid
+flowchart LR
+    A[Host Server] -->|Download| B(Index.html)
+    B -->|Download| C(Game Engine JS)
+    C -->|Download| D(Game Scene)
+    D -->|Download| E(Init Assets)
+    E -->|Run| F(Game)
+```
+
+### 方法1：Index.html嵌入
+
+### 方法2：從場景下載
+
+
 ## 如何決定 Zip 資源包的切割數量?
 
 在設定選項 `Select Pack Size` 中，可以選擇單一 zip 包體的近似大小，藉此將資源切割成多個 zip 包。
