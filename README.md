@@ -57,6 +57,8 @@ HTTP2.0 透過單一 TCP 連線，理論上可以超過 6 個下載併發數非�
 
 ## [DEMO (Host on itch.io)](https://bricl.itch.io/cc3webzipbundledemo)
 
+* 官方的 UI 範例 [Cocos UI Example](https://github.com/cocos/cocos-example-ui)
+
 <p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
 
 ## 版本
