@@ -1,6 +1,6 @@
 # Web Zip Bundle
 
-*EN | [中文](/README-CN.md)
+[EN](/README.md) | *中文
 
 將 `web platform` 啟動時用到的資源 (如：png、jpg、astc、webp、json、cconb) 紀錄後打包成 zip 檔 ，藉此減少遊戲啟動時對網路請求數量加速啟動時間。
 
@@ -33,14 +33,36 @@
 flowchart LR
    A[Host Server] -->|Download| B(Index.html)
    B -->|Download| C(Game Engine JS)
-   C -->|Download&Run| D(Game Scene & Init Assets)
+   C -->|Download| D(Start Scene)
+   D -->|Parse Start Scene & Run| E(Download Assets)
+   E --> F(Game)
 ```
 
-* 遊戲的第一個 `場景 (Scene)` 與 `相關聯的資源 (Assets)` 以 `On Demind` 的方式下載後啟動，因此產生大量且零散的 `網路請求`。
+* 解析執行第一個 `起始場景 (Start Scene)` 會把 `相關聯資源 (Assets)` 以 `On Demind` 的方式用到什麼下什麼，因此產生大量、零散的 `網路請求`。
 
-* 而本擴展主要就是將 `場景 (Scene)` 與 `相關聯的資源 (Assets)` 打包成一個或少量 zip 檔案進行下載，達到減少網路請求加速啟動。
+* 而本擴展就是將 `起始場景 (Start Scene)` 用到的 `相關聯的資源 (Assets)` 打成一個或少量 zip 包進行下載，減少網路請求加速啟動。尤其在中、低階安卓手機與網路不那麼快速的國境，能提升遊戲的啟動速度達 50+% 之多。
 
-### 方法1：Download Zip At Index.html (速度最快)
+### 方法1：ZipBundle 場景下載 (通用)
+
+```mermaid
+flowchart LR
+   C(Game Engine JS) -->|Download| D(ZipBundle Start Scene)
+   subgraph ZipBundle Dwonload Flow
+   D -->|Inject local cache functionality into the XMLHttpRequest| E(Download zip)
+   end
+   E -->|Download & Run| F(Start Scene)
+   F --> G(Load Assets From Local Cache)
+   G --> H(Game)
+   style D fill:#eb3434
+```
+
+* 在原流程 `起始場景 (Start Scene)` 前插入 `ZipBundle Start Scene` 場景，該場景會對 `XMLHttpRequest` 注入 Local Cache 功能並啟動 Zip 包的下載。
+
+* 這個方法比較通用且易於客製化，依照專案的需求進行修改，參考範場景 (zip-loader-boot.scene)。
+
+* 缺點在於沒偷到下載時間，只單純降低了網路請求數量，但單就這樣也足夠讓啟動速度在中、低階安卓手機快上個 20~30%。
+
+### 方法2：Download Zip At Index.html (偷下載時間)
 
 ```mermaid
 flowchart LR
@@ -59,29 +81,6 @@ flowchart LR
 * 採非同步讓 `zip 檔案` 與 `遊戲引擎核心` 同時下載，節省時間速度最快。
 
 * 在原本 `Game.scene` 之前，先載入一個 `Init.scene` 進行 injection 修改 `XMLHttpRequest` 功能，加入 local cache 讀取機制，若 cahce 命中則無需發出網路請求。
-
-### 方法2：從場景下載 (較通用)
-
-```mermaid
-flowchart LR
-    subgraph Engine Download
-        C(Game Engine JS)
-    end
-    subgraph Assets Download
-        E(Dwonload Assets Zip files)
-    end
-
-   A[Host Server] -->|Download| B(Index.html)
-   B --> C(Game Engine JS)
-   C -- Download&Run --> D("ZipBundle Scene
-    'Use injection to add local caching functionality to XMLHttpRequest.'")
-   D --> E(Dwonload Assets Zip files)
-   E -- Download&Run --> F(Game)
-```
-
-* 在原本 `Game.scene` 之前，先載入一個 `Init.scene` 進行 injection 修改 `XMLHttpRequest` 功能，加入 local cache 讀取機制，若 cahce 命中則無需發出網路請求。
-
-* 在 Init.scene 完成 injection 後，開始啟動 Assets Zip Files 的下載 (因為沒有偷到時間，因此速度較慢)。
 
 ## 如何決定 Zip 資源包的切割數量?
 
