@@ -1,8 +1,10 @@
 # Web Zip Bundle
 
-*English | [中文](/README-CN.md)
+*EN | [中文](/README-CN.md)
 
 將 `web platform` 啟動時用到的資源 (如：png、jpg、astc、webp、json、cconb) 紀錄後打包成 zip 檔 ，藉此減少遊戲啟動時對網路請求數量加速啟動時間。
+
+擴展實踐思路來自 Cocos 中文論壇 `haiyoucuv` 分享的文章 [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256)。
 
 ## 安裝方法
 
@@ -125,3 +127,9 @@ HTTP2.0 透過單一 TCP 連線，理論上可以超過 6 個下載併發數非�
 ## 版本
 * v1.0.0
     * 第一個可用版本
+
+## 參考文獻
+
+* [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256)
+
+* [JSZip](https://stuk.github.io/jszip/)
