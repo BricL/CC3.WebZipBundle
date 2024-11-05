@@ -60,7 +60,7 @@ flowchart LR
 
 * 這個方法比較通用且易於客製化，依照專案的需求進行修改，參考範場景 (zip-loader-boot.scene)。
 
-* 缺點在於沒偷到下載時間，只單純降低了網路請求數量，但單就這樣也足夠讓啟動速度在中、低階安卓手機快上個 20~30%。
+* 缺點在於沒偷到下載時間，只單純降低了網路請求數量，但單就這樣也足夠讓啟動速度在中、低階安卓手機快上個 `20 ~ 30%`。
 
 ### 方法2：Download Zip At Index.html (偷下載時間)
 
@@ -83,9 +83,17 @@ flowchart LR
     style E fill:#eb3434
 ```
 
-* 採非同步讓 `zip 檔案` 與 `遊戲引擎核心` 同時下載，節省時間速度最快。
+* 非同步下載 `Zip 檔案` 與 `遊戲引擎核心`，節省時間速度最快。
 
-* 在原本 `Game.scene` 之前，先載入一個 `Init.scene` 進行 injection 修改 `XMLHttpRequest` 功能，加入 local cache 讀取機制，若 cahce 命中則無需發出網路請求。
+* 這個方法偷到了下載CC引擎與引擎初始化時間，就實驗 [Cocos UI Example](https://github.com/cocos/cocos-example-ui) 數據來看可在快 `10 ~ 20%`：
+
+    | ZipBundle | Zip 數 | 瀏覽器 | 連線規格 | 網速 | 耗時啟動 | 網路請求
+    | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+    | On 方法1 | 1 各 | Chrome | http1.1 | Fast 4G | 9.62秒 | 30 reqs |
+    | On 方法2 | 1 各 | Chrome | http1.1 | Fast 4G | 11.98秒 | 30 reqs |
+    | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+    | Off | 0 各 | Chrome | http1.1 | Fast 4G | 17.22秒 | 261 reqs |
+
 
 ## 如何決定 Zip 資源包的切割數量?
 
