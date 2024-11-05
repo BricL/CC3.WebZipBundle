@@ -48,11 +48,11 @@ flowchart LR
 flowchart LR
    C(Game Engine JS) -->|Download| D(ZipBundle Start Scene)
    subgraph ZipBundle Dwonload Flow
-   D -->|Inject local cache functionality into the XMLHttpRequest| E(Download zip)
+   D -->|Inject local cache functionality into the XMLHttpRequest| E(Download Zip)
    end
    E -->|Download & Run| F(Start Scene)
-   F --> G(Load Assets From Local Cache)
-   G --> H(Game)
+   F -->|Load Assets From Local Cache| G(Game Play)
+
    style D fill:#eb3434
 ```
 
@@ -72,10 +72,15 @@ flowchart LR
     end
 
     A[Host Server] -->|Download| B(Index.html)
-    B --> C(Game Engine JS) & D(Assets Zip files)
-    C & D --> E("ZipBundle Scene
-    'Use injection to add local caching functionality to XMLHttpRequest.'")
-    E -- Download&Run --> F(Game)
+    B --> C(Game Engine JS) & D(Zip Files)
+    C --> |Dwonload| E(ZipBundle Start Scene)
+    D --> E
+    subgraph "Inject local cache functionality into the XMLHttpRequest"
+    E -->|Dwonload & Run| F(Start Scene)
+    end
+    F -->|Load Assets From Local Cache| G(Game Play)
+
+    style E fill:#eb3434
 ```
 
 * 採非同步讓 `zip 檔案` 與 `遊戲引擎核心` 同時下載，節省時間速度最快。
