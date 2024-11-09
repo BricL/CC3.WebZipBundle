@@ -25,7 +25,7 @@
 
         * 啟動後，會在自動在專案資料夾下生成資料夾 `your_project_path/wzb-build-config`。
 
-            * 其中 `assetsUrlRecordLost.json` 是紀錄 CC 啟動遊戲時所需要的 Assets Url，在專案建置時依此名單進行 Assets Zip 打包。
+            * 其中 `assetsUrlRecordList.json` 內容是啟動遊戲用到的 Assets 列表，建置專案時會依此名單進行 Zip 打包。
 
                 ( PS：這部分內容需手動貼入，參閱 `ZipLoader` 說明 `"如何取得 CC 啟動遊戲時所需要的 Assets Url"` )。
 
@@ -49,11 +49,11 @@
 
         * 啟動選項 `Is Record Assets Url`，會在 CC 每次下載資源時將所用到的資源記錄下來
         
-            * 透過 `ALT + W` 可將記錄列表打印在 console 中，透過複製、貼上至 `assetsUrlRecordLost.json`，作為 Zip 打包資源的依據。
+            * 透過 `ALT + W` 可將記錄列表打印在 console 中，透過複製、貼上至 `assetsUrlRecordList.json`，作為 Zip 打包資源的依據。
 
                 <p align="center"><img src="doc/img/console_log.png" width="450"></p>
 
-                <p align="center"><img src="doc/img/assetsUrlRecordLost.png" width="450"></p>
+                <p align="center"><img src="doc/img/assetsUrlRecordList.png" width="450"></p>
 
             * 該選項預設 `true`，在 `zip-load-boot.scene` 載入後就會進行紀錄。
 
