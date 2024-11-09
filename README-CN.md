@@ -25,7 +25,7 @@
 
         * 啟動後，會在自動在專案資料夾下生成資料夾 `your_project_path/wzb-build-config`。
 
-            * 其中 `assetsUrlRecordLost.json` 是紀錄 CC 啟動遊戲時所需要的 Assets Url，在專案建置時依此名單進行 Assets Zip 打包。
+            * 其中 `assetsUrlRecordList.json` 內容是啟動遊戲用到的 Assets 列表，建置專案時會依此名單進行 Zip 打包。
 
                 ( PS：這部分內容需手動貼入，參閱 `ZipLoader` 說明 `"如何取得 CC 啟動遊戲時所需要的 Assets Url"` )。
 
@@ -43,23 +43,21 @@
 
 3. ZipLoader Component
 
-    * `zip-load-boot.scene` 中的 `ZipLoader` 會將 Record Assets Url 與 Load Assets from Local-cache 兩個功能加入CC中。
+    * `zip-load-boot.scene` 中的 `ZipLoader` 會開始記錄遊戲啟動所用到 Assets 的下載 Url，並於下載流程加入檢查 Local Cache 是否存在所需 Asset，若有責讀取本地資源替代發出網路請求 。
 
-    * 如何取得 CC 啟動遊戲時所需要的 Assets Url?
+    * 如何取得遊戲所用到的 Assets Url 紀錄?
 
-        * 啟動選項 `Is Record Assets Url`，會在 CC 每次下載資源時將所用到的資源記錄下來
+        * `Is Record Assets Url`預設為 `true`，會在 CC 請求下載資源時順便記錄 Assets 的 Url。透過 `"ALT + W"` 快捷鍵，可將記錄打印在 console 中
+
+            <p align="center"><img src="doc/img/console_log.png" width="450"></p>
         
-            * 透過 `ALT + W` 可將記錄列表打印在 console 中，透過複製、貼上至 `assetsUrlRecordLost.json`，作為 Zip 打包資源的依據。
+        * 透過複製、貼上至 `assetsUrlRecordList.json`，作為 Zip 打包資源的依據。
 
-                <p align="center"><img src="doc/img/console_log.png" width="450"></p>
+            <p align="center"><img src="doc/img/assetsUrlRecordList.png" width="450"></p>
 
-                <p align="center"><img src="doc/img/assetsUrlRecordLost.png" width="450"></p>
+        * 可透過 ZipLoader 的 API `isRecordAssetsUrl = false` 來停止紀錄。
 
-            * 該選項預設 `true`，在 `zip-load-boot.scene` 載入後就會進行紀錄。
-
-            * 可透過 ZipLoader 的 `isRecordAssetsUrl` 設為 `false` 來停止紀錄。
-
-                * 一般來說，我們決定一個時間點為 "記錄斷點" 停止紀錄。在這之後遊戲已啟動，內容後續所需的資源 "下載/載入' 將復原 `"On Demind 用甚麼拿甚麼"`。
+            一般來說，我們決定一個時間點為 "記錄斷點" 停止紀錄。在這之後遊戲已啟動，內容後續所需的資源 "下載/載入' 將復原 `"On Demind (用甚麼、拿甚麼)"`。
 
 
 ## 下載流程
@@ -75,7 +73,7 @@ flowchart LR
    E --> F(Game)
 ```
 
-* 解析執行第一個 `起始場景 (Start Scene)` 會把 `相關聯資源 (Assets)` 以 `"On Demind 用甚麼拿甚麼"` 的方式用到什麼下什麼，因此產生大量、零散的 `網路請求`。
+* 解析執行第一個 `起始場景 (Start Scene)` 會把 `相關聯資源 (Assets)` 以 `"On Demind (用甚麼、拿甚麼)"` 的方式用到什麼下什麼，因此產生大量、零散的 `網路請求`。
 
 * 而本擴展就是將 `起始場景 (Start Scene)` 用到的 `相關聯的資源 (Assets)` 打成一個或少量 zip 包進行下載，減少網路請求加速啟動。尤其在中、低階安卓手機與網路不那麼快速的國境，能提升遊戲的啟動速度達 50+% 之多。
 
