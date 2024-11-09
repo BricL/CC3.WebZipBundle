@@ -167,9 +167,11 @@ HTTP2.0 透過單一 TCP 連線，理論上可以超過 6 個下載併發數非�
 
 單一連線裡下載併發數上限決定切分初始資源包的數量，合適的設定為：*`切割數量 < 併發數上限`*
 
-## [DEMO (Host on itch.io)](https://bricl.itch.io/cc3webzipbundledemo)
+## DEMO (Host on itch.io)
 
-* 官方的 UI 範例 [Cocos UI Example](https://github.com/cocos/cocos-example-ui)
+* [Enable-ziploader](https://bricl.itch.io/cc3webzipbundledemo)
+
+* [Disable-Ziploader](https://bricl.itch.io/cc3webzipbundledemo-disable-ziploader)
 
 <p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
 
@@ -184,3 +186,5 @@ HTTP2.0 透過單一 TCP 連線，理論上可以超過 6 個下載併發數非�
 * [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256)
 
 * [JSZip](https://stuk.github.io/jszip/)
+
+* Cocos Creator 官方的 UI 範例 GitHub： [Cocos UI Example](https://github.com/cocos/cocos-example-ui)
