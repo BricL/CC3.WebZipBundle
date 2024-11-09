@@ -16,13 +16,50 @@
 
    <p align="center"><img src="doc/img/extension_manager.png" width="450"></p>
 
-4. 至 `Build Setting` 中，下拉至最底會看到 web-zip-bundle 的參數選項。
+
+## 如何使用
+
+1. 至 `Build Setting` 下拉至最底會看到 web-zip-bundle 的參數選項。
 
    * Enable (啟動)：啟動或關閉功能。
 
-   * Select Pack Size (選擇zip分割大小)：設定單一包 zip 檔案大小的約略上限，超過就會分包。
+        * 啟動後，會在自動在專案資料夾下生成資料夾 `your_project_path/wzb-build-config`。
+
+            * 其中 `assetsUrlRecordLost.json` 是紀錄 CC 啟動遊戲時所需要的 Assets Url，在專案建置時依此名單進行 Assets Zip 打包。
+
+                ( PS：這部分內容需手動貼入，參閱 `ZipLoader` 說明 `"如何取得 CC 啟動遊戲時所需要的 Assets Url"` )。
+
+   * Select Pack Size (選擇zip分割大小)：設定單一包 zip 大小的約略上限，超過就分包。
 
    <p align="center"><img src="doc/img/build_setting.png" width="450"></p>
+
+2. 在 Assets Panel 中會出現 web-zip-bunld 項目。
+
+    * 請在 Build Setting 中 `Included Scenes` 設定 `zip-load-boot.scene` 成專案的 `Start Scene`。
+
+    * 開啟 `zip-load-boot.scene`。
+
+        * 根節點上 `ZipLoader Component` 面板輸入專案原來的 `Start Scene` 名稱。
+
+3. ZipLoader Component
+
+    * `zip-load-boot.scene` 中的 `ZipLoader` 會將 Record Assets Url 與 Load Assets from Local-cache 兩個功能加入CC中。
+
+    * 如何取得 CC 啟動遊戲時所需要的 Assets Url?
+
+        * 啟動選項 `Is Record Assets Url`，會在 CC 每次下載資源時將所用到的資源記錄下來
+        
+            * 透過 `ALT + W` 可將記錄列表打印在 console 中，透過複製、貼上至 `assetsUrlRecordLost.json`，作為 Zip 打包資源的依據。
+
+                <p align="center"><img src="doc/img/console_log.png" width="450"></p>
+
+                <p align="center"><img src="doc/img/assetsUrlRecordLost.png" width="450"></p>
+
+            * 該選項預設 `true`，在 `zip-load-boot.scene` 載入後就會進行紀錄。
+
+            * 可透過 ZipLoader 的 `isRecordAssetsUrl` 設為 `false` 來停止紀錄。
+
+        * 一般來說，我們決定一個時間點為 "記錄斷點" 為專案設定的啟動結束點停止紀錄。在之後算遊戲已成功啟動，後續所需資源的下載/載入將復原 `"On Demind 用甚麼拿甚麼"` 的機制。
 
 
 ## 下載流程
@@ -38,7 +75,7 @@ flowchart LR
    E --> F(Game)
 ```
 
-* 解析執行第一個 `起始場景 (Start Scene)` 會把 `相關聯資源 (Assets)` 以 `On Demind` 的方式用到什麼下什麼，因此產生大量、零散的 `網路請求`。
+* 解析執行第一個 `起始場景 (Start Scene)` 會把 `相關聯資源 (Assets)` 以 `"On Demind 用甚麼拿甚麼"` 的方式用到什麼下什麼，因此產生大量、零散的 `網路請求`。
 
 * 而本擴展就是將 `起始場景 (Start Scene)` 用到的 `相關聯的資源 (Assets)` 打成一個或少量 zip 包進行下載，減少網路請求加速啟動。尤其在中、低階安卓手機與網路不那麼快速的國境，能提升遊戲的啟動速度達 50+% 之多。
 
@@ -136,9 +173,11 @@ HTTP2.0 透過單一 TCP 連線，理論上可以超過 6 個下載併發數非�
 
 <p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
 
+
 ## 版本
 * v1.0.0
     * 第一個可用版本
+
 
 ## 參考文獻
 
