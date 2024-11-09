@@ -7,12 +7,18 @@ const { ccclass, property } = _decorator;
 
 @ccclass('ZipLoader')
 export class ZipLoader extends Component {
-    @property
+    @property({
+        tooltip: 'If this is true, the URLs of the assets will be recorded when they are downloaded by the engine.'
+    })
     public isRecordAssetsUrl: boolean = true;
-    @property
-    public isAwaitResCacheDwonload: boolean = true;
-    @property
-    public loadSceneName: string = '';
+    @property({
+        tooltip: 'If this is true, the next scene will not be loaded until all the zip files are downloaded.'
+    })
+    public isAwaitDwonloadZipFinished: boolean = true;
+    @property({
+        tooltip: 'The next scene to be loaded.'
+    })
+    public loadNextScene: string = '';
 
     private static instance: ZipLoader = null;
     private downloadResCachePromise: Promise<void> = null;
@@ -232,12 +238,12 @@ export class ZipLoader extends Component {
         (async () => {
             this.downloadResCachePromise = this.downloadResCache();
 
-            if (this.isAwaitResCacheDwonload) {
+            if (this.isAwaitDwonloadZipFinished) {
                 await this.downloadResCachePromise;
             }
 
-            if (this.loadSceneName.trim() !== '') {
-                director.loadScene(this.loadSceneName);
+            if (this.loadNextScene.trim() !== '') {
+                director.loadScene(this.loadNextScene);
             }
         })();
     }

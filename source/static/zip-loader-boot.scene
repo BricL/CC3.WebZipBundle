@@ -111,7 +111,9 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "loadSceneName": "home",
+    "isRecordAssetsUrl": true,
+    "isAwaitDwonloadZipFinished": true,
+    "loadNextScene": "home",
     "_id": "29tF5Lf/xKZpwsYYdNeUaf"
   },
   {
