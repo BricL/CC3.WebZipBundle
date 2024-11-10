@@ -1,5 +1,9 @@
 # CC3.WebZipBundle
 
+![Static Badge](https://img.shields.io/badge/Version-1.0.0-blue) ![Static Badge](https://img.shields.io/badge/CocosCreator-3.8.x-green) 
+
+![Static Badge](https://img.shields.io/badge/Tested_On-web-yellow)
+
 *EN | [中文](/README-CN.md)
 
 Web Game 的啟動速度直接影響遊戲留存轉化，而這速度的關鍵除了 `“初始資源總大小”` 外，`“網路請求數量”` 其實也舉足輕重卻常被忽略，尤其在東南亞平均網速及硬件都較差一個世代下。
