@@ -2,7 +2,9 @@
 
 *EN | [中文](/README-CN.md)
 
-將 `web platform` 啟動時用到的資源 (如：png、jpg、astc、webp、json、cconb) 紀錄後打包成 zip 檔 ，藉此減少遊戲啟動時對網路請求數量加速啟動時間。
+Web Game 的啟動速度直接影響遊戲留存轉化率，而這速度的關鍵除了 “初使資源的總大小” 外，“網路請求數量” 也是舉足輕重卻常被忽略，尤其在東南亞國家平均網速及硬件都較差一個世代下。
+
+本擴展將 `web platform` 啟動時用到的資源 (如：png、jpg、astc、webp、json、cconb) 紀錄後打包成 zip 檔 ，藉此減少遊戲啟動時對網路請求數量加速啟動時間。
 
 *PS：擴展實踐思路來自 Cocos 中文論壇 `haiyoucuv` 分享的文章 [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256)。*
 
