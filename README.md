@@ -23,11 +23,11 @@
 
    * Enable：啟動或關閉功能。
 
-        * 啟動後，自動在專案資料夾下生成資料夾 `your_project_path/wzb-build-config`。
+        * 啟動後，在專案資料夾下自動生成資料夾 `your_project_path/wzb-build-config` 及 `assetsUrlRecordList.json` 。
+          
+        * `assetsUrlRecordList.json` 內容是啟動遊戲用到的 Assets 列表，建置專案時會依此名單進行 Zip 打包。
 
-            * 其中 `assetsUrlRecordList.json` 內容是啟動遊戲用到的 Assets 列表，建置專案時會依此名單進行 Zip 打包。
-
-                ( PS：這部分內容需手動貼入，參閱 `ZipLoader` 說明 `"如何取得 CC 啟動遊戲時所需要的 Assets Url"` )。
+          ( PS：這部分內容需手動貼入，參閱 `ZipLoader` 說明 `"如何取得 CC 啟動遊戲時所需要的 Assets Url"` )。
 
    * Select Pack Size (選擇zip分割大小)：設定單一包 zip 大小的約略上限，超過就分包。
 
