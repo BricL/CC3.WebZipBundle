@@ -27,6 +27,14 @@
           
         * `assetsUrlRecordList.json` 內容為啟動遊戲下載所需 Assets 紀錄，建置專案時會依此名單將 Assets 打包成 Zip。這部分需手動貼入，參閱 `ZipLoader` 說明 `"如何取得 CC 啟動遊戲時所需要的 Assets Url"`。
 
+   * Download zip at index.html：將啟動下載 Zip 包的時間提前至 `index.html`
+
+        * 選項預設為 `false`
+
+        * 將下載 Zip 包請求提前至 `index.html` 並透過非同步載入達到與 CC 引擎下載/初始化同步進行，進一步縮減下載時間。
+
+        * 若要對下載是否完成進行確認，可 `await ZipLoader.getDownloadZipPromise()`。
+   
    * Select Pack Size (選擇zip分割大小)：設定單一包 zip 大小的約略上限，超過就分包。
 
    <p align="center"><img src="doc/img/build_setting.png" width="450"></p>
@@ -173,7 +181,9 @@ HTTP2.0 透過單一 TCP 連線，理論上可以超過 6 個下載併發數非�
 
 
 ## 版本
+
 * v1.0.0
+
     * 第一個可用版本
 
 

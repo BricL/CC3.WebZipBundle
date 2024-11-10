@@ -10,25 +10,31 @@
 
 1. 下載專案成 zip。
 
-2. 解壓縮後將內容複製到 `your_project_path/extensions/web-zip-bundle` 中。
+2. 解壓縮後將內容複製至 `your_project_path/extensions/web-zip-bundle`。
 
-3. 至 Editor menu 裡 `Extension/Extension Manager/Installed` 中，找到 web-zip-bunld 並啟動。
+3. 至 Editor menu 裡 `Extension/Extension Manager/Installed` 中，找到 web-zip-bunld 啟動。
 
    <p align="center"><img src="doc/img/extension_manager.png" width="450"></p>
 
 
 ## 如何使用
 
-1. 至 `Build Setting` 下拉至最底會看到 web-zip-bundle 的參數選項。
+1. 至 `Build Setting` 下拉找到 web-zip-bundle 選項。
 
-   * Enable (啟動)：啟動或關閉功能。
+   * Enable：啟動或關閉功能。
 
-        * 啟動後，會在自動在專案資料夾下生成資料夾 `your_project_path/wzb-build-config`。
+        * 啟動後，在專案資料夾下自動生成資料夾 `your_project_path/wzb-build-config` 及 `assetsUrlRecordList.json` 。
+          
+        * `assetsUrlRecordList.json` 內容為啟動遊戲下載所需 Assets 紀錄，建置專案時會依此名單將 Assets 打包成 Zip。這部分需手動貼入，參閱 `ZipLoader` 說明 `"如何取得 CC 啟動遊戲時所需要的 Assets Url"`。
 
-            * 其中 `assetsUrlRecordList.json` 內容是啟動遊戲用到的 Assets 列表，建置專案時會依此名單進行 Zip 打包。
+   * Download zip at index.html：將啟動下載 Zip 包的時間提前至 `index.html`
 
-                ( PS：這部分內容需手動貼入，參閱 `ZipLoader` 說明 `"如何取得 CC 啟動遊戲時所需要的 Assets Url"` )。
+        * 選項預設為 `false`
 
+        * 將下載 Zip 包請求提前至 `index.html` 並透過非同步載入達到與 CC 引擎下載/初始化同步進行，進一步縮減下載時間。
+
+        * 若要對下載是否完成進行確認，可 `await ZipLoader.getDownloadZipPromise()`。
+   
    * Select Pack Size (選擇zip分割大小)：設定單一包 zip 大小的約略上限，超過就分包。
 
    <p align="center"><img src="doc/img/build_setting.png" width="450"></p>
@@ -47,7 +53,7 @@
 
     * 如何取得遊戲所用到的 Assets Url 紀錄?
 
-        * `Is Record Assets Url`預設為 `true`，會在 CC 請求下載資源時順便記錄 Assets 的 Url。透過 `"ALT + W"` 快捷鍵，可將記錄打印在 console 中
+        * `Is Record Assets Url`預設 `true`，會在 CC 請求下載資源時記錄 Assets 的 Url。遊戲中按下 `"ALT + W"` 快捷鍵，可將記錄打印在 console 中
 
             <p align="center"><img src="doc/img/console_log.png" width="450"></p>
         
@@ -175,7 +181,9 @@ HTTP2.0 透過單一 TCP 連線，理論上可以超過 6 個下載併發數非�
 
 
 ## 版本
+
 * v1.0.0
+
     * 第一個可用版本
 
 
