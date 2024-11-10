@@ -51,7 +51,7 @@
 
     * `zip-load-boot.scene` 中的 `ZipLoader` 會開始記錄遊戲啟動所用到 Assets 的下載 Url，並於下載流程加入檢查 Local Cache 是否存在所需 Asset，若有責讀取本地資源替代發出網路請求 。
 
-    * 如何取得遊戲所用到的 Assets Url 紀錄?
+    * 如何取得遊戲請求 Assets 紀錄?
 
         * `Is Record Assets Url`預設 `true`，會在 CC 請求下載資源時記錄 Assets 的 Url。遊戲中按下 `"ALT + W"` 快捷鍵，可將記錄打印在 console 中
 
