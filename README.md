@@ -87,7 +87,7 @@ flowchart LR
 
 擴展提供的方法有以下兩種：
 
-### 方法1：ZipBundle 場景下載 (通用)
+### 方法1：zip-load-boot.scene 場景下載 (通用)
 
 ```mermaid
 flowchart LR
