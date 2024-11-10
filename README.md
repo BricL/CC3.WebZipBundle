@@ -1,4 +1,4 @@
-# Web Zip Bundle
+# CC3.WebZipBundle
 
 *EN | [中文](/README-CN.md)
 
