@@ -101,11 +101,9 @@ flowchart LR
    style D fill:#eb3434
 ```
 
-* 在原流程 `起始場景 (Start Scene)` 前插入 `ZipBundle Start Scene` 場景，該場景會對 `XMLHttpRequest` 注入 Local Cache 功能並啟動 Zip 包的下載。
+* 在原流程 `起始場景 (Start Scene)` 前插入 `zip-load-boot.scene` 場景，該場景會對注入 Assets Local Cache 功能並啟動 Zip 包的下載。
 
-* 這個方法比較通用且易於客製化，依照專案的需求進行修改，參考範場景 (zip-loader-boot.scene)。
-
-* 缺點在於沒偷到下載時間，只單純降低了網路請求數量，但單就這樣也足夠讓啟動速度在中、低階安卓手機快上個 `20 ~ 30%`。
+* 此方法通用且易於客製化，可依專案需求進行修改。單純降低網路請求數量，已足夠讓啟動速度在中、低階安卓、網速較低的環境快上個 `20 ~ 30%`。
 
 ### 方法2：Download Zip At Index.html (偷下載時間)
 
