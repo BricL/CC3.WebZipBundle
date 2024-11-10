@@ -138,7 +138,7 @@ flowchart LR
 
 ## 如何決定 Zip 資源包的切割數量?
 
-在設定選項 `Select Pack Size` 中，可以選擇單一 zip 包體的近似大小，藉此將資源切割成多個 zip 包。
+在 Build Setting 設定中有選項 `Select Pack Size` 可設定分包大小，將資源切割成多個 zip 包。
 
 ### 在 HTTP1.1 下
 
