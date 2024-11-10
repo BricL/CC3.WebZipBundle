@@ -10,20 +10,20 @@
 
 1. 下載專案成 zip。
 
-2. 解壓縮後將內容複製到 `your_project_path/extensions/web-zip-bundle` 中。
+2. 解壓縮後將內容複製至 `your_project_path/extensions/web-zip-bundle`。
 
-3. 至 Editor menu 裡 `Extension/Extension Manager/Installed` 中，找到 web-zip-bunld 並啟動。
+3. 至 Editor menu 裡 `Extension/Extension Manager/Installed` 中，找到 web-zip-bunld 啟動。
 
    <p align="center"><img src="doc/img/extension_manager.png" width="450"></p>
 
 
 ## 如何使用
 
-1. 至 `Build Setting` 下拉至最底會看到 web-zip-bundle 的參數選項。
+1. 至 `Build Setting` 下拉找到 web-zip-bundle 選項。
 
-   * Enable (啟動)：啟動或關閉功能。
+   * Enable：啟動或關閉功能。
 
-        * 啟動後，會在自動在專案資料夾下生成資料夾 `your_project_path/wzb-build-config`。
+        * 啟動後，自動在專案資料夾下生成資料夾 `your_project_path/wzb-build-config`。
 
             * 其中 `assetsUrlRecordList.json` 內容是啟動遊戲用到的 Assets 列表，建置專案時會依此名單進行 Zip 打包。
 
