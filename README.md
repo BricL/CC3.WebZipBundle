@@ -45,7 +45,7 @@
 
     * 如何取得遊戲所用到的 Assets Url 紀錄?
 
-        * `Is Record Assets Url`預設為 `true`，會在 CC 請求下載資源時順便記錄 Assets 的 Url。透過 `"ALT + W"` 快捷鍵，可將記錄打印在 console 中
+        * `Is Record Assets Url`預設 `true`，會在 CC 請求下載資源時記錄 Assets 的 Url。遊戲中按下 `"ALT + W"` 快捷鍵，可將記錄打印在 console 中
 
             <p align="center"><img src="doc/img/console_log.png" width="450"></p>
         
