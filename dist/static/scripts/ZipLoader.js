@@ -29,9 +29,9 @@ let ZipLoader = ZipLoader_1 = class ZipLoader extends cc_1.Component {
     constructor() {
         super(...arguments);
         this.isRecordAssetsUrl = true;
-        this.isAwaitResCacheDwonload = true;
-        this.loadSceneName = '';
-        this.downloadResCachePromise = null;
+        this.isAwaitDwonloadZipFinished = true;
+        this.loadNextScene = '';
+        this.downloadZipPromise = null;
         this.recordAssetsUrlList = [];
         this.zipCache = new Map();
         this.resCache = new Map();
@@ -41,8 +41,8 @@ let ZipLoader = ZipLoader_1 = class ZipLoader extends cc_1.Component {
     static get inst() {
         return ZipLoader_1.instance;
     }
-    get getDownloadResCachePromise() {
-        return this.downloadResCachePromise;
+    get getDownloadZipPromise() {
+        return this.downloadZipPromise;
     }
     downloadResCache() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -236,26 +236,32 @@ let ZipLoader = ZipLoader_1 = class ZipLoader extends cc_1.Component {
             });
         }
         (() => __awaiter(this, void 0, void 0, function* () {
-            this.downloadResCachePromise = this.downloadResCache();
-            if (this.isAwaitResCacheDwonload) {
-                yield this.downloadResCachePromise;
+            this.downloadZipPromise = this.downloadResCache();
+            if (this.isAwaitDwonloadZipFinished) {
+                yield this.downloadZipPromise;
             }
-            if (this.loadSceneName.trim() !== '') {
-                cc_1.director.loadScene(this.loadSceneName);
+            if (this.loadNextScene.trim() !== '') {
+                cc_1.director.loadScene(this.loadNextScene);
             }
         }))();
     }
 };
 ZipLoader.instance = null;
 __decorate([
-    property
+    property({
+        tooltip: 'If this is true, the URLs of the assets will be recorded when they are downloaded by the engine.'
+    })
 ], ZipLoader.prototype, "isRecordAssetsUrl", void 0);
 __decorate([
-    property
-], ZipLoader.prototype, "isAwaitResCacheDwonload", void 0);
+    property({
+        tooltip: 'If this is true, the next scene will not be loaded until all the zip files are downloaded.'
+    })
+], ZipLoader.prototype, "isAwaitDwonloadZipFinished", void 0);
 __decorate([
-    property
-], ZipLoader.prototype, "loadSceneName", void 0);
+    property({
+        tooltip: 'The next scene to be loaded.'
+    })
+], ZipLoader.prototype, "loadNextScene", void 0);
 ZipLoader = ZipLoader_1 = __decorate([
     ccclass('ZipLoader')
 ], ZipLoader);

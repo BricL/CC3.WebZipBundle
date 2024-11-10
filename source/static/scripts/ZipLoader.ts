@@ -21,7 +21,7 @@ export class ZipLoader extends Component {
     public loadNextScene: string = '';
 
     private static instance: ZipLoader = null;
-    private downloadResCachePromise: Promise<void> = null;
+    private downloadZipPromise: Promise<void> = null;
     private recordAssetsUrlList = [];
     private zipCache = new Map<string, JSZip.JSZipObject>();
     private resCache = new Map();
@@ -32,8 +32,8 @@ export class ZipLoader extends Component {
         return ZipLoader.instance;
     }
 
-    public get getDownloadResCachePromise(): Promise<void> {
-        return this.downloadResCachePromise;
+    public get getDownloadZipPromise(): Promise<void> {
+        return this.downloadZipPromise;
     }
 
     public async downloadResCache() {
@@ -236,10 +236,10 @@ export class ZipLoader extends Component {
         }
 
         (async () => {
-            this.downloadResCachePromise = this.downloadResCache();
+            this.downloadZipPromise = this.downloadResCache();
 
             if (this.isAwaitDwonloadZipFinished) {
-                await this.downloadResCachePromise;
+                await this.downloadZipPromise;
             }
 
             if (this.loadNextScene.trim() !== '') {
