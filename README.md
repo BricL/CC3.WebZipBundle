@@ -159,7 +159,7 @@ flowchart LR
 
 (*PS：網速選擇 Fast 4G 主因是較接近整體平均網速環境，尤其在東南亞地區。*)
 
-從 12 各下載併發來看，可明顯觀察到當下載併發數達上限，後面下載請求進入排隊等待。若等待的下載項目中有 CC 引擎本體 (`_virtual_cc-8ed102a6.js`)，也會導致整體啟動速度變慢，如下圖所示：
+從 12 各下載併發可觀察到當併發數達上限，後面的下載請求會進入排隊等待。若等待的下載中有 CC 本體 (`_virtual_cc-8ed102a6.js`)，會明顯導致啟動速度變慢，如下圖所示：
 
 <p align="center"><img src="doc/img/12zips_boost_testing_result.png" width="800"></p>
 
