@@ -1,10 +1,14 @@
 # CC3.WebZipBundle
 
+![Static Badge](https://img.shields.io/badge/Version-1.0.0-blue) ![Static Badge](https://img.shields.io/badge/CocosCreator-3.8.x-green) ![Static Badge](https://img.shields.io/badge/Tested_On-web-yellow)
+
 [EN](/README.md) | *中文
 
-將 `web platform` 啟動時用到的資源 (如：png、jpg、astc、webp、json、cconb) 紀錄後打包成 zip 檔 ，藉此減少遊戲啟動時對網路請求數量加速啟動時間。
+網頁遊戲的啟動速度直接影響用戶留存與轉化。除了 `"初始資源總大小"` 這一因素外，`"網路請求數量"` 也是一個不可忽視的關鍵，尤其在東南亞等網速及硬體較慢的地區。
 
-*PS：擴展實踐思路來自 Cocos 中文論壇 `haiyoucuv` 分享的文章 [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256)。*
+此擴展將 web 平台 啟動時所需的資源（如：PNG、JPG、ASTC、WebP、JSON、CCONB）打包為 zip 檔，從而減少啟動時的網路請求數量，加快遊戲載入速度。
+
+(*註：擴展實踐思路來自 Cocos 中文論壇 `haiyoucuv` 分享的文章 [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256)。*)
 
 ## 安裝方法
 
@@ -51,7 +55,7 @@
 
     * `zip-load-boot.scene` 中的 `ZipLoader` 會開始記錄遊戲啟動所用到 Assets 的下載 Url，並於下載流程加入檢查 Local Cache 是否存在所需 Asset，若有責讀取本地資源替代發出網路請求 。
 
-    * 如何取得遊戲所用到的 Assets Url 紀錄?
+    * 如何取得遊戲請求 Assets 紀錄?
 
         * `Is Record Assets Url`預設 `true`，會在 CC 請求下載資源時記錄 Assets 的 Url。遊戲中按下 `"ALT + W"` 快捷鍵，可將記錄打印在 console 中
 
@@ -81,9 +85,11 @@ flowchart LR
 
 * 解析執行第一個 `起始場景 (Start Scene)` 會把 `相關聯資源 (Assets)` 以 `"On Demind (用甚麼、拿甚麼)"` 的方式用到什麼下什麼，因此產生大量、零散的 `網路請求`。
 
-* 而本擴展就是將 `起始場景 (Start Scene)` 用到的 `相關聯的資源 (Assets)` 打成一個或少量 zip 包進行下載，減少網路請求加速啟動。尤其在中、低階安卓手機與網路不那麼快速的國境，能提升遊戲的啟動速度達 50+% 之多。
+* 而本擴展就是將 `起始場景 (Start Scene)` 用到的 `相關聯的資源 (Assets)` 打成一個或少量 zip 包進行下載，減少網路請求。在中、低階安卓手機、網速不快的環境下，可提升遊戲啟動速度達 30+% 之多。
 
-### 方法1：ZipBundle 場景下載 (通用)
+擴展提供的方法有以下兩種：
+
+### 方法1：zip-load-boot.scene 場景下載 (通用)
 
 ```mermaid
 flowchart LR
@@ -97,11 +103,9 @@ flowchart LR
    style D fill:#eb3434
 ```
 
-* 在原流程 `起始場景 (Start Scene)` 前插入 `ZipBundle Start Scene` 場景，該場景會對 `XMLHttpRequest` 注入 Local Cache 功能並啟動 Zip 包的下載。
+* 在原流程 `起始場景 (Start Scene)` 前插入 `zip-load-boot.scene` 場景，該場景會對注入 Assets Local Cache 功能並啟動 Zip 包的下載。
 
-* 這個方法比較通用且易於客製化，依照專案的需求進行修改，參考範場景 (zip-loader-boot.scene)。
-
-* 缺點在於沒偷到下載時間，只單純降低了網路請求數量，但單就這樣也足夠讓啟動速度在中、低階安卓手機快上個 `20 ~ 30%`。
+* 此方法通用且易於客製化，可依專案需求進行修改。單純降低網路請求數量，已足夠讓啟動速度在中、低階安卓、網速較低的環境快上個 `20 ~ 30%`。
 
 ### 方法2：Download Zip At Index.html (偷下載時間)
 
@@ -138,15 +142,15 @@ flowchart LR
 
 ## 如何決定 Zip 資源包的切割數量?
 
-在設定選項 `Select Pack Size` 中，可以選擇單一 zip 包體的近似大小，藉此將資源切割成多個 zip 包。
+在 Build Setting 設定中有選項 `Select Pack Size` 可設定分包大小，將資源切割成多個 zip 包。但...
+
+*`“將初始資源切割成越多、越小各zip包，下載速度就越快？”`*
 
 ### 在 HTTP1.1 下
 
-*`將初始資源切割成越多、越小各zip包，下載速度就越快？`*
+HTTP1.1 在 Chrome 下一個連線最多 6 各下載併發，當超過後續下載請求得排隊等待。
 
-這問題的關鍵在 *`一個連線下，可以同時有多少個併發下載？`*。以 HTTP1.1 在 Chrome 底下一個連線最多 6 各下載併發，當超過時後面的下載請求得排隊等待。
-
-我們用官方的 UI 範例 [Cocos UI Example](https://github.com/cocos/cocos-example-ui) 進行測試，透過不同的 Select Pack Size 設定，將啟動所需資源分隔成 1各、3各、6各、12各 Zip 包測試啟動速度，結果如下：
+我們用官方的 UI 範例 [Cocos UI Example](https://github.com/cocos/cocos-example-ui) 進行測試，透過不同 Select Pack Size 的設定，將啟動資源包分隔成 1各、3各、6各、12各 Zip 測試速度結果如下：
 
 | ZipBundle | Zip 數 | 瀏覽器 | 連線規格 | 網速 | 耗時啟動 | 網路請求
 | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -157,9 +161,9 @@ flowchart LR
 | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
 | Off | 0 各 | Chrome | http1.1 | Fast 4G | 17.22秒 | 261 reqs |
 
-(*PS：網速選擇 Fast 4G 主因是較接近整體平均網速環境，尤其在東南亞地區。*)
+(*網速選擇 Fast 4G 主因是較接近整體平均網速環境，尤其在東南亞地區。*)
 
-從 12 各下載併發來看，可明顯觀察到當下載併發數達上限，後面下載請求進入排隊等待。若等待的下載項目中有 CC 引擎本體 (`_virtual_cc-8ed102a6.js`)，也會導致整體啟動速度變慢，如下圖所示：
+從 12 各下載併發可觀察到當併發數達上限，後面的下載請求會進入排隊等待。若等待的下載中有 CC 本體 (`_virtual_cc-8ed102a6.js`)，會明顯導致啟動速度變慢，如下圖所示：
 
 <p align="center"><img src="doc/img/12zips_boost_testing_result.png" width="800"></p>
 
