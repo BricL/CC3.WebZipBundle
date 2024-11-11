@@ -18,8 +18,9 @@
 
 3. 開啟終端機
      * 至位置 `your_project_path/` 輸入 `npm install jszip`，安裝 jszip。
-     * 至位置 `your_project_path/extensions/web-zip-build` 輸入 `npm install`，安裝擴展相依套件。
-     * 至位置 `your_project_path/extensions/web-zip-build` 輸入 `npm run build`，建置擴展。
+     * 至位置 `your_project_path/extensions/web-zip-build`
+         * 輸入 `npm install`，安裝擴展相依套件。
+         * 輸入 `npm run build`，建置擴展。
 
 4. 至 Editor menu 裡 `Extension/Extension Manager/Installed` 中，找到 web-zip-bunld 啟動。
 
