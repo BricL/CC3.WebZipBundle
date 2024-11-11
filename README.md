@@ -16,11 +16,14 @@
 
 2. 解壓縮後將內容複製至 `your_project_path/extensions/web-zip-bundle`。
 
-3. 至 Editor menu 裡 `Extension/Extension Manager/Installed` 中，找到 web-zip-bunld 啟動。
+3. 開啟終端機
+     * 至位置 `your_project_path/` 輸入 `npm install jszip`，安裝 jszip。
+     * 至位置 `your_project_path/extensions/web-zip-build` 輸入 `npm install`，安裝擴展相依套件。
+     * 至位置 `your_project_path/extensions/web-zip-build` 輸入 `npm run build`，建置擴展。
+
+4. 至 Editor menu 裡 `Extension/Extension Manager/Installed` 中，找到 web-zip-bunld 啟動。
 
    <p align="center"><img src="doc/img/extension_manager.png" width="450"></p>
-
-4. 開啟終端機至位置 `your_project_path/` 輸入 `npm install jszip`，安裝 jszip。
 
 
 ## 如何使用
