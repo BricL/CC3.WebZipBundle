@@ -20,6 +20,8 @@
 
    <p align="center"><img src="doc/img/extension_manager.png" width="450"></p>
 
+4. 開啟終端機至位置 `your_project_path/` 輸入 `npm install jszip`，安裝 jszip。
+
 
 ## 如何使用
 
