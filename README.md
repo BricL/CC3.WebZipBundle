@@ -176,7 +176,7 @@ HTTP1.1 在 Chrome 下一個連線最多 6 各下載併發，當超過後續下�
 
 <p align="center"><img src="doc/img/12zips_boost_testing_result.png" width="800"></p>
 
-### 那 HTTP2 呢?
+### HTTP2 呢?
 
 HTTP2.0 透過單一 TCP 連線，理論上可以超過 6 個下載併發數非常的多。但實際還是看 Host Server 設定，決定一個連線能同時併發多少個下載請求。
 
