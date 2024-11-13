@@ -14,12 +14,12 @@
 
 1. 下載專案成 zip。
 
-2. 解壓縮後將內容複製到 `your_project_path/extensions/web-zip-bundle`。
+2. 解壓縮後將內容複製到 `${your_project_path}/extensions/web-zip-bundle`。
 
 3. 開啟終端機
-     * `cd your_project_path/` 輸入 `npm install jszip`，安裝 jszip。
+     * `cd ${your_project_path}/` 輸入 `npm install jszip`，安裝 jszip。
 
-     * `cd your_project_path/extensions/web-zip-build`
+     * `cd ${your_project_path}/extensions/web-zip-build`
 
          * 輸入 `npm install`，安裝擴展相依套件。
 
@@ -36,7 +36,7 @@
 
    * Enable：啟動或關閉功能。
 
-        * 啟動後，在專案資料夾下自動生成資料夾 `your_project_path/wzb-build-config` 及 `assetsUrlRecordList.json` 。
+        * 啟動後，在專案資料夾下自動生成資料夾 `${your_project_path}/wzb-build-config` 及 `assetsUrlRecordList.json` 。
           
         * `assetsUrlRecordList.json` 內容為啟動遊戲下載所需 Assets 紀錄，建置專案時會依此名單將 Assets 打包成 Zip。這部分需手動貼入，參閱 `ZipLoader` 說明 `"如何取得 CC 啟動遊戲時所需要的 Assets Url"`。
 
