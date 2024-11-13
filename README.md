@@ -29,6 +29,7 @@
 
    <p align="center"><img src="doc/img/extension_manager.png" width="450"></p>
 
+(*註：安裝方法也可參考官方文件 [【擴展 安装与分享】](https://docs.cocos.com/creator/3.8/manual/zh/editor/extension/install.html) 。*)
 
 ## 如何使用
 
