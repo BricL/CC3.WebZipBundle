@@ -19,13 +19,13 @@
 3. 開啟終端機
      * `cd ${your_project_path}/` 輸入 `npm install jszip`，安裝 jszip。
 
-     * `cd ${your_project_path}/extensions/web-zip-build`
+     * `cd ${your_project_path}/extensions/web-zip-bundle`
 
          * 輸入 `npm install`，安裝擴展相依套件。
 
          * 輸入 `npm run build`，建置擴展。
 
-4. 至 Editor menu `Extension -> Extension Manager -> Installed` 啟動 web-zip-bunld。
+4. 至 Editor menu `Extension -> Extension Manager -> Installed` 啟動 web-zip-bundle。
 
    <p align="center"><img src="doc/img/extension_manager.png" width="450"></p>
 
@@ -52,7 +52,7 @@
 
    <p align="center"><img src="doc/img/build_setting.png" width="450"></p>
 
-2. 在 Assets Panel 中會出現 web-zip-bunld 項目。
+2. 在 Assets Panel 中會出現 web-zip-bundle 項目。
 
     * 請在 Build Setting 中 `Included Scenes` 設定 `zip-load-boot.scene` 成專案的 `Start Scene`。
 
