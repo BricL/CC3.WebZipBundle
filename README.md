@@ -203,6 +203,8 @@ HTTP2.0 透過單一 TCP 連線，理論上可以超過 6 個下載併發數非�
 
 ## 參考文獻
 
+* [WebZipBundle Demo Project](https://github.com/BricL/CC3.WebZipBundle.DemoProject)
+
 * [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256)
 
 * [JSZip](https://stuk.github.io/jszip/)
