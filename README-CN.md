@@ -8,18 +8,28 @@
 
 此擴展將 web 平台 啟動時所需的資源（如：PNG、JPG、ASTC、WebP、JSON、CCONB）打包為 zip 檔，從而減少啟動時的網路請求數量，加快遊戲載入速度。
 
-(*註：擴展實踐思路來自 Cocos 中文論壇 `haiyoucuv` 分享的文章 [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256)。*)
+(*註：實踐思路來自 Cocos 中文論壇 `haiyoucuv` 分享的文章 [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256)。*)
 
 ## 安裝方法
 
 1. 下載專案成 zip。
 
-2. 解壓縮後將內容複製至 `your_project_path/extensions/web-zip-bundle`。
+2. 解壓縮後將內容複製到 `${your_project_path}/extensions/web-zip-bundle`。
 
-3. 至 Editor menu 裡 `Extension/Extension Manager/Installed` 中，找到 web-zip-bunld 啟動。
+3. 開啟終端機
+     * `cd ${your_project_path}/` 輸入 `npm install jszip`，安裝 jszip。
+
+     * `cd ${your_project_path}/extensions/web-zip-bundle`
+
+         * 輸入 `npm install`，安裝擴展相依套件。
+
+         * 輸入 `npm run build`，建置擴展。
+
+4. 至 Editor menu `Extension -> Extension Manager -> Installed` 啟動 web-zip-bundle。
 
    <p align="center"><img src="doc/img/extension_manager.png" width="450"></p>
 
+(*註：安裝方法也可參考官方文件 [【擴展 安装与分享】](https://docs.cocos.com/creator/3.8/manual/zh/editor/extension/install.html) 。*)
 
 ## 如何使用
 
@@ -27,7 +37,7 @@
 
    * Enable：啟動或關閉功能。
 
-        * 啟動後，在專案資料夾下自動生成資料夾 `your_project_path/wzb-build-config` 及 `assetsUrlRecordList.json` 。
+        * 啟動後，在專案資料夾下自動生成資料夾 `${your_project_path}/wzb-build-config` 及 `assetsUrlRecordList.json` 。
           
         * `assetsUrlRecordList.json` 內容為啟動遊戲下載所需 Assets 紀錄，建置專案時會依此名單將 Assets 打包成 Zip。這部分需手動貼入，參閱 `ZipLoader` 說明 `"如何取得 CC 啟動遊戲時所需要的 Assets Url"`。
 
@@ -43,7 +53,7 @@
 
    <p align="center"><img src="doc/img/build_setting.png" width="450"></p>
 
-2. 在 Assets Panel 中會出現 web-zip-bunld 項目。
+2. 在 Assets Panel 中會出現 web-zip-bundle 項目。
 
     * 請在 Build Setting 中 `Included Scenes` 設定 `zip-load-boot.scene` 成專案的 `Start Scene`。
 
@@ -57,7 +67,7 @@
 
     * 如何取得遊戲請求 Assets 紀錄?
 
-        * `Is Record Assets Url`預設 `true`，會在 CC 請求下載資源時記錄 Assets 的 Url。遊戲中按下 `"ALT + W"` 快捷鍵，可將記錄打印在 console 中
+        * `Is Record Assets Url`預設 `true`，會在 CC 請求下載資源時記錄 Assets 的 Url。遊戲中按下 `"ALT + W"` 快捷鍵 (Debug Only)，可將記錄打印在 console 中。
 
             <p align="center"><img src="doc/img/console_log.png" width="450"></p>
         
@@ -70,7 +80,7 @@
             一般來說，我們決定一個時間點為 "記錄斷點" 停止紀錄。在這之後遊戲已啟動，內容後續所需的資源 "下載/載入' 將復原 `"On Demind (用甚麼、拿甚麼)"`。
 
 
-## 下載流程
+## 下載模式說明
 
 一般來說，Web Game 啟動流程如下：
 
@@ -161,13 +171,13 @@ HTTP1.1 在 Chrome 下一個連線最多 6 各下載併發，當超過後續下�
 | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
 | Off | 0 各 | Chrome | http1.1 | Fast 4G | 17.22秒 | 261 reqs |
 
-(*網速選擇 Fast 4G 主因是較接近整體平均網速環境，尤其在東南亞地區。*)
+(*註：網速選擇 Fast 4G 主因是較接近整體平均網速環境，尤其在東南亞地區。*)
 
-從 12 各下載併發可觀察到當併發數達上限，後面的下載請求會進入排隊等待。若等待的下載中有 CC 本體 (`_virtual_cc-8ed102a6.js`)，會明顯導致啟動速度變慢，如下圖所示：
+從 12 各下載併發可觀察到當併發數達上限，後續的下載請求會排隊等待。若等待下載中有 CC 本體 (`_virtual_cc-8ed102a6.js`)，會更明顯導致啟動速度變慢，如下圖所示：
 
 <p align="center"><img src="doc/img/12zips_boost_testing_result.png" width="800"></p>
 
-### 那 HTTP2 呢?
+### HTTP2 呢?
 
 HTTP2.0 透過單一 TCP 連線，理論上可以超過 6 個下載併發數非常的多。但實際還是看 Host Server 設定，決定一個連線能同時併發多少個下載請求。
 
@@ -192,6 +202,8 @@ HTTP2.0 透過單一 TCP 連線，理論上可以超過 6 個下載併發數非�
 
 
 ## 參考文獻
+
+* [WebZipBundle Demo Project](https://github.com/BricL/CC3.WebZipBundle.DemoProject)
 
 * [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256)
 
