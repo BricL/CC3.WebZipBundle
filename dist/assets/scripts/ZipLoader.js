@@ -64,7 +64,10 @@ let ZipLoader = ZipLoader_1 = class ZipLoader extends cc_1.Component {
                 if (resZipList !== undefined && resZipList.length > 0) {
                     const promises = [];
                     for (let i = 0; i < resZipList.length; i++) {
-                        promises.push(this.downloadZip(resZipList[i]));
+                        const zipPromise = this.downloadZip(resZipList[i]);
+                        if (zipPromise) {
+                            promises.push(zipPromise);
+                        }
                     }
                     const zips = yield Promise.all(promises);
                     for (const zip of zips) {
@@ -90,6 +93,7 @@ let ZipLoader = ZipLoader_1 = class ZipLoader extends cc_1.Component {
             }
             catch (e) {
                 (0, cc_1.error)(`[${this.constructor.name}].downloadZip`, e);
+                return null;
             }
         });
     }
@@ -118,19 +122,19 @@ let ZipLoader = ZipLoader_1 = class ZipLoader extends cc_1.Component {
             else {
                 if (this.zipCache.has(url)) {
                     const cache = this.zipCache.get(url);
-                    const res = yield cache.async("blob");
-                    this.resCache.set(url, res);
-                    this.zipCache.delete(url);
-                    onComplete(null, res);
-                    return;
+                    if (cache) {
+                        const res = yield cache.async("blob");
+                        this.resCache.set(url, res);
+                        this.zipCache.delete(url);
+                        onComplete(null, res);
+                        return;
+                    }
                 }
-                else {
-                    const img = new Image();
-                    img.crossOrigin = 'anonymous';
-                    img.onload = () => { onComplete(null, img); };
-                    img.onerror = (e) => { onComplete(new Error(e instanceof Event ? e.type : e), null); };
-                    img.src = url;
-                }
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = () => { onComplete(null, img); };
+                img.onerror = (e) => { onComplete(new Error(e instanceof Event ? e.type : e), null); };
+                img.src = url;
             }
         }));
     }
@@ -168,15 +172,17 @@ let ZipLoader = ZipLoader_1 = class ZipLoader extends cc_1.Component {
                 if (this.zipCacheUrl) {
                     if (!that.resCache.has(this.zipCacheUrl)) {
                         const cache = that.zipCache.get(this.zipCacheUrl);
-                        if (this.responseType === "json") {
-                            const text = yield cache.async("text");
-                            that.resCache.set(this.zipCacheUrl, text);
+                        if (cache) {
+                            if (this.responseType === "json") {
+                                const text = yield cache.async("text");
+                                that.resCache.set(this.zipCacheUrl, text);
+                            }
+                            else {
+                                const res = yield cache.async(this.responseType);
+                                that.resCache.set(this.zipCacheUrl, res);
+                            }
+                            that.zipCache.delete(this.zipCacheUrl);
                         }
-                        else {
-                            const res = yield cache.async(this.responseType);
-                            that.resCache.set(this.zipCacheUrl, res);
-                        }
-                        that.zipCache.delete(this.zipCacheUrl);
                     }
                     if (typeof this.onload === "function") {
                         const event = new ProgressEvent('load', {

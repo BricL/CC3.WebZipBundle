@@ -27,7 +27,7 @@
         "builder": "./dist/builder.js",
         "asset-db": {
             "mount": {
-                "path": "./source/static",
+                "path": "./source/assets",
                 "readonly": false
             }
         }

@@ -20,19 +20,19 @@ export class ZipLoader extends Component {
     })
     public loadNextScene: string = '';
 
-    private static instance: ZipLoader = null;
-    private downloadZipPromise: Promise<void> = null;
-    private recordAssetsUrlList = [];
+    private static instance: ZipLoader | null = null;
+    private downloadZipPromise: Promise<void> | null = null;
+    private recordAssetsUrlList: string[] = [];
     private zipCache = new Map<string, JSZip.JSZipObject>();
     private resCache = new Map();
     private isPressedLeftAlt = false;
 
     //#region public methods
-    public static get inst(): ZipLoader {
+    public static get inst(): ZipLoader | null {
         return ZipLoader.instance;
     }
 
-    public get getDownloadZipPromise(): Promise<void> {
+    public get getDownloadZipPromise(): Promise<void> | null {
         return this.downloadZipPromise;
     }
 
@@ -54,7 +54,10 @@ export class ZipLoader extends Component {
             if (resZipList !== undefined && resZipList.length > 0) {
                 const promises: Promise<JSZip>[] = [];
                 for (let i = 0; i < resZipList.length; i++) {
-                    promises.push(this.downloadZip(resZipList[i]));
+                    const zipPromise = this.downloadZip(resZipList[i]);
+                    if (zipPromise) {
+                        promises.push(zipPromise);
+                    }
                 }
 
                 const zips = await Promise.all(promises);
@@ -80,6 +83,7 @@ export class ZipLoader extends Component {
             return zip;
         } catch (e) {
             error(`[${this.constructor.name}].downloadZip`, e);
+            return null;
         }
     }
 
@@ -109,19 +113,20 @@ export class ZipLoader extends Component {
             } else {
                 if (this.zipCache.has(url)) {
                     const cache = this.zipCache.get(url);
-                    const res = await cache.async("blob");
-                    this.resCache.set(url, res);
-                    this.zipCache.delete(url);
-
-                    onComplete(null, res);
-                    return;
-                } else {
-                    const img = new Image();
-                    img.crossOrigin = 'anonymous';
-                    img.onload = () => { onComplete(null, img); };
-                    img.onerror = (e) => { onComplete(new Error(e instanceof Event ? e.type : e), null); };
-                    img.src = url;
+                    if (cache) {
+                        const res = await cache.async("blob");
+                        this.resCache.set(url, res);
+                        this.zipCache.delete(url);
+                        onComplete(null, res);
+                        return;
+                    }
                 }
+
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = () => { onComplete(null, img); };
+                img.onerror = (e) => { onComplete(new Error(e instanceof Event ? e.type : e), null); };
+                img.src = url;
             }
         });
     }
@@ -163,14 +168,16 @@ export class ZipLoader extends Component {
             if (this.zipCacheUrl) {
                 if (!that.resCache.has(this.zipCacheUrl)) {
                     const cache = that.zipCache.get(this.zipCacheUrl);
-                    if (this.responseType === "json") {
-                        const text = await cache.async("text");
-                        that.resCache.set(this.zipCacheUrl, text);
-                    } else {
-                        const res = await cache.async(this.responseType);
-                        that.resCache.set(this.zipCacheUrl, res);
+                    if (cache) {
+                        if (this.responseType === "json") {
+                            const text = await cache.async("text");
+                            that.resCache.set(this.zipCacheUrl, text);
+                        } else {
+                            const res = await cache.async(this.responseType);
+                            that.resCache.set(this.zipCacheUrl, res);
+                        }
+                        that.zipCache.delete(this.zipCacheUrl);
                     }
-                    that.zipCache.delete(this.zipCacheUrl);
                 }
 
                 if (typeof this.onload === "function") {
