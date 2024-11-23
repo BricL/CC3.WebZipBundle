@@ -4,52 +4,54 @@
 
 *EN | [中文](/README-CN.md)
 
-網頁遊戲的啟動速度直接影響用戶留存與轉化。除了 `"初始資源總大小"` 這一因素外，`"網路請求數量"` 也是一個不可忽視的關鍵，尤其在東南亞等網速及硬體較慢的地區。
+In H5 games, launch time is a critical factor influencing user retention and conversion. Besides the `total package size`, the `number of network requests` is another key factor, especially in regions like Southeast Asia, where internet speeds and hardware capabilities are often limited.
 
-此擴展將 web 平台 啟動時所需的資源（如：PNG、JPG、ASTC、WebP、JSON、CCONB）打包為 zip 檔，從而減少啟動時的網路請求數量，加快遊戲載入速度。
+The extension for Cocos Creator 3.x packages all resource files (e.g., PNG, JPG, ASTC, WebP, JSON, CCOBN) into a ZIP file to reduce network requests and speed up the game's loading time.
 
-(*註：實踐思路來自 Cocos 中文論壇 `haiyoucuv` 分享的文章 [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256)。*)
+(*Note: Thie implementation is inspired by an article shared by `haiyoucuv` on the Cocos Chinese forum: [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256).*)
 
-## 安裝方法
+## Installation
 
-1. 下載專案成 zip。
+1. Download ZIP package from github.
 
-2. 解壓縮後將內容複製到 `${your_project_path}/extensions/web-zip-bundle`。
+2. Decompress the file and copy the content to `${your_project_path}/extensions/web-zip-bundle`.
 
-3. 開啟終端機
-     * `cd ${your_project_path}/` 輸入 `npm install jszip`，安裝 jszip。
+3. Open the terminal
+     * Enter `cd ${your_project_path}/` and run `npm install jszip` to install jszip.
 
      * `cd ${your_project_path}/extensions/web-zip-bundle`
 
-         * 輸入 `npm install`，安裝擴展相依套件。
+         * Enter `npm install`，install dependency packages.
 
-         * 輸入 `npm run build`，建置擴展。
+         * Enter `npm run build`，build the extension.
 
-4. 至 Editor menu `Extension -> Extension Manager -> Installed` 啟動 web-zip-bundle。
+4. Go to the Editor menu `Extension -> Extension Manager -> Installed` to activate the extension.
 
    <p align="center"><img src="doc/img/extension_manager.png" width="450"></p>
 
-(*註：安裝方法也可參考官方文件 [【擴展 安装与分享】](https://docs.cocos.com/creator/3.8/manual/zh/editor/extension/install.html) 。*)
+(*Note：You can also check out the official docs for installation instrucctions [【擴展 安装与分享】](https://docs.cocos.com/creator/3.8/manual/zh/editor/extension/install.html) 。*)
 
-## 如何使用
+## How to Use
 
-1. 至 `Build Setting` 下拉找到 web-zip-bundle 選項。
+1. Go to `Build Setting` and select the `web-zip-bundle` option from the dropdown.
 
-   * Enable：啟動或關閉功能。
+   * Enable：Turn on/off the extension
 
-        * 啟動後，在專案資料夾下自動生成資料夾 `${your_project_path}/wzb-build-config` 及 `assetsUrlRecordList.json` 。
+        * After enabling, the extension will auto generate the folder `${your_project_path}/wzb-build-config` and the file `assetsUrlRecordList.json` in the project directory.
           
-        * `assetsUrlRecordList.json` 內容為啟動遊戲下載所需 Assets 紀錄，建置專案時會依此名單將 Assets 打包成 Zip。這部分需手動貼入，參閱 `ZipLoader` 說明 `"如何取得 CC 啟動遊戲時所需要的 Assets Url"`。
+        * The `assetsUrlRecordList.json` contains a record of the assets required to launch the game. During the build process, all assets listed in this file will be packaged into a ZIP file. 
+        
+        The contents of `assetsUrlRecordList.json` need to be manually updated. Refer to the ZipLoader documentation for details on `"How to get the assets required to launch the game"`.
 
-   * Download zip at index.html：將啟動下載 Zip 包的時間提前至 `index.html`
+   * Download ZIP at index.html：Start downloading the ZIP package in `index.html`.
 
-        * 選項預設為 `false`
+        * The Default is `false`
 
-        * 將下載 Zip 包請求提前至 `index.html` 並透過非同步載入達到與 CC 引擎下載/初始化同步進行，進一步縮減下載時間。
+        * This will move the ZIP download request to `index.html` and use async loading to further reduce the download time.
 
-        * 若要對下載是否完成進行確認，可 `await ZipLoader.getDownloadZipPromise()`。
+        * To check if the download is complete, you can `await ZipLoader.getDownloadZipPromise()`.
    
-   * Select Pack Size (選擇zip分割大小)：設定單一包 zip 大小的約略上限，超過就分包。
+   * Select Pack Size (Choose zip split size)：Set the maximum size for a single zip file. If it goes over, it'll split into multiple files.
 
    <p align="center"><img src="doc/img/build_setting.png" width="450"></p>
 
@@ -80,7 +82,7 @@
             一般來說，我們決定一個時間點為 "記錄斷點" 停止紀錄。在這之後遊戲已啟動，內容後續所需的資源 "下載/載入' 將復原 `"On Demind (用甚麼、拿甚麼)"`。
 
 
-## 下載模式說明
+## Description of Download Modes
 
 一般來說，Web Game 啟動流程如下：
 
@@ -99,7 +101,7 @@ flowchart LR
 
 擴展提供的方法有以下兩種：
 
-### 方法1：zip-load-boot.scene 場景下載 (通用)
+### Method 1: Using `zip-load-boot.scene` (General)
 
 ```mermaid
 flowchart LR
@@ -117,7 +119,7 @@ flowchart LR
 
 * 此方法通用且易於客製化，可依專案需求進行修改。單純降低網路請求數量，已足夠讓啟動速度在中、低階安卓、網速較低的環境快上個 `20 ~ 30%`。
 
-### 方法2：Download Zip At Index.html (偷下載時間)
+### Method 2：Download Zip At Index.html
 
 ```mermaid
 flowchart LR
@@ -150,13 +152,13 @@ flowchart LR
     | Off | 0 各 | Chrome | http1.1 | Fast 4G | 17.22秒 | 261 reqs |
 
 
-## 如何決定 Zip 資源包的切割數量?
+## How to Determine the Number of Split Zip Files?
 
 在 Build Setting 設定中有選項 `Select Pack Size` 可設定分包大小，將資源切割成多個 zip 包。但...
 
 *`“將初始資源切割成越多、越小各zip包，下載速度就越快？”`*
 
-### 在 HTTP1.1 下
+### Under HTTP1.1
 
 HTTP1.1 在 Chrome 下一個連線最多 6 各下載併發，當超過後續下載請求得排隊等待。
 
@@ -177,11 +179,11 @@ HTTP1.1 在 Chrome 下一個連線最多 6 各下載併發，當超過後續下�
 
 <p align="center"><img src="doc/img/12zips_boost_testing_result.png" width="800"></p>
 
-### HTTP2 呢?
+### HTTP2
 
 HTTP2.0 透過單一 TCP 連線，理論上可以超過 6 個下載併發數非常的多。但實際還是看 Host Server 設定，決定一個連線能同時併發多少個下載請求。
 
-### 小結
+### Summary
 
 單一連線裡下載併發數上限決定切分初始資源包的數量，合適的設定為：*`切割數量 < 併發數上限`*
 
@@ -194,14 +196,14 @@ HTTP2.0 透過單一 TCP 連線，理論上可以超過 6 個下載併發數非�
 <p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
 
 
-## 版本
+## Versions
 
 * v1.0.0
 
-    * 第一個可用版本
+    * The First Available Version
 
 
-## 參考文獻
+## References
 
 * [WebZipBundle Demo Project](https://github.com/BricL/CC3.WebZipBundle.DemoProject)
 
