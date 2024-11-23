@@ -55,36 +55,38 @@ The extension for Cocos Creator 3.x packages all resource files (e.g., PNG, JPG,
 
    <p align="center"><img src="doc/img/build_setting.png" width="450"></p>
 
-2. 在 Assets Panel 中會出現 web-zip-bundle 項目。
+2. In the `Assets Panel`, the new item, `web-zip-bundle` will appear.
 
-    * 請在 Build Setting 中 `Included Scenes` 設定 `zip-load-boot.scene` 成專案的 `Start Scene`。
+    * In the `Build Setting`, set `zip-load-boot.scene` as the project's Start Scene.
 
-    * 開啟 `zip-load-boot.scene`。
+    * Open `zip-load-boot.scene`.
 
-        * 根節點上 `ZipLoader Component` 面板輸入專案原來的 `Start Scene` 名稱。
+        * In the ZipLoader component panel on the root node, enter the original name of the start scene.
 
 3. ZipLoader Component
 
-    * `zip-load-boot.scene` 中的 `ZipLoader` 會開始記錄遊戲啟動所用到 Assets 的下載 Url，並於下載流程加入檢查 Local Cache 是否存在所需 Asset，若有責讀取本地資源替代發出網路請求 。
+    * One of the purposes is to record the download URLs of the assets required for game startup. The sceond purpose is to inject local cache functionality before the original download process.
 
-    * 如何取得遊戲請求 Assets 紀錄?
+    * How to get the asset request records for the game?
 
-        * `Is Record Assets Url`預設 `true`，會在 CC 請求下載資源時記錄 Assets 的 Url。遊戲中按下 `"ALT + W"` 快捷鍵 (Debug Only)，可將記錄打印在 console 中。
+        * Set `Is Record Assets Url` to `true` in the ZipLoader inspector. This will record the URLs of every asset download request made by the engine. 
+
+        * During gameplay, press `ALT + W (Debug Only)` to print the record to the browser console.
 
             <p align="center"><img src="doc/img/console_log.png" width="450"></p>
         
-        * 透過複製、貼上至 `assetsUrlRecordList.json`，作為 Zip 打包資源的依據。
+        * Copy and paste the content into `assetsUrlRecordList.json`, which will serve as the basis for the Zip packing resources.
 
             <p align="center"><img src="doc/img/assetsUrlRecordList.png" width="450"></p>
 
-        * 可透過 ZipLoader 的 API `isRecordAssetsUrl = false` 來停止紀錄。
+        * Set `isRecordAssetsUrl` to `false` to stop recording.
 
-            一般來說，我們決定一個時間點為 "記錄斷點" 停止紀錄。在這之後遊戲已啟動，內容後續所需的資源 "下載/載入' 將復原 `"On Demind (用甚麼、拿甚麼)"`。
+            Generally, we set a specific point in time to stop recording, and the recorded data representes the startup resources for the game.
 
 
 ## Description of Download Modes
 
-一般來說，Web Game 啟動流程如下：
+Generally, the startup process for a Web Game is as follows:
 
 ```mermaid
 flowchart LR
