@@ -4,7 +4,7 @@
 
 [EN](/README.md) | *中文
 
-<p align="center"><img src="doc/img/store_banner.png" width="450"></p>
+<p align="center"><img src="doc/img/store_banner.png" width="256"></p>
 
 網頁遊戲的啟動速度直接影響用戶留存與轉化。除了 `"初始資源總大小"` 這一因素外，`"網路請求數量"` 也是一個不可忽視的關鍵，尤其在東南亞等網速及硬體較慢的地區。
 

@@ -4,7 +4,7 @@
 
 *EN | [中文](/README-CN.md)
 
-<p align="center"><img src="doc/img/store_banner.png" width="450"></p>
+<p align="center"><img src="doc/img/store_banner.png" width="256"></p>
 
 In H5 games, launch time is a critical factor influencing user retention and conversion. Besides the `total package size`, the `number of network requests` is another key factor, especially in regions like Southeast Asia, where internet speeds and hardware capabilities are often limited.
 
