@@ -119,9 +119,9 @@ flowchart LR
    style D fill:#eb3434
 ```
 
-* Insert a new scene, `zip-load-boot.scene`, into the original startup pipeline. This scene provides three key functionalities: injecting the Assets Local Cache, downloads ZIP files, and records the required asset URLs during  game startup.
+* Insert a new scene, `zip-load-boot.scene`, into the original startup pipeline. The `ZipLoader Component` in this scene provides three key functionalities: injecting the Assets Local Cache, downloads ZIP files, and records the required asset URLs during  game startup.
 
-* This method is flexible and customizable. Reducing network requests alone can boost startup speed by `20-39%` on mid- to low-end Android devices or slower networks.
+* This method is flexible and customizable. Reducing network requests alone can boost startup speed by `20-40%` on mid- to low-end Android devices or slower networks.
 
 ### Method 2：Download Zip At Index.html
 

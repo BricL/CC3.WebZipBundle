@@ -103,7 +103,7 @@ flowchart LR
 
 而本擴展將啟動遊戲所需的 `相關聯的資源 (Assets)` 打成一個或少量 ZIP 並下載，以減少網路請求。在中、低階安卓手機、網速不快的環境下，可提升遊戲啟動速度達 30+% 之多。提供的方法有以下兩種：
 
-### 方法1：zip-load-boot.scene 場景下載 (通用)
+### 方法1：場景下載 (zip-load-boot.scene) (通用)
 
 ```mermaid
 flowchart LR
@@ -117,11 +117,11 @@ flowchart LR
    style D fill:#eb3434
 ```
 
-* 在原流程 `起始場景 (Start Scene)` 前插入 `zip-load-boot.scene` 場景，該場景會對注入 Assets Local Cache 功能並啟動 Zip 包的下載。
+* 將新場景 `zip-load-boot.scene` 插入原啟動流程中。該場景中 `ZipLoader Component` 提供了三個關鍵功能：注入 Assets 本地快取、下載 ZIP 檔案以及遊戲啟動時記錄所需 Assets 的 URL。
 
-* 此方法通用且易於客製化，可依專案需求進行修改。單純降低網路請求數量，已足夠讓啟動速度在中、低階安卓、網速較低的環境快上個 `20 ~ 30%`。
+* 此方法通用且易於客製化，可依專案需求進行修改。單純降低網路請求數量，已足夠讓啟動速度在中、低階安卓、網速較低的環境快上個 `20-30%`。
 
-### 方法2：Download Zip At Index.html (偷下載時間)
+### 方法2：偷下載時間 (Download Zip At Index.html)
 
 ```mermaid
 flowchart LR
@@ -144,7 +144,7 @@ flowchart LR
 
 * 非同步下載 `Zip 檔案` 與 `遊戲引擎核心`，節省時間速度最快。
 
-* 這個方法偷到了下載CC引擎與引擎初始化時間，就實驗 [Cocos UI Example](https://github.com/cocos/cocos-example-ui) 數據來看可在快 `10 ~ 20%`：
+* 這個方法偷到了下載CC引擎與引擎初始化時間，就實驗數據來看可快 `20-30%` 在中、低階安卓、網速較低的環境上：
 
     | ZipBundle | Zip 數 | 瀏覽器 | 連線規格 | 網速 | 耗時啟動 | 網路請求
     | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -164,7 +164,7 @@ flowchart LR
 
 HTTP1.1 在 Chrome 下一個連線最多 6 各下載併發，當超過後續下載請求得排隊等待。
 
-我們用官方的 UI 範例 [Cocos UI Example](https://github.com/cocos/cocos-example-ui) 進行測試，透過不同 Select Pack Size 的設定，將啟動資源包分隔成 1各、3各、6各、12各 Zip 測試速度結果如下：
+我們用官方的 UI 範例 [Cocos UI Example](https://github.com/cocos/cocos-example-ui) 進行測試，透過不同 Select Pack Size 的設定，將啟動資源包分隔成 1各、3各、6各、12各 Zip 測試結果如下：
 
 | ZipBundle | Zip 數 | 瀏覽器 | 連線規格 | 網速 | 耗時啟動 | 網路請求
 | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -177,7 +177,7 @@ HTTP1.1 在 Chrome 下一個連線最多 6 各下載併發，當超過後續下�
 
 (*註：網速選擇 Fast 4G 主因是較接近整體平均網速環境，尤其在東南亞地區。*)
 
-從 12 各下載併發可觀察到當併發數達上限，後續的下載請求會排隊等待。若等待下載中有 CC 本體 (`_virtual_cc-8ed102a6.js`)，會更明顯導致啟動速度變慢，如下圖所示：
+從 12 各下載併發可觀察到當併發數達上限，後續下載請求進入排隊等待。若等待下載有 CC 本體 `_virtual_cc-8ed102a6.js`，會明顯導致啟動速度變慢，如下所示：
 
 <p align="center"><img src="doc/img/12zips_boost_testing_result.png" width="800"></p>
 
