@@ -97,11 +97,9 @@ flowchart LR
    E --> F(Game)
 ```
 
-* 解析執行第一個 `起始場景 (Start Scene)` 會把 `相關聯資源 (Assets)` 以 `"On Demind (用甚麼、拿甚麼)"` 的方式用到什麼下什麼，因此產生大量、零散的 `網路請求`。
+* All the initial assets associated with the start scene are downloaded on demand, resulting in a large number of scattered network requests.
 
-* 而本擴展就是將 `起始場景 (Start Scene)` 用到的 `相關聯的資源 (Assets)` 打成一個或少量 zip 包進行下載，減少網路請求。在中、低階安卓手機、網速不快的環境下，可提升遊戲啟動速度達 30+% 之多。
-
-擴展提供的方法有以下兩種：
+This extension bundles the assets for the Start Scene into one or a few zip files, cutting down on network requests. On mid- to low-end Android devices or slower internet, it can speed up game startup by over 30%. We provide two methods:
 
 ### Method 1: Using `zip-load-boot.scene` (General)
 
