@@ -63,6 +63,8 @@ The extension for Cocos Creator 3.x packages all resource files (e.g., PNG, JPG,
 
         * In the ZipLoader component panel on the root node, enter the original name of the start scene.
 
+    <p align="center"><img src="doc/img/asset_inspector.png" width="450"></p>
+
 3. ZipLoader Component
 
     * One of the purposes is to record the download URLs of the assets required for game startup. The sceond purpose is to inject local cache functionality before the original download process.

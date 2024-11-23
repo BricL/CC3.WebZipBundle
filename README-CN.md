@@ -55,11 +55,13 @@
 
 2. 在 Assets Panel 中會出現 web-zip-bundle 項目。
 
-    * 請在 Build Setting 中 `Included Scenes` 設定 `zip-load-boot.scene` 成專案的 `Start Scene`。
+    * 在 Build Setting 裡的 `Included Scenes`，設定 `zip-load-boot.scene` 為 `Start Scene`。
 
     * 開啟 `zip-load-boot.scene`。
 
-        * 根節點上 `ZipLoader Component` 面板輸入專案原來的 `Start Scene` 名稱。
+        * 於根節點 `ZipLoader Component` 面板，輸入專案原來的 `Start Scene` 名稱。
+
+    <p align="center"><img src="doc/img/asset_inspector.png" width="450"></p>
 
 3. ZipLoader Component
 
@@ -67,7 +69,9 @@
 
     * 如何取得遊戲請求 Assets 紀錄?
 
-        * `Is Record Assets Url`預設 `true`，會在 CC 請求下載資源時記錄 Assets 的 Url。遊戲中按下 `"ALT + W"` 快捷鍵 (Debug Only)，可將記錄打印在 console 中。
+        * `Is Record Assets Url`預設 `true`
+        
+            在 CC 請求下載 Assets 時記錄其 URLs。遊戲中透過 `"ALT + W"(Debug Only)`，可將記錄打印在瀏覽器的 console 中。
 
             <p align="center"><img src="doc/img/console_log.png" width="450"></p>
         
@@ -93,11 +97,9 @@ flowchart LR
    E --> F(Game)
 ```
 
-* 解析執行第一個 `起始場景 (Start Scene)` 會把 `相關聯資源 (Assets)` 以 `"On Demind (用甚麼、拿甚麼)"` 的方式用到什麼下什麼，因此產生大量、零散的 `網路請求`。
+* 遊戲啟動時會把 `相關聯資源 (Assets)` 以 "On Demind" 的方式用到什麼、下什麼，因而產生大量的網路請求。
 
-* 而本擴展就是將 `起始場景 (Start Scene)` 用到的 `相關聯的資源 (Assets)` 打成一個或少量 zip 包進行下載，減少網路請求。在中、低階安卓手機、網速不快的環境下，可提升遊戲啟動速度達 30+% 之多。
-
-擴展提供的方法有以下兩種：
+而本擴展將啟動遊戲所需的 `相關聯的資源 (Assets)` 打成一個或少量 ZIP 並下載，以減少網路請求。在中、低階安卓手機、網速不快的環境下，可提升遊戲啟動速度達 30+% 之多。提供的方法有以下兩種：
 
 ### 方法1：zip-load-boot.scene 場景下載 (通用)
 
