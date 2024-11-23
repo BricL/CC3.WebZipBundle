@@ -119,9 +119,9 @@ flowchart LR
    style D fill:#eb3434
 ```
 
-* 在原流程 `起始場景 (Start Scene)` 前插入 `zip-load-boot.scene` 場景，該場景會對注入 Assets Local Cache 功能並啟動 Zip 包的下載。
+* Insert a new scene, `zip-load-boot.scene`, into the original startup pipeline. This scene provides three key functionalities: injecting the Assets Local Cache, downloads ZIP files, and records the required asset URLs during  game startup.
 
-* 此方法通用且易於客製化，可依專案需求進行修改。單純降低網路請求數量，已足夠讓啟動速度在中、低階安卓、網速較低的環境快上個 `20 ~ 30%`。
+* This method is flexible and customizable. Reducing network requests alone can boost startup speed by `20-39%` on mid- to low-end Android devices or slower networks.
 
 ### Method 2：Download Zip At Index.html
 
@@ -144,9 +144,9 @@ flowchart LR
     style E fill:#eb3434
 ```
 
-* 非同步下載 `Zip 檔案` 與 `遊戲引擎核心`，節省時間速度最快。
+* Asynchronously downloading the ZIP files and game engine core saves the most time and offers the fastest speed.
 
-* 這個方法偷到了下載CC引擎與引擎初始化時間，就實驗 [Cocos UI Example](https://github.com/cocos/cocos-example-ui) 數據來看可在快 `10 ~ 20%`：
+* This method takes advantage of downloading the CC engine and initializing it simultaneously. Based on experiment data, it can speed up the process by 30–40% on mid- to low-end Android devices or slower networks.
 
     | ZipBundle | Number of Zips | Browser | Connection Type | Network Speed | Startup Time | Network Reqs
     | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -164,9 +164,9 @@ In the Build Settings, the "Select Pack Size" option allows you to split resourc
 
 ### Under HTTP1.1
 
-HTTP1.1 在 Chrome 下一個連線最多 6 各下載併發，當超過後續下載請求得排隊等待。
+In Chrome with HTTP1.1, a single connection supports up to 6 concurrent downloads. Any additional download requests will be queued.
 
-我們用官方的 UI 範例 [Cocos UI Example](https://github.com/cocos/cocos-example-ui) 進行測試，透過不同 Select Pack Size 的設定，將啟動資源包分隔成 1各、3各、6各、12各 Zip 測試速度結果如下：
+We tested different `Select Pack Size` settings using the official  [Cocos UI Example](https://github.com/cocos/cocos-example-ui). The initial assets were split into 1, 3, 6 and 12 ZIP files, with the results shown below:
 
 | ZipBundle | Number of Zips | Browser | Connection Type | Network Speed | Startup Time | Network Reqs
 | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -179,7 +179,7 @@ HTTP1.1 在 Chrome 下一個連線最多 6 各下載併發，當超過後續下�
 
 (*Note: Fast 4G simulation is used because it’s closer to real-world internet speeds, especially in Southeast Asia.*)
 
-從 12 各下載併發可觀察到當併發數達上限，後續的下載請求會排隊等待。若等待下載中有 CC 本體 (`_virtual_cc-8ed102a6.js`)，會更明顯導致啟動速度變慢，如下圖所示：
+The results show that when concurrent downloads reach the maximum of 12, any additional network requests will be queued. If `_virtual_cc-8ed102a6.js` from CC is among the queued requests, it can noticeably delay the startup time, as illustrated below:
 
 <p align="center"><img src="doc/img/12zips_boost_testing_result.png" width="800"></p>
 
