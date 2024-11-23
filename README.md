@@ -146,12 +146,12 @@ flowchart LR
 
 * 這個方法偷到了下載CC引擎與引擎初始化時間，就實驗 [Cocos UI Example](https://github.com/cocos/cocos-example-ui) 數據來看可在快 `10 ~ 20%`：
 
-    | ZipBundle | Zip 數 | 瀏覽器 | 連線規格 | 網速 | 耗時啟動 | 網路請求
+    | ZipBundle | Number of Zips | Browser | Connection Type | Network Speed | Startup Time | Network Reqs
     | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
-    | On 方法1 | 1 各 | Chrome | http1.1 | Fast 4G | 9.62秒 | 30 reqs |
-    | On 方法2 | 1 各 | Chrome | http1.1 | Fast 4G | 11.98秒 | 30 reqs |
+    | On 方法1 | 1 | Chrome | http1.1 | Fast 4G | 9.62s | 30 reqs |
+    | On 方法2 | 1 | Chrome | http1.1 | Fast 4G | 11.98s | 30 reqs |
     | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
-    | Off | 0 各 | Chrome | http1.1 | Fast 4G | 17.22秒 | 261 reqs |
+    | Off | 0 | Chrome | http1.1 | Fast 4G | 17.22s | 261 reqs |
 
 
 ## How to Determine the Number of Split Zip Files?
@@ -166,14 +166,14 @@ HTTP1.1 在 Chrome 下一個連線最多 6 各下載併發，當超過後續下�
 
 我們用官方的 UI 範例 [Cocos UI Example](https://github.com/cocos/cocos-example-ui) 進行測試，透過不同 Select Pack Size 的設定，將啟動資源包分隔成 1各、3各、6各、12各 Zip 測試速度結果如下：
 
-| ZipBundle | Zip 數 | 瀏覽器 | 連線規格 | 網速 | 耗時啟動 | 網路請求
+| ZipBundle | Number of Zips | Browser | Connection Type | Network Speed | Startup Time | Network Reqs
 | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
-| On | 1 各 | Chrome | http1.1 | Fast 4G | 9.62秒 | 30 reqs |
-| On | 3 各 | Chrome | http1.1 | Fast 4G | 11.40秒 | 32 reqs |
-| On | 6 各 | Chrome | http1.1 | Fast 4G | 12.36秒 | 35 reqs |
-| On | 12 各 | Chrome | http1.1 | Fast 4G | 12.47秒 | 41 reqs |
+| On | 1 | Chrome | http1.1 | Fast 4G | 9.62s | 30 reqs |
+| On | 3 | Chrome | http1.1 | Fast 4G | 11.40s | 32 reqs |
+| On | 6 | Chrome | http1.1 | Fast 4G | 12.36s | 35 reqs |
+| On | 12 | Chrome | http1.1 | Fast 4G | 12.47s | 41 reqs |
 | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
-| Off | 0 各 | Chrome | http1.1 | Fast 4G | 17.22秒 | 261 reqs |
+| Off | 0 | Chrome | http1.1 | Fast 4G | 17.22s | 261 reqs |
 
 (*Note: Fast 4G simulation is used because it’s closer to real-world internet speeds, especially in Southeast Asia.*)
 
