@@ -41,7 +41,7 @@ The extension for Cocos Creator 3.x packages all resource files (e.g., PNG, JPG,
           
         * The `assetsUrlRecordList.json` contains a record of the assets required to launch the game. During the build process, all assets listed in this file will be packaged into a ZIP file. 
         
-        The contents of `assetsUrlRecordList.json` need to be manually updated. Refer to the ZipLoader documentation for details on `"How to get the assets required to launch the game"`.
+        The contents of `assetsUrlRecordList.json` need to be manually added. Refer to the ZipLoader documentation for details on `"How to get the assets required to launch the game"`.
 
    * Download ZIP at index.html：Start downloading the ZIP package in `index.html`.
 
