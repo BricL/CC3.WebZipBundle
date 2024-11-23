@@ -150,8 +150,8 @@ flowchart LR
 
     | ZipBundle | Number of Zips | Browser | Connection Type | Network Speed | Startup Time | Network Reqs
     | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
-    | On 方法1 | 1 | Chrome | http1.1 | Fast 4G | 9.62s | 30 reqs |
-    | On 方法2 | 1 | Chrome | http1.1 | Fast 4G | 11.98s | 30 reqs |
+    | On (Method 1) | 1 | Chrome | http1.1 | Fast 4G | 9.62s | 30 reqs |
+    | On (Method 2) | 1 | Chrome | http1.1 | Fast 4G | 11.98s | 30 reqs |
     | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
     | Off | 0 | Chrome | http1.1 | Fast 4G | 17.22s | 261 reqs |
 

@@ -148,8 +148,8 @@ flowchart LR
 
     | ZipBundle | Zip 數 | 瀏覽器 | 連線規格 | 網速 | 耗時啟動 | 網路請求
     | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
-    | On 方法1 | 1 各 | Chrome | http1.1 | Fast 4G | 9.62秒 | 30 reqs |
-    | On 方法2 | 1 各 | Chrome | http1.1 | Fast 4G | 11.98秒 | 30 reqs |
+    | On (方法1) | 1 各 | Chrome | http1.1 | Fast 4G | 9.62秒 | 30 reqs |
+    | On (方法2) | 1 各 | Chrome | http1.1 | Fast 4G | 11.98秒 | 30 reqs |
     | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
     | Off | 0 各 | Chrome | http1.1 | Fast 4G | 17.22秒 | 261 reqs |
 
