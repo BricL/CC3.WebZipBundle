@@ -187,7 +187,7 @@ HTTP2.0 透過單一 TCP 連線，理論上可以超過 6 個下載併發數非�
 
 ### Summary
 
-單一連線裡下載併發數上限決定切分初始資源包的數量，合適的設定為：*`切割數量 < 併發數上限`*
+The max number of concurrent downloads in a single connection decides how many splits the initial resource package should have. A good rule of thumb is: number of splits < max concurrent downloads.
 
 ## DEMO (Host on itch.io)
 
