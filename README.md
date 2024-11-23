@@ -158,9 +158,9 @@ flowchart LR
 
 ## How to Determine the Number of Split Zip Files?
 
-在 Build Setting 設定中有選項 `Select Pack Size` 可設定分包大小，將資源切割成多個 zip 包。但...
+In the Build Settings, the "Select Pack Size" option allows you to split resources into multiple zip files. However...
 
-*`“將初始資源切割成越多、越小各zip包，下載速度就越快？”`*
+*`"Does splitting the initial resources into more, smaller zip files lead to faster download speeds ?"`*
 
 ### Under HTTP1.1
 
