@@ -175,7 +175,7 @@ HTTP1.1 在 Chrome 下一個連線最多 6 各下載併發，當超過後續下�
 | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
 | Off | 0 各 | Chrome | http1.1 | Fast 4G | 17.22秒 | 261 reqs |
 
-(*註：網速選擇 Fast 4G 主因是較接近整體平均網速環境，尤其在東南亞地區。*)
+(*Note: Fast 4G simulation is used because it’s closer to real-world internet speeds, especially in Southeast Asia.*)
 
 從 12 各下載併發可觀察到當併發數達上限，後續的下載請求會排隊等待。若等待下載中有 CC 本體 (`_virtual_cc-8ed102a6.js`)，會更明顯導致啟動速度變慢，如下圖所示：
 
@@ -183,11 +183,11 @@ HTTP1.1 在 Chrome 下一個連線最多 6 各下載併發，當超過後續下�
 
 ### HTTP2
 
-HTTP2.0 透過單一 TCP 連線，理論上可以超過 6 個下載併發數非常的多。但實際還是看 Host Server 設定，決定一個連線能同時併發多少個下載請求。
+In theory, a single TCP connection can handle more than 6 concurrent downloads. However, in practice, this depends on the host server's configuration.
 
 ### Summary
 
-The max number of concurrent downloads in a single connection decides how many splits the initial resource package should have. A good rule of thumb is: number of splits < max concurrent downloads.
+The max number of concurrent downloads in a single connection decides how many splits the initial resource package should have. A good rule of thumb is: `"number of splits < max concurrent downloads"`.
 
 ## DEMO (Host on itch.io)
 
