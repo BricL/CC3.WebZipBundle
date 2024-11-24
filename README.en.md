@@ -1,6 +1,6 @@
-網頁遊戲的啟動速度直接影響用戶留存與轉化。除了 `"初始資源總大小"` 這一因素外，`"網路請求數量"` 也是一個不可忽視的關鍵，尤其在東南亞等網速及硬體較慢的地區。
+In H5 games, launch time is a critical factor influencing user retention and conversion. Besides the `total package size`, the `number of network requests` is another key factor, especially in regions like Southeast Asia, where internet speeds and hardware capabilities are often limited.
 
-此擴展將 web 平台 啟動時所需的資源（如：PNG、JPG、ASTC、WebP、JSON、CCONB）打包為 zip 檔，從而減少啟動時的網路請求數量，加快遊戲載入速度。
+The extension for Cocos Creator 3.x packages all resource files (e.g., PNG, JPG, ASTC, WebP, JSON, CCOBN) into a ZIP file to reduce network requests and speed up the game's loading time.
 
 ## 如何使用
 
