@@ -35,7 +35,7 @@
 
 ## 如何使用
 
-1. 至 `Build Setting` 下拉找到 web-zip-bundle 選項。
+1. 至 `Build Setting` 新增 `New Build Task` 並選擇平台 `WebMobile`。至 Panel 中下拉找到 web-zip-bundle 選項。
 
    * Enable：啟動或關閉功能。
 

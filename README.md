@@ -31,11 +31,12 @@ The extension for Cocos Creator 3.x packages all resource files (e.g., PNG, JPG,
 
    <p align="center"><img src="doc/img/extension_manager.png" width="450"></p>
 
+
 (*Note：You can also check out the official docs for installation instrucctions [【擴展 安装与分享】](https://docs.cocos.com/creator/3.8/manual/zh/editor/extension/install.html) 。*)
 
 ## How to Use
 
-1. Go to `Build Setting` and select the `web-zip-bundle` option from the dropdown.
+1. Go to `Build Setting` and add a `New Build Task` by selecting the platform as `WebMobile`. Then, choose the `web-zip-bundle` option from the dropdown.
 
    * Enable：Turn on/off the extension
 
