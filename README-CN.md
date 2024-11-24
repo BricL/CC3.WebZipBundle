@@ -6,84 +6,86 @@
 
 <p align="center"><img src="doc/img/store_banner.png" width="256"></p>
 
-網頁遊戲的啟動速度直接影響用戶留存與轉化。除了 `"初始資源總大小"` 這一因素外，`"網路請求數量"` 也是一個不可忽視的關鍵，尤其在東南亞等網速及硬體較慢的地區。
+网页游戏的启动速度直接影响用户留存与转化。除了`"初始资源总大小"`这一因素外，`"网络请求数量"`也是一个不可忽视的关键，尤其在东南亚等网速及硬件较慢的地区。
 
-此擴展將 web 平台 啟動時所需的資源（如：PNG、JPG、ASTC、WebP、JSON、CCONB）打包為 zip 檔，從而減少啟動時的網路請求數量，加快遊戲載入速度。
+该扩展将 web 平台启动时所需的资源（如：PNG、JPG、ASTC、WebP、JSON、CCONB）打包为 zip 文件，从而减少启动时的网络请求数量，加快游戏加载速度。
 
-(*註：實踐思路來自 Cocos 中文論壇 `haiyoucuv` 分享的文章 [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256)。*)
+*（注：实现思路来自 Cocos 中文论坛 `haiyoucuv` 分享的文章  [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256)。）*
 
-## 安裝方法
+## 安装方法
 
-1. 下載專案成 zip。
+1. 下载项目成 ZIP 文件。
 
-2. 解壓縮後將內容複製到 `${your_project_path}/extensions/web-zip-bundle`。
+2. 解压后将内容复制到 `${your_project_path}/extensions/web-zip-bundle`。
 
-3. 開啟終端機
-     * `cd ${your_project_path}/` 輸入 `npm install jszip`，安裝 jszip。
+3. 打开终端
+     * 输入 `cd ${your_project_path}/`，安装 jszip `npm install jszip`。
 
-     * `cd ${your_project_path}/extensions/web-zip-bundle`
+     * 输入 `cd ${your_project_path}/extensions/web-zip-bundle`
 
-         * 輸入 `npm install`，安裝擴展相依套件。
+         * 安装扩展依赖包 `npm install`
 
-         * 輸入 `npm run build`，建置擴展。
+         * 构建扩展 `npm run build`
 
-4. 至 Editor menu `Extension -> Extension Manager -> Installed` 啟動 web-zip-bundle。
+4. 到 Editor 菜单 Extension -> Extension Manager -> Installed 启用 `web-zip-bundle`。
 
    <p align="center"><img src="doc/img/extension_manager.png" width="450"></p>
 
-(*註：安裝方法也可參考官方文件 [【擴展 安装与分享】](https://docs.cocos.com/creator/3.8/manual/zh/editor/extension/install.html) 。*)
+    (*注：安装方法也可参考官方文档 [【扩展 安装与分享】](https://docs.cocos.com/creator/3.8/manual/zh/editor/extension/install.html) 。*)
 
 ## 如何使用
 
-1. 至 `Build Setting` 新增 `New Build Task` 並選擇平台 `WebMobile`。至 Panel 中下拉找到 web-zip-bundle 選項。
+1. 到 Build Setting 新增 `New Build Task` 并选择平台 `WebMobile`。到 Panel 中下拉找到 `web-zip-bundle` 选项。
 
-   * Enable：啟動或關閉功能。
+   * Enable：启用或关闭功能。
 
-        * 啟動後，在專案資料夾下自動生成資料夾 `${your_project_path}/wzb-build-config` 及 `assetsUrlRecordList.json` 。
+        * 启用后，在项目文件夹下自动生成文件夹 `${your_project_path}/wzb-build-config` 和 `assetsUrlRecordList.json`。
           
-        * `assetsUrlRecordList.json` 內容為啟動遊戲下載所需 Assets 紀錄，建置專案時會依此名單將 Assets 打包成 Zip。這部分需手動貼入，參閱 `ZipLoader` 說明 `"如何取得 CC 啟動遊戲時所需要的 Assets Url"`。
+        * `assetsUrlRecordList.json` 的内容为游戏启动下载所需 Assets URLs 记录，项目构建时会根据此清单打包成 Assets  成 ZIP 文件。
+        
+            * 内容部分需要手动粘贴，参考 ZipLoader 说明 "如何获取 CC 启动游戏时所需的 Assets Url"。
 
-   * Download zip at index.html：將啟動下載 Zip 包的時間提前至 `index.html`
+   * Download zip at index.html：将启动下载 Zip 包的时间提前到 `index.html`。
 
-        * 選項預設為 `false`
+        * 选项默认值为 `false`
 
-        * 將下載 Zip 包請求提前至 `index.html` 並透過非同步載入達到與 CC 引擎下載/初始化同步進行，進一步縮減下載時間。
+        * 启用后会将下载 ZIP 文件的请求提前到 `index.html` 中啟動，通过异步加载与 CC 引擎下载/初始化同步进行，进一步缩短加载时间。  
 
-        * 若要對下載是否完成進行確認，可 `await ZipLoader.getDownloadZipPromise()`。
+        * 要确认下载是否完成，可 `await ZipLoader.getDownloadZipPromise()`。
    
-   * Select Pack Size (選擇zip分割大小)：設定單一包 zip 大小的約略上限，超過就分包。
+   * Select Pack Size (选择 zip 分割大小)：设置单个 ZIP 文件大小上限，超过则分包。
 
    <p align="center"><img src="doc/img/build_setting.png" width="450"></p>
 
-2. 在 Assets Panel 中會出現 web-zip-bundle 項目。
+2. 在 Assets 面板中会有 web-zip-bundle 项目。
 
-    * 在 Build Setting 裡的 `Included Scenes`，設定 `zip-load-boot.scene` 為 `Start Scene`。
+    * 於 Build Setting 的 `Included Scenes` 设置 `zip-load-boot.scene` 为启动场景（Start Scene）。
 
-    * 開啟 `zip-load-boot.scene`。
+    * 打开 `zip-load-boot.scene`。
 
-        * 於根節點 `ZipLoader Component` 面板，輸入專案原來的 `Start Scene` 名稱。
+        * 於在根节点的 `ZipLoader` 组件面板中，填写项目原本的启动场景名称。
 
     <p align="center"><img src="doc/img/asset_inspector.png" width="450"></p>
 
-3. ZipLoader Component
+3. ZipLoader 组件
 
-    * `zip-load-boot.scene` 中的 `ZipLoader` 會開始記錄遊戲啟動所用到 Assets 的下載 Url，並於下載流程加入檢查 Local Cache 是否存在所需 Asset，若有責讀取本地資源替代發出網路請求 。
+    * 组件其中一个目的是记录游戏启动所需资源的下载 URL。另一个目的是在原始下载流程之前注入本地缓存功能。
 
-    * 如何取得遊戲請求 Assets 紀錄?
+    * 如何获取游戏请求的 Assets 记录？
 
-        * `Is Record Assets Url`預設 `true`
+        * `Is Record Assets Url` 为 `true`，在 CC 请求下载 Assets 时记录其 URLs。 
         
-            在 CC 請求下載 Assets 時記錄其 URLs。遊戲中透過 `"ALT + W"(Debug Only)`，可將記錄打印在瀏覽器的 console 中。
+        * 游戏运行时按下 `ALT + W`（仅限 Debug 模式），可以将记录打印到浏览器的控制台（console）。
 
             <p align="center"><img src="doc/img/console_log.png" width="450"></p>
         
-        * 透過複製、貼上至 `assetsUrlRecordList.json`，作為 Zip 打包資源的依據。
+        * 通过复制并粘贴记录到 `assetsUrlRecordList.json`，作为打包资源 Zip 文件的依据。
 
             <p align="center"><img src="doc/img/assetsUrlRecordList.png" width="450"></p>
 
-        * 可透過 ZipLoader 的 API `isRecordAssetsUrl = false` 來停止紀錄。
+        * 可通过调用 ZipLoader 组件 API `isRecordAssetsUrl = false` 停止记录。
 
-            一般來說，我們決定一個時間點為 "記錄斷點" 停止紀錄。在這之後遊戲已啟動，內容後續所需的資源 "下載/載入' 將復原 `"On Demind (用甚麼、拿甚麼)"`。
+            一般来说，我们会选择一个时间点作为 “记录断点” 来停止记录。在这之后，游戏已经启动，后续内容所需的资源将恢复为 “按需加载”。
 
 
 ## 下載模式說明
