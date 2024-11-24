@@ -2,10 +2,10 @@ In H5 games, launch time is a critical factor influencing user retention and con
 
 The extension for Cocos Creator 3.x packages all resource files (e.g., PNG, JPG, ASTC, WebP, JSON, CCOBN) into a ZIP file to reduce network requests and speed up the game's loading time.
 
-## 如何使用
+## How to Use
 
-請參閱 Github [CC3.WebZipBundle](https://github.com/BricL/CC3.WebZipBundle)
+Please refer to the GitHub repository [CC3.WebZipBundle](https://github.com/BricL/CC3.WebZipBundle)
 
-## DEMO 專案
+## DEMO Project
 
-請參考 Github [CC3.WebZipBundle.DemoProject](https://github.com/BricL/CC3.WebZipBundle.DemoProject)
+Please refer to the GitHub repository [CC3.WebZipBundle.DemoProject](https://github.com/BricL/CC3.WebZipBundle.DemoProject)
