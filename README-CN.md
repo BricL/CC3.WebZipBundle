@@ -163,9 +163,9 @@ flowchart LR
 
 *`“将初始资源切割成越多、越小的 zip 包，下载速度就越快？”`*
 
-### 在 HTTP1.1 下
+### HTTP1.1
 
-在 HTTP1.1 下，Chrome 浏览器对同一域名的最大并发连接数限制为 6 个。当下载请求超过 6 个时，后续的下载请求会排队等待，直到有空闲连接可以处理。
+HTTP1.1 下，Chrome 浏览器对同一域名的最大并发连接数限制为 6 个。当下载请求超过 6 个时，后续的下载请求会排队等待，直到有空闲连接可以处理。
 
 我们使用官方的 UI 示例 [Cocos UI Example](https://github.com/cocos/cocos-example-ui) 进行测试，通过不同的 `Select Pack Size` 设置，将启动资源包分隔成 1 个、3 个、6 个、12 个 Zip 包，测试结果如下：
 
@@ -184,7 +184,7 @@ flowchart LR
 
 <p align="center"><img src="doc/img/12zips_boost_testing_result.png" width="800"></p>
 
-### HTTP2 呢?
+### HTTP2
 
 HTTP2.0 通过单一 TCP 连接，理论上可以支持超过 6 个的下载并发数，能够实现更多的并发请求。但实际情况仍然取决于 Host Server 的设置，决定一个连接能同时并发多少个下载请求。
 
