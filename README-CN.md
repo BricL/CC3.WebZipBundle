@@ -105,7 +105,7 @@ flowchart LR
 
 本扩展将启动游戏所需 `相关联 Assets` 打包成一个或少量的 ZIP 文件并进行下载，以减少网络请求。在中低端安卓手机和网络不快的环境下，可提升游戏启动速度超过 30%。提供的方法有以下两种：
 
-### 方法1：場景下載 (zip-load-boot.scene) (通用)
+### 方法 1：zip-load-boot.scene (較通用)
 
 ```mermaid
 flowchart LR
@@ -119,11 +119,12 @@ flowchart LR
    style D fill:#eb3434
 ```
 
-* 將新場景 `zip-load-boot.scene` 插入原啟動流程中。該場景中 `ZipLoader Component` 提供了三個關鍵功能：注入 Assets 本地快取、下載 ZIP 檔案以及遊戲啟動時記錄所需 Assets 的 URL。
+* 将新场景 `zip-load-boot.scene` 插入原启动流程中。该场景中的 `ZipLoader` 组件提供了三个关键功能：注入资源本地缓存、下载 ZIP 文件以及在游戏启动时记录所需资源的 URL。
 
-* 此方法通用且易於客製化，可依專案需求進行修改。單純降低網路請求數量，已足夠讓啟動速度在中、低階安卓、網速較低的環境快上個 `20-30%`。
+* 此方法通用且易于定制，可以根据项目需求进行修改。单纯降低网络请求数量，已足够让启动速度在中低端安卓设备和网速较慢的环境中提升约 `20-30%`。
 
-### 方法2：偷下載時間 (Download Zip At Index.html)
+
+### 方法 2：Download Zip At Index.html (偷下载时间)
 
 ```mermaid
 flowchart LR
@@ -144,11 +145,11 @@ flowchart LR
     style E fill:#eb3434
 ```
 
-* 非同步下載 `Zip 檔案` 與 `遊戲引擎核心`，節省時間速度最快。
+* 通过异步下载 `Zip 文件` 和 `游戏引擎核心`，节省时间，从而实现最快的启动速度。
 
-* 這個方法偷到了下載CC引擎與引擎初始化時間，就實驗數據來看可快 `20-30%` 在中、低階安卓、網速較低的環境上：
+* 这个方法通过 “偷” 取下载 CC 引擎和引擎初始化时间，根据实验数据，在中低端安卓设备和网速较慢的环境下，启动速度提升约 `30-40%`。
 
-    | ZipBundle | Zip 數 | 瀏覽器 | 連線規格 | 網速 | 耗時啟動 | 網路請求
+    | ZipBundle | Zip 数 | 浏览器 | 连接规格 | 网速 | 耗时启动 | 网络请求 |
     | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
     | On (方法1) | 1 各 | Chrome | http1.1 | Fast 4G | 9.62秒 | 30 reqs |
     | On (方法2) | 1 各 | Chrome | http1.1 | Fast 4G | 11.98秒 | 30 reqs |
@@ -156,19 +157,19 @@ flowchart LR
     | Off | 0 各 | Chrome | http1.1 | Fast 4G | 17.22秒 | 261 reqs |
 
 
-## 如何決定 Zip 資源包的切割數量?
+## 如何决定 Zip 资源包的切割数量？
 
-在 Build Setting 設定中有選項 `Select Pack Size` 可設定分包大小，將資源切割成多個 zip 包。但...
+在 Build Setting 设置中有选项 `Select Pack Size` 可以设置分包大小，将资源切割成多个 zip 包。但是...
 
-*`“將初始資源切割成越多、越小各zip包，下載速度就越快？”`*
+*`“将初始资源切割成越多、越小的 zip 包，下载速度就越快？”`*
 
 ### 在 HTTP1.1 下
 
-HTTP1.1 在 Chrome 下一個連線最多 6 各下載併發，當超過後續下載請求得排隊等待。
+在 HTTP1.1 下，Chrome 浏览器对同一域名的最大并发连接数限制为 6 个。当下载请求超过 6 个时，后续的下载请求会排队等待，直到有空闲连接可以处理。
 
-我們用官方的 UI 範例 [Cocos UI Example](https://github.com/cocos/cocos-example-ui) 進行測試，透過不同 Select Pack Size 的設定，將啟動資源包分隔成 1各、3各、6各、12各 Zip 測試結果如下：
+我们使用官方的 UI 示例 [Cocos UI Example](https://github.com/cocos/cocos-example-ui) 进行测试，通过不同的 `Select Pack Size` 设置，将启动资源包分隔成 1 个、3 个、6 个、12 个 Zip 包，测试结果如下：
 
-| ZipBundle | Zip 數 | 瀏覽器 | 連線規格 | 網速 | 耗時啟動 | 網路請求
+| ZipBundle | Zip 数 | 浏览器 | 连接规格 | 网速 | 耗时启动 | 网络请求 |
 | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
 | On | 1 各 | Chrome | http1.1 | Fast 4G | 9.62秒 | 30 reqs |
 | On | 3 各 | Chrome | http1.1 | Fast 4G | 11.40秒 | 32 reqs |
@@ -177,19 +178,20 @@ HTTP1.1 在 Chrome 下一個連線最多 6 各下載併發，當超過後續下�
 | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
 | Off | 0 各 | Chrome | http1.1 | Fast 4G | 17.22秒 | 261 reqs |
 
-(*註：網速選擇 Fast 4G 主因是較接近整體平均網速環境，尤其在東南亞地區。*)
+(*注：选择网速为 Fast 4G 的主要原因是较接近整体平均网速环境，尤其在东南亚地区。*)
 
-從 12 各下載併發可觀察到當併發數達上限，後續下載請求進入排隊等待。若等待下載有 CC 本體 `_virtual_cc-8ed102a6.js`，會明顯導致啟動速度變慢，如下所示：
+从 12 个下载并发中可以观察到，当并发数达到上限时，后续的下载请求会进入排队等待。如果等待下载包含 CC 本体 `_virtual_cc.js`，会明显导致启动速度变慢，如下所示：
 
 <p align="center"><img src="doc/img/12zips_boost_testing_result.png" width="800"></p>
 
 ### HTTP2 呢?
 
-HTTP2.0 透過單一 TCP 連線，理論上可以超過 6 個下載併發數非常的多。但實際還是看 Host Server 設定，決定一個連線能同時併發多少個下載請求。
+HTTP2.0 通过单一 TCP 连接，理论上可以支持超过 6 个的下载并发数，能够实现更多的并发请求。但实际情况仍然取决于 Host Server 的设置，决定一个连接能同时并发多少个下载请求。
 
-### 小結
+### 小结
 
-單一連線裡下載併發數上限決定切分初始資源包的數量，合適的設定為：*`切割數量 < 併發數上限`*
+单一连接中的下载并发数上限决定了初始资源包切分的数量，合适的设置是：*`切割数量 < 并发数上限`*。
+
 
 ## DEMO (Host on itch.io)
 
@@ -204,10 +206,9 @@ HTTP2.0 透過單一 TCP 連線，理論上可以超過 6 個下載併發數非�
 
 * v1.0.0
 
-    * 第一個可用版本
+    * 第一个可用版本
 
-
-## 參考文獻
+## 参考文献
 
 * [WebZipBundle Demo Project](https://github.com/BricL/CC3.WebZipBundle.DemoProject)
 
