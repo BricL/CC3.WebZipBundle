@@ -150,10 +150,10 @@ flowchart LR
 * According to experimental data, startup speed improves by about 30-40% on low- to mid-range Android devices or in slow network environments.
 
     | ZipBundle | Number of Zips | Browser | Connection Type | Network Speed | Startup Time | Network Reqs
-    | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+    | - | - | - | - | - | - | - |
     | On (Method 1) | 1 | Chrome | http1.1 | Fast 4G | 9.62s | 30 reqs |
     | On (Method 2) | 1 | Chrome | http1.1 | Fast 4G | 11.98s | 30 reqs |
-    | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+    | --- | --- | --- | --- | --- | --- | --- |
     | Off | 0 | Chrome | http1.1 | Fast 4G | 17.22s | 261 reqs |
 
 
@@ -170,12 +170,12 @@ In Chrome with HTTP1.1, a single connection supports up to 6 concurrent download
 We tested different `Select Pack Size` settings using the official  [Cocos UI Example](https://github.com/cocos/cocos-example-ui). The initial assets were split into 1, 3, 6 and 12 ZIP files, with the results shown below:
 
 | ZipBundle | Number of Zips | Browser | Connection Type | Network Speed | Startup Time | Network Reqs
-| ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| - | - | - | - | - | - | - |
 | On | 1 | Chrome | http1.1 | Fast 4G | 9.62s | 30 reqs |
 | On | 3 | Chrome | http1.1 | Fast 4G | 11.40s | 32 reqs |
 | On | 6 | Chrome | http1.1 | Fast 4G | 12.36s | 35 reqs |
 | On | 12 | Chrome | http1.1 | Fast 4G | 12.47s | 41 reqs |
-| ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| --- | --- | --- | --- | --- | --- | --- |
 | Off | 0 | Chrome | http1.1 | Fast 4G | 17.22s | 261 reqs |
 
 (*Note: Fast 4G simulation is used because it’s closer to real-world internet speeds, especially in Southeast Asia.*)
