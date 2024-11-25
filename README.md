@@ -120,9 +120,9 @@ flowchart LR
    style D fill:#eb3434
 ```
 
-* Insert a new scene, `zip-load-boot.scene`, into the original startup pipeline. The `ZipLoader Component` in this scene provides three key functionalities: injecting the Assets Local Cache, downloads ZIP files, and records the required asset URLs during  game startup.
+* Insert the new scene `zip-load-boot.scene` into the original startup process. The `ZipLoader` component in this scene handles downloading ZIP files and injecting a local caching mechanism for resources. Once completed, the original startup scene (Start Scene) will be launched.  
 
-* This method is flexible and customizable. Reducing network requests alone can boost startup speed by `20-40%` on mid- to low-end Android devices or slower networks.
+* This method is general and easy to customize based on project requirements. Simply reducing the number of network requests is sufficient to boost startup speed by about `20-30%` on low- to mid-range Android devices or in slow network environments.
 
 ### Method 2：Download Zip At Index.html
 
@@ -145,9 +145,9 @@ flowchart LR
     style E fill:#eb3434
 ```
 
-* Asynchronously downloading the ZIP files and game engine core saves the most time and offers the fastest speed.
+* In the game's `index.html`, ZIP files are downloaded asynchronously in advance, parallel to the engine core downloads, saving time and achieving faster startup.  
 
-* This method takes advantage of downloading the CC engine and initializing it simultaneously. Based on experiment data, it can speed up the process by 30–40% on mid- to low-end Android devices or slower networks.
+* According to experimental data, startup speed improves by about 30-40% on low- to mid-range Android devices or in slow network environments.
 
     | ZipBundle | Number of Zips | Browser | Connection Type | Network Speed | Startup Time | Network Reqs
     | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
