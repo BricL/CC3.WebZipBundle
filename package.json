@@ -2,7 +2,7 @@
     "$schema": "./@types/schema/package/index.json",
     "package_version": 2,
     "name": "web-zip-bundle",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "author": "ericlin09@gmail.com",
     "editor": ">=3.8.0",
     "scripts": {
