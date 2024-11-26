@@ -15,9 +15,9 @@ The extension for Cocos Creator 3.x packages all resource files (e.g., PNG, JPG,
 
 ## DEMO (Host on itch.io)
 
-* [Enable-ziploader](https://bricl.itch.io/cc3webzipbundledemo)
+* [Enable-ZipLoader](https://bricl.itch.io/cc3webzipbundledemo)
 
-* [Disable-Ziploader](https://bricl.itch.io/cc3webzipbundledemo-disable-ziploader)
+* [Disable-ZipLoader](https://bricl.itch.io/cc3webzipbundledemo-disable-ziploader)
 
 <p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
 
