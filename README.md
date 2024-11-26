@@ -12,6 +12,15 @@ The extension for Cocos Creator 3.x packages all resource files (e.g., PNG, JPG,
 
 (*Note: Thie implementation is inspired by an article shared by `haiyoucuv` on the Cocos Chinese forum: [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256).*)
 
+
+## DEMO (Host on itch.io)
+
+* [Enable-ziploader](https://bricl.itch.io/cc3webzipbundledemo)
+
+* [Disable-Ziploader](https://bricl.itch.io/cc3webzipbundledemo-disable-ziploader)
+
+<p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
+
 ## Installation
 
 1. Download ZIP package from github.
@@ -191,14 +200,6 @@ In theory, a single TCP connection can handle more than 6 concurrent downloads. 
 ### Summary
 
 The max number of concurrent downloads in a single connection decides how many splits the initial resource package should have. A good rule of thumb is: `"number of splits < max concurrent downloads"`.
-
-## DEMO (Host on itch.io)
-
-* [Enable-ziploader](https://bricl.itch.io/cc3webzipbundledemo)
-
-* [Disable-Ziploader](https://bricl.itch.io/cc3webzipbundledemo-disable-ziploader)
-
-<p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
 
 
 ## References
