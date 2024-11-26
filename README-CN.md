@@ -202,12 +202,6 @@ HTTP2.0 通过单一 TCP 连接，理论上可以支持超过 6 个的下载并�
 <p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
 
 
-## 版本
-
-* v1.0.0
-
-    * 第一个可用版本
-
 ## 参考文献
 
 * [WebZipBundle Demo Project](https://github.com/BricL/CC3.WebZipBundle.DemoProject)
