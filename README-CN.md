@@ -12,6 +12,16 @@
 
 *（注：实现思路来自 Cocos 中文论坛 `haiyoucuv` 分享的文章  [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256)。）*
 
+
+## DEMO (Host on itch.io)
+
+* [Enable-ziploader](https://bricl.itch.io/cc3webzipbundledemo)
+
+* [Disable-Ziploader](https://bricl.itch.io/cc3webzipbundledemo-disable-ziploader)
+
+<p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
+
+
 ## 安装方法
 
 1. 下载项目成 ZIP 文件。
@@ -191,15 +201,6 @@ HTTP2.0 通过单一 TCP 连接，理论上可以支持超过 6 个的下载并�
 ### 小结
 
 单一连接中的下载并发数上限决定了初始资源包切分的数量，合适的设置是：*`切割数量 < 并发数上限`*。
-
-
-## DEMO (Host on itch.io)
-
-* [Enable-ziploader](https://bricl.itch.io/cc3webzipbundledemo)
-
-* [Disable-Ziploader](https://bricl.itch.io/cc3webzipbundledemo-disable-ziploader)
-
-<p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
 
 
 ## 参考文献
