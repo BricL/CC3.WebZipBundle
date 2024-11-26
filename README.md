@@ -201,13 +201,6 @@ The max number of concurrent downloads in a single connection decides how many s
 <p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
 
 
-## Versions
-
-* v1.0.0
-
-    * The First Available Version
-
-
 ## References
 
 * [WebZipBundle Demo Project](https://github.com/BricL/CC3.WebZipBundle.DemoProject)
