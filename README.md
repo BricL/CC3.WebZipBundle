@@ -10,6 +10,8 @@ In H5 games, launch time is a critical factor influencing user retention and con
 
 The extension for Cocos Creator 3.x packages all resource files (e.g., PNG, JPG, ASTC, WebP, JSON, CCOBN) into a ZIP file to reduce network requests and speed up the game's loading time.
 
+>"Don’t just pass by, give it a try—hit a star and show your support!"
+
 *(Note：If you have any feedback on the plugin, please go to [Cocos 中文论坛](https://forum.cocos.org/t/topic/163849))*
 
 (*Note: Thie implementation is inspired by an article shared by `haiyoucuv` on the Cocos Chinese forum: [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256).*)
