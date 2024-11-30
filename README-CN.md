@@ -15,12 +15,16 @@
 
 ## DEMO (Host on itch.io)
 
+<div align="center">
+
 | ZipBundle | Zip 数 | 浏览器 | 连接规格 | 网速 | 耗时启动 | 网络请求 |
 | - | - | - | - | - | - | - |
 | On (Method 1) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">9.62s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
 | On (Method 2) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">11.98s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
 | --- | --- | --- | --- | --- | --- | --- |
 | Off | 0 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: red;">17.22s</span> | <span style="font-weight: bold; color: red;">261 reqs</span> |
+
+</div>
 
 <p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
 
@@ -166,12 +170,16 @@ flowchart LR
 
 * 根据实验数据，在中低端安卓设备和网速较慢的环境中，启动速度提升约 30-40%。
 
+    <div align="center">
+
     | ZipBundle | Zip 数 | 浏览器 | 连接规格 | 网速 | 耗时启动 | 网络请求 |
     | - | - | - | - | - | - | - |
     | On (Method 1) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">9.62s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
     | On (Method 2) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">11.98s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
     | --- | --- | --- | --- | --- | --- | --- |
     | Off | 0 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: red;">17.22s</span> | <span style="font-weight: bold; color: red;">261 reqs</span> |
+
+    </div>
 
 
 ## 如何决定 Zip 资源包的切割数量？
@@ -186,6 +194,8 @@ HTTP1.1 下，Chrome 浏览器对同一域名的最大并发连接数限制为 6
 
 我们使用官方的 UI 示例 [Cocos UI Example](https://github.com/cocos/cocos-example-ui) 进行测试，通过不同的 `Select Pack Size` 设置，将启动资源包分隔成 1 个、3 个、6 个、12 个 Zip 包，测试结果如下：
 
+<div align="center">
+
 | ZipBundle | Zip 数 | 浏览器 | 连接规格 | 网速 | 耗时启动 | 网络请求 |
 | - | - | - | - | - | - | - |
 | On | <span style="font-weight: bold; color: green;">1</span> | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">9.62s</span> | 30 reqs |
@@ -194,6 +204,8 @@ HTTP1.1 下，Chrome 浏览器对同一域名的最大并发连接数限制为 6
 | On | <span style="font-weight: bold; color: yellow;">12</span> | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: yellow;">12.47s</span> | 41 reqs |
 | --- | --- | --- | --- | --- | --- | --- |
 | Off | 0 | Chrome | http1.1 | Fast 4G | 17.22秒 | 261 reqs |
+
+</div>
 
 (*注：选择网速为 Fast 4G 的主要原因是较接近整体平均网速环境，尤其在东南亚地区。*)
 

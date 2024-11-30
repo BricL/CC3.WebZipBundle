@@ -6,12 +6,16 @@ The extension for Cocos Creator 3.x packages all resource files (e.g., PNG, JPG,
 
 ## Optimization Data
 
+<div align="center">
+
 | ZipBundle | Number of Zips | Browser | Connection Type | Network Speed | Startup Time | Network Reqs
 | - | - | - | - | - | - | - |
 | On (Method 1) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">9.62s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
 | On (Method 2) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">11.98s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
 | --- | --- | --- | --- | --- | --- | --- |
 | Off | 0 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: red;">17.22s</span> | <span style="font-weight: bold; color: red;">261 reqs</span> |
+
+</div>
 
 
 This extension provides two methods to accelerate game startup:
