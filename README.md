@@ -170,12 +170,16 @@ flowchart LR
 
 * According to experimental data, startup speed improves by about 30-40% on low- to mid-range Android devices or in slow network environments.
 
+    <div align="center">
+
     | ZipBundle | Number of Zips | Browser | Connection Type | Network Speed | Startup Time | Network Reqs
     | - | - | - | - | - | - | - |
     | On (Method 1) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">9.62s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
     | On (Method 2) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">11.98s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
     | --- | --- | --- | --- | --- | --- | --- |
     | Off | 0 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: red;">17.22s</span> | <span style="font-weight: bold; color: red;">261 reqs</span> |
+
+    </div>
 
 
 ## How to Determine the Number of Split Zip Files?
@@ -190,6 +194,8 @@ In Chrome with HTTP1.1, a single connection supports up to 6 concurrent download
 
 We tested different `Select Pack Size` settings using the official  [Cocos UI Example](https://github.com/cocos/cocos-example-ui). The initial assets were split into 1, 3, 6 and 12 ZIP files, with the results shown below:
 
+<div align="center">
+
 | ZipBundle | Number of Zips | Browser | Connection Type | Network Speed | Startup Time | Network Reqs
 | - | - | - | - | - | - | - |
 | On | <span style="font-weight: bold; color: green;">1</span> | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">9.62s</span> | 30 reqs |
@@ -198,6 +204,8 @@ We tested different `Select Pack Size` settings using the official  [Cocos UI Ex
 | On | <span style="font-weight: bold; color: yellow;">12</span> | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: yellow;">12.47s</span> | 41 reqs |
 | --- | --- | --- | --- | --- | --- | --- |
 | Off | 0 | Chrome | http1.1 | Fast 4G | 17.22s | 261 reqs |
+
+</div>
 
 (*Note: Fast 4G simulation is used because it’s closer to real-world internet speeds, especially in Southeast Asia.*)
 
