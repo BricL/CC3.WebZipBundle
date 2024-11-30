@@ -15,12 +15,16 @@ The extension for Cocos Creator 3.x packages all resource files (e.g., PNG, JPG,
 
 ## DEMO (Host on itch.io)
 
+<div align="center">
+
 | ZipBundle | Number of Zips | Browser | Connection Type | Network Speed | Startup Time | Network Reqs
 | - | - | - | - | - | - | - |
 | On (Method 1) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">9.62s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
 | On (Method 2) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">11.98s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
 | --- | --- | --- | --- | --- | --- | --- |
 | Off | 0 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: red;">17.22s</span> | <span style="font-weight: bold; color: red;">261 reqs</span> |
+
+</div>
 
 <p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
 
