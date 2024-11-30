@@ -6,6 +6,14 @@ The extension for Cocos Creator 3.x packages all resource files (e.g., PNG, JPG,
 
 ## Optimization Data
 
+| ZipBundle | Number of Zips | Browser | Connection Type | Network Speed | Startup Time | Network Reqs
+| - | - | - | - | - | - | - |
+| On (Method 1) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">9.62s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
+| On (Method 2) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">11.98s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
+| --- | --- | --- | --- | --- | --- | --- |
+| Off | 0 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: red;">17.22s</span> | <span style="font-weight: bold; color: red;">261 reqs</span> |
+
+
 This extension provides two methods to accelerate game startup:
 
 1. zip-load-boot.scene (More General)
@@ -19,13 +27,6 @@ This extension provides two methods to accelerate game startup:
    * In the game's `index.html`, ZIP files are downloaded asynchronously in advance, parallel to the engine core downloads, saving time and achieving faster startup.  
 
    * According to experimental data, startup speed improves by about 30-40% on low- to mid-range Android devices or in slow network environments.
-
-    | ZipBundle | Number of Zips | Browser | Connection Type | Network Speed | Startup Time | Network Reqs
-    | - | - | - | - | - | - | - |
-    | On (Method 1) | 1 | Chrome | http1.1 | Fast 4G | 9.62s | 30 reqs |
-    | On (Method 2) | 1 | Chrome | http1.1 | Fast 4G | 11.98s | 30 reqs |
-    | --- | --- | --- | --- | --- | --- | --- |
-    | Off | 0 | Chrome | http1.1 | Fast 4G | 17.22s | 261 reqs |
 
 ## How to Use
 

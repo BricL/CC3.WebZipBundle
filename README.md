@@ -15,11 +15,19 @@ The extension for Cocos Creator 3.x packages all resource files (e.g., PNG, JPG,
 
 ## DEMO (Host on itch.io)
 
+| ZipBundle | Number of Zips | Browser | Connection Type | Network Speed | Startup Time | Network Reqs
+| - | - | - | - | - | - | - |
+| On (Method 1) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">9.62s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
+| On (Method 2) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">11.98s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
+| --- | --- | --- | --- | --- | --- | --- |
+| Off | 0 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: red;">17.22s</span> | <span style="font-weight: bold; color: red;">261 reqs</span> |
+
+<p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
+
 * [Enable-ZipLoader](https://bricl.itch.io/cc3webzipbundledemo)
 
 * [Disable-ZipLoader](https://bricl.itch.io/cc3webzipbundledemo-disable-ziploader)
 
-<p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
 
 ## Installation
 
@@ -160,10 +168,10 @@ flowchart LR
 
     | ZipBundle | Number of Zips | Browser | Connection Type | Network Speed | Startup Time | Network Reqs
     | - | - | - | - | - | - | - |
-    | On (Method 1) | 1 | Chrome | http1.1 | Fast 4G | 9.62s | 30 reqs |
-    | On (Method 2) | 1 | Chrome | http1.1 | Fast 4G | 11.98s | 30 reqs |
+    | On (Method 1) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">9.62s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
+    | On (Method 2) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">11.98s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
     | --- | --- | --- | --- | --- | --- | --- |
-    | Off | 0 | Chrome | http1.1 | Fast 4G | 17.22s | 261 reqs |
+    | Off | 0 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: red;">17.22s</span> | <span style="font-weight: bold; color: red;">261 reqs</span> |
 
 
 ## How to Determine the Number of Split Zip Files?
@@ -180,10 +188,10 @@ We tested different `Select Pack Size` settings using the official  [Cocos UI Ex
 
 | ZipBundle | Number of Zips | Browser | Connection Type | Network Speed | Startup Time | Network Reqs
 | - | - | - | - | - | - | - |
-| On | 1 | Chrome | http1.1 | Fast 4G | 9.62s | 30 reqs |
-| On | 3 | Chrome | http1.1 | Fast 4G | 11.40s | 32 reqs |
-| On | 6 | Chrome | http1.1 | Fast 4G | 12.36s | 35 reqs |
-| On | 12 | Chrome | http1.1 | Fast 4G | 12.47s | 41 reqs |
+| On | <span style="font-weight: bold; color: green;">1</span> | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">9.62s</span> | 30 reqs |
+| On | <span style="font-weight: bold; color: yellow;">3</span> | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: yellow;">11.40s</span> | 32 reqs |
+| On | <span style="font-weight: bold; color: yellow;">6</span> | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: yellow;">12.36s</span> | 35 reqs |
+| On | <span style="font-weight: bold; color: yellow;">12</span> | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: yellow;">12.47s</span> | 41 reqs |
 | --- | --- | --- | --- | --- | --- | --- |
 | Off | 0 | Chrome | http1.1 | Fast 4G | 17.22s | 261 reqs |
 

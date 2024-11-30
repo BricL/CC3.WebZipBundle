@@ -15,11 +15,18 @@
 
 ## DEMO (Host on itch.io)
 
+| ZipBundle | Zip 数 | 浏览器 | 连接规格 | 网速 | 耗时启动 | 网络请求 |
+| - | - | - | - | - | - | - |
+| On (Method 1) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">9.62s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
+| On (Method 2) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">11.98s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
+| --- | --- | --- | --- | --- | --- | --- |
+| Off | 0 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: red;">17.22s</span> | <span style="font-weight: bold; color: red;">261 reqs</span> |
+
+<p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
+
 * [Enable-ZipLoader](https://bricl.itch.io/cc3webzipbundledemo)
 
 * [Disable-ZipLoader](https://bricl.itch.io/cc3webzipbundledemo-disable-ziploader)
-
-<p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
 
 
 ## 安装方法
@@ -161,10 +168,10 @@ flowchart LR
 
     | ZipBundle | Zip 数 | 浏览器 | 连接规格 | 网速 | 耗时启动 | 网络请求 |
     | - | - | - | - | - | - | - |
-    | On (方法1) | 1 各 | Chrome | http1.1 | Fast 4G | 9.62秒 | 30 reqs |
-    | On (方法2) | 1 各 | Chrome | http1.1 | Fast 4G | 11.98秒 | 30 reqs |
+    | On (Method 1) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">9.62s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
+    | On (Method 2) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">11.98s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
     | --- | --- | --- | --- | --- | --- | --- |
-    | Off | 0 各 | Chrome | http1.1 | Fast 4G | 17.22秒 | 261 reqs |
+    | Off | 0 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: red;">17.22s</span> | <span style="font-weight: bold; color: red;">261 reqs</span> |
 
 
 ## 如何决定 Zip 资源包的切割数量？
@@ -181,12 +188,12 @@ HTTP1.1 下，Chrome 浏览器对同一域名的最大并发连接数限制为 6
 
 | ZipBundle | Zip 数 | 浏览器 | 连接规格 | 网速 | 耗时启动 | 网络请求 |
 | - | - | - | - | - | - | - |
-| On | 1 各 | Chrome | http1.1 | Fast 4G | 9.62秒 | 30 reqs |
-| On | 3 各 | Chrome | http1.1 | Fast 4G | 11.40秒 | 32 reqs |
-| On | 6 各 | Chrome | http1.1 | Fast 4G | 12.36秒 | 35 reqs |
-| On | 12 各 | Chrome | http1.1 | Fast 4G | 12.47秒 | 41 reqs |
+| On | <span style="font-weight: bold; color: green;">1</span> | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">9.62s</span> | 30 reqs |
+| On | <span style="font-weight: bold; color: yellow;">3</span> | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: yellow;">11.40s</span> | 32 reqs |
+| On | <span style="font-weight: bold; color: yellow;">6</span> | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: yellow;">12.36s</span> | 35 reqs |
+| On | <span style="font-weight: bold; color: yellow;">12</span> | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: yellow;">12.47s</span> | 41 reqs |
 | --- | --- | --- | --- | --- | --- | --- |
-| Off | 0 各 | Chrome | http1.1 | Fast 4G | 17.22秒 | 261 reqs |
+| Off | 0 | Chrome | http1.1 | Fast 4G | 17.22秒 | 261 reqs |
 
 (*注：选择网速为 Fast 4G 的主要原因是较接近整体平均网速环境，尤其在东南亚地区。*)
 

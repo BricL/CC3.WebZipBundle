@@ -6,6 +6,14 @@
 
 ## 優化數據
 
+| ZipBundle | Zip 数 | 浏览器 | 连接规格 | 网速 | 耗时启动 | 网络请求 |
+| - | - | - | - | - | - | - |
+| On (Method 1) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">9.62s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
+| On (Method 2) | 1 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: green;">11.98s</span> | <span style="font-weight: bold; color: green;">30 reqs</span> |
+| --- | --- | --- | --- | --- | --- | --- |
+| Off | 0 | Chrome | http1.1 | Fast 4G | <span style="font-weight: bold; color: red;">17.22s</span> | <span style="font-weight: bold; color: red;">261 reqs</span> |
+
+
 本擴展提共兩種方法進行加速：
 
 1. zip-load-boot.scene（较通用）
@@ -19,14 +27,6 @@
    * 在启动游戏的 `index.html` 中，提前异步下载 ZIP 文件，与引擎核心的下载并行进行，节省时间，从而实现更快的启动速度。  
 
    * 根据实验数据，在中低端安卓设备和网速较慢的环境中，启动速度提升约 30-40%。
-
-
-	| ZipBundle | Zip 数 | 浏览器 | 连接规格 | 网速 | 耗时启动 | 网络请求 |
-    | - | - | - | - | - | - | - |
-    | On (方法1) | 1 各 | Chrome | http1.1 | Fast 4G | 9.62秒 | 30 reqs |
-    | On (方法2) | 1 各 | Chrome | http1.1 | Fast 4G | 11.98秒 | 30 reqs |
-    | --- | --- | --- | --- | --- | --- | --- |
-    | Off | 0 各 | Chrome | http1.1 | Fast 4G | 17.22秒 | 261 reqs |
 
 ## 如何使用
 
