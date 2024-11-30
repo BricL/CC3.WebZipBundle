@@ -10,6 +10,9 @@
 
 该扩展将 web 平台启动时所需的资源（如：PNG、JPG、ASTC、WebP、JSON、CCONB）打包为 zip 文件，从而减少启动时的网络请求数量，加快游戏加载速度。
 
+
+*（注：对插件的意见反馈请至 [Cocos 中文论坛](https://forum.cocos.org/t/topic/163849)。）*
+
 *（注：实现思路来自 Cocos 中文论坛 `haiyoucuv` 分享的文章  [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256)。）*
 
 
