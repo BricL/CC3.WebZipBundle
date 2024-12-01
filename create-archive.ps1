@@ -1,5 +1,6 @@
 # 定义要压缩的文件和文件夹名称
 $filesToZip = @(
+    "doc",
     "dist",
     "i18n",
     "node_modules",
