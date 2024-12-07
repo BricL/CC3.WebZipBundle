@@ -234,4 +234,4 @@ The max number of concurrent downloads in a single connection decides how many s
 
 * [JSZip](https://stuk.github.io/jszip/)
 
-* Cocos Creator 官方的 UI 範例 GitHub： [Cocos UI Example](https://github.com/cocos/cocos-example-ui)
+* [Cocos Creator 官方的 UI 範例 GitHub：Cocos UI Example](https://github.com/cocos/cocos-example-ui)
