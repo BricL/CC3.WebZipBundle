@@ -12,12 +12,14 @@ The extension for Cocos Creator 3.x packages all resource files (e.g., PNG, JPG,
 
 >"Don’t just pass by, give it a try—hit a star and show your support!"
 
-*(Note：If you have any feedback on the plugin, please go to [Cocos 中文论坛](https://forum.cocos.org/t/topic/163849))*
+>*(Note：If you have any feedback on the plugin, please go to [Cocos 中文论坛](https://forum.cocos.org/t/topic/163849))*
 
-(*Note: Thie implementation is inspired by an article shared by `haiyoucuv` on the Cocos Chinese forum: [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256).*)
+>(*Note: Thie implementation is inspired by an article shared by `haiyoucuv` on the Cocos Chinese forum: [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256).*)
 
 
 ## DEMO (Host on itch.io)
+
+<p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
 
 <div align="center">
 
@@ -30,11 +32,9 @@ The extension for Cocos Creator 3.x packages all resource files (e.g., PNG, JPG,
 
 </div>
 
-<p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
-
-* [Enable-ZipLoader](https://bricl.itch.io/cc3webzipbundledemo)
-
-* [Disable-ZipLoader](https://bricl.itch.io/cc3webzipbundledemo-disable-ziploader)
+Host on itch.io:
+>* [Enable-ZipLoader](https://bricl.itch.io/cc3webzipbundledemo)
+>* [Disable-ZipLoader](https://bricl.itch.io/cc3webzipbundledemo-disable-ziploader)
 
 
 ## Installation
@@ -190,7 +190,7 @@ flowchart LR
 
 In the Build Settings, the "Select Pack Size" option allows you to split resources into multiple zip files. However...
 
-*`"Does splitting the initial resources into more, smaller zip files lead to faster download speeds ?"`*
+>*`"Does splitting the initial resources into more, smaller zip files lead to faster download speeds ?"`*
 
 ### Under HTTP1.1
 
@@ -211,7 +211,7 @@ We tested different `Select Pack Size` settings using the official  [Cocos UI Ex
 
 </div>
 
-(*Note: Fast 4G simulation is used because it’s closer to real-world internet speeds, especially in Southeast Asia.*)
+>(*Note: Fast 4G simulation is used because it’s closer to real-world internet speeds, especially in Southeast Asia.*)
 
 The results show that when concurrent downloads reach the maximum of 12, any additional network requests will be queued. If `_virtual_cc-8ed102a6.js` from CC is among the queued requests, it can noticeably delay the startup time, as illustrated below:
 

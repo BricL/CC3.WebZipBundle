@@ -12,12 +12,14 @@
 
 >「走過路過，別錯過，點顆星星，支持我！」
 
-*（注：对插件的意见反馈请至 [Cocos 中文论坛](https://forum.cocos.org/t/topic/163849)。）*
+>*（注：对插件的意见反馈请至 [Cocos 中文论坛](https://forum.cocos.org/t/topic/163849)。）*
 
-*（注：实现思路来自 Cocos 中文论坛 `haiyoucuv` 分享的文章  [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256)。）*
+>*（注：实现思路来自 Cocos 中文论坛 `haiyoucuv` 分享的文章  [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256)。）*
 
 
 ## DEMO (Host on itch.io)
+
+<p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
 
 <div align="center">
 
@@ -30,11 +32,9 @@
 
 </div>
 
-<p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
-
-* [Enable-ZipLoader](https://bricl.itch.io/cc3webzipbundledemo)
-
-* [Disable-ZipLoader](https://bricl.itch.io/cc3webzipbundledemo-disable-ziploader)
+Host on itch.io：
+>* [Enable-ZipLoader](https://bricl.itch.io/cc3webzipbundledemo)
+>* [Disable-ZipLoader](https://bricl.itch.io/cc3webzipbundledemo-disable-ziploader)
 
 
 ## 安装方法
@@ -56,7 +56,7 @@
 
    <p align="center"><img src="doc/img/extension_manager.png" width="450"></p>
 
-    (*注：安装方法也可参考官方文档 [【扩展 安装与分享】](https://docs.cocos.com/creator/3.8/manual/zh/editor/extension/install.html) 。*)
+    >(*注：安装方法也可参考官方文档 [【扩展 安装与分享】](https://docs.cocos.com/creator/3.8/manual/zh/editor/extension/install.html) 。*)
 
 ## 如何使用
 
@@ -190,7 +190,7 @@ flowchart LR
 
 在 Build Setting 设置中有选项 `Select Pack Size` 可以设置分包大小，将资源切割成多个 zip 包。但是...
 
-*`“将初始资源切割成越多、越小的 zip 包，下载速度就越快？”`*
+>*`“将初始资源切割成越多、越小的 zip 包，下载速度就越快？”`*
 
 ### HTTP1.1
 
