@@ -37,7 +37,7 @@
 
 ## 運作原理
 
-<p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/WZB.jpg" width="450"></a></p>
+<p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="https://download.cocos.com/CocosStore/resource/a8a19856e11e4232a3d48c7762419338/a8a19856e11e4232a3d48c7762419338.jpg" width="450"></a></p>
 
 
 ## 如何使用
