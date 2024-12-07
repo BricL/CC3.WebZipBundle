@@ -34,6 +34,12 @@
 
    * 根据实验数据，在中低端安卓设备和网速较慢的环境中，启动速度提升约 30-40%。
 
+
+## 運作原理
+
+<p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/WZB.jpg" width="450"></a></p>
+
+
 ## 如何使用
 
 请参阅 Github [CC3.WebZipBundle](https://github.com/BricL/CC3.WebZipBundle)

@@ -37,6 +37,11 @@ Host on itch.io:
 >* [Disable-ZipLoader](https://bricl.itch.io/cc3webzipbundledemo-disable-ziploader)
 
 
+## How it Works
+
+<p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/WZB.jpg" width="450"></a></p>
+
+
 ## Installation
 
 1. Download ZIP package from github.

@@ -16,7 +16,6 @@
 
 >*（注：实现思路来自 Cocos 中文论坛 `haiyoucuv` 分享的文章  [使用 Zip 加速 CocosWeb 加载](https://forum.cocos.org/t/topic/156256)。）*
 
-
 ## DEMO (Host on itch.io)
 
 <p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/itch.io_demo.png" width="450"></a></p>
@@ -35,6 +34,11 @@
 Host on itch.io：
 >* [Enable-ZipLoader](https://bricl.itch.io/cc3webzipbundledemo)
 >* [Disable-ZipLoader](https://bricl.itch.io/cc3webzipbundledemo-disable-ziploader)
+
+
+## 運作原理
+
+<p align="center"><a href="https://bricl.itch.io/cc3webzipbundledemo"><img src="doc/img/WZB.jpg" width="450"></a></p>
 
 
 ## 安装方法
