@@ -14,7 +14,7 @@ export class ZipLoader extends Component {
     @property({
         tooltip: 'If this is true, the next scene will not be loaded until all the zip files are downloaded.'
     })
-    public isAwaitDwonloadZipFinished: boolean = true;
+    public isAwaitDownloadZipFinished: boolean = true;
     @property({
         tooltip: 'The next scene to be loaded.'
     })
@@ -245,7 +245,7 @@ export class ZipLoader extends Component {
         (async () => {
             this.downloadZipPromise = this.downloadResCache();
 
-            if (this.isAwaitDwonloadZipFinished) {
+            if (this.isAwaitDownloadZipFinished) {
                 await this.downloadZipPromise;
             }
 

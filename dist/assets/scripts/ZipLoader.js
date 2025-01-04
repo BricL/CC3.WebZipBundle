@@ -29,7 +29,7 @@ let ZipLoader = ZipLoader_1 = class ZipLoader extends cc_1.Component {
     constructor() {
         super(...arguments);
         this.isRecordAssetsUrl = true;
-        this.isAwaitDwonloadZipFinished = true;
+        this.isAwaitDownloadZipFinished = true;
         this.loadNextScene = '';
         this.downloadZipPromise = null;
         this.recordAssetsUrlList = [];
@@ -243,7 +243,7 @@ let ZipLoader = ZipLoader_1 = class ZipLoader extends cc_1.Component {
         }
         (() => __awaiter(this, void 0, void 0, function* () {
             this.downloadZipPromise = this.downloadResCache();
-            if (this.isAwaitDwonloadZipFinished) {
+            if (this.isAwaitDownloadZipFinished) {
                 yield this.downloadZipPromise;
             }
             if (this.loadNextScene.trim() !== '') {
@@ -262,7 +262,7 @@ __decorate([
     property({
         tooltip: 'If this is true, the next scene will not be loaded until all the zip files are downloaded.'
     })
-], ZipLoader.prototype, "isAwaitDwonloadZipFinished", void 0);
+], ZipLoader.prototype, "isAwaitDownloadZipFinished", void 0);
 __decorate([
     property({
         tooltip: 'The next scene to be loaded.'
