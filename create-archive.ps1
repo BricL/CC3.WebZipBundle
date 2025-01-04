@@ -10,7 +10,8 @@ $filesToZip = @(
     "README.md",
     "README-CN.md",
     "README.zh.md",
-    "README.en.md"
+    "README.en.md",
+    "logo.jpg"
 )
 
 # 定义压缩文件的名称
