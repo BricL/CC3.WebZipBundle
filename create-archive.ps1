@@ -45,7 +45,7 @@ foreach ($item in $filesToZip) {
 # 使用 7-Zip 壓縮臨時文件夾中的內容
 $7zipPath = "C:\Program Files\7-Zip\7z.exe" # 7-Zip 的安裝路徑
 if (Test-Path $7zipPath) {
-    & $7zipPath a -tzip $zipFileName "$tempFolder\*" | Out-Null
+    & $7zipPath a -tzip $zipFileName "$tempFolder\*" -mx=9 -mmt -r | Out-Null
     if ($LASTEXITCODE -eq 0) {
         Write-Host "Compressed Complete!: $zipFileName"
     } else {
