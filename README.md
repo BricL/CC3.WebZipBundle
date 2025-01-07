@@ -106,7 +106,7 @@ Host on itch.io:
 
         * Set `Is Record Assets Url` to `true` in the ZipLoader inspector. This will record the URLs of every asset download request made by the engine. 
 
-        * During gameplay, press `ALT + W (Debug Only)` to print the record to the browser console.
+        * During gameplay, press `ALT + W (Mac: option + W) (Debug Only)` to print the record to the browser console.
 
             <p align="center"><img src="doc/img/console_log.png" width="450"></p>
         
