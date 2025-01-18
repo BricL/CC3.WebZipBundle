@@ -104,7 +104,7 @@ Host on itch.io：
 
         * `Is Record Assets Url` 为 `true`，在 CC 请求下载 Assets 时记录其 URLs。 
         
-        * 游戏运行时按下 `ALT + W`（仅限 Debug 模式），可以将记录打印到浏览器的控制台（console）。
+        * 游戏运行时按下 `ALT + W (Mac: option + W)`（仅限 Debug 模式），可以将记录打印到浏览器的控制台（console）。
 
             <p align="center"><img src="doc/img/console_log.png" width="450"></p>
         
